@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Details &amp; Pricing - WaaS Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#5048e5",
+                        "success": "#10b981",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121121",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0f0e1b] dark:text-white transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Navigation Bar -->
+<header class="sticky top-0 z-50 w-full border-b border-solid border-[#e8e8f3] dark:border-white/10 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-10 py-3">
+<div class="max-w-[1200px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#0f0e1b] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">WaaS Marketplace</h2>
+</div>
+<label class="hidden md:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full overflow-hidden">
+<div class="text-[#545095] dark:text-gray-400 flex border-none bg-[#e8e8f3] dark:bg-white/5 items-center justify-center pl-4">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-[#e8e8f3] dark:bg-white/5 text-[#0f0e1b] dark:text-white focus:outline-0 focus:ring-0 h-full placeholder:text-[#545095] dark:placeholder:text-gray-500 px-4 pl-2 text-sm" placeholder="Search solutions..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden lg:flex items-center gap-9">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Marketplace</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Solutions</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Pricing</a>
+</div>
+<div class="flex gap-3">
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold transition-all hover:opacity-90">
+                            Sign Up
+                        </button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-[1200px] mx-auto w-full px-6 py-8">
+<!-- Breadcrumbs -->
+<div class="flex flex-wrap gap-2 py-4">
+<a class="text-[#545095] dark:text-gray-400 text-sm font-medium hover:text-primary" href="#">Home</a>
+<span class="text-[#545095] dark:text-gray-400 text-sm font-medium">/</span>
+<a class="text-[#545095] dark:text-gray-400 text-sm font-medium hover:text-primary" href="#">Solutions</a>
+<span class="text-[#545095] dark:text-gray-400 text-sm font-medium">/</span>
+<span class="text-[#0f0e1b] dark:text-white text-sm font-medium">E-commerce Website</span>
+</div>
+<!-- Page Heading & Trust Badges -->
+<div class="flex flex-col lg:flex-row justify-between items-start gap-8 mt-4 mb-12">
+<div class="flex flex-col gap-4 max-w-2xl">
+<h1 class="text-[#0f0e1b] dark:text-white text-5xl font-black leading-tight tracking-[-0.033em]">E-commerce Website Solution</h1>
+<p class="text-[#545095] dark:text-gray-400 text-lg font-normal leading-relaxed">
+                        Scalable online stores for growing brands with enterprise-grade performance, native checkout, and seamless inventory management.
+                    </p>
+<div class="flex flex-wrap gap-4 mt-2">
+<div class="flex items-center gap-2 bg-white dark:bg-white/5 border border-[#e8e8f3] dark:border-white/10 px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-primary text-lg">verified</span>
+<span class="text-sm font-medium">PCI Compliant</span>
+</div>
+<div class="flex items-center gap-2 bg-white dark:bg-white/5 border border-[#e8e8f3] dark:border-white/10 px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-primary text-lg">support_agent</span>
+<span class="text-sm font-medium">24/7 Support</span>
+</div>
+<div class="flex items-center gap-2 bg-white dark:bg-white/5 border border-[#e8e8f3] dark:border-white/10 px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-primary text-lg">speed</span>
+<span class="text-sm font-medium">99.9% Uptime</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-4 min-w-[300px]">
+<div class="flex items-center -space-x-4 px-4 py-3">
+<div class="bg-center bg-cover border-4 border-[#f6f6f8] dark:border-background-dark rounded-full size-12" data-alt="Customer avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD8sEJud_XjLxnEOCqWRUumfzFgE9IS5pBkymUFY82gN2jG5sOJ30DTreDS_QLVlxVHW0rfoFycs7fXNjcpNpbFr777PRdjUpiUiUGWKnbFcKGRSVg5oWsTus6bMN-UKyVvkoDoggnn24tDgrjJqYX80NctKo-mVL1Gu3ExJx6-LXbxrjoT_e9JQTFnEl4Sxg508X4e_kgQ1f1rDxAl3eBEp7wI0wEEAWVgB4FHU5eRWc2Yb4whNPyURMeLg1OblFODcOUbsUzr76Ds");'></div>
+<div class="bg-center bg-cover border-4 border-[#f6f6f8] dark:border-background-dark rounded-full size-12" data-alt="Customer avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuByIzX_SLRmJKpOPvzcYLf6sLmE41sTMoqbo1x3P-BPfJ6f3egCKo51KV6-VWuBgPFqr0B0NnU4B5CmnylgXI9kjr_UykD7hCpw1YDUcqJtaR4SWD8axex-1kK-2AszSk4KKS5ekhFW0ZHaSbASAnoxT7DHxICk5AhjM2bTnR11hZ-LoBf_CcS-0g7sVMyJ6FC1owL1t3RBX5Ip1sB4THVWEpztjwV6d3SC-T_E4dBdRkqInc3U25PeVQ4G6tAuOEp4syS5JJz159tT");'></div>
+<div class="bg-center bg-cover border-4 border-[#f6f6f8] dark:border-background-dark rounded-full size-12" data-alt="Customer avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAsKFh5bjcxZtdRxCqlB_UJRkR_6zaROrDNO3nEw4ChlwP6lhUVPB3yk7TM3FEqe28xnXdR1N_BbCrBuxDrZM8ovXPg0f5HPt3n_DVAD3xWHvvU8SfuQGiyjyXXCVZZiIUu95EfTD_XJ6kXEn8kvU2ke5o1GyUu0HgnmS-OooIAVbkCxdOLjkIcypePPFpmPRPgb01LpyYEpdEtzvX3tVeAEXbkGKVIPV4Df-rVEz4Z9znHZT1SvWR7MjECQdWGPSKL5Yoj-EYgmqhd");'></div>
+<div class="bg-primary flex items-center justify-center border-4 border-[#f6f6f8] dark:border-background-dark rounded-full size-12 text-white text-xs font-bold">5k+</div>
+</div>
+<p class="text-right text-sm text-[#545095] dark:text-gray-400">Trusted by over 5,000 businesses globally</p>
+</div>
+</div>
+<!-- Features Grid -->
+<div class="mb-20">
+<h2 class="text-[#0f0e1b] dark:text-white text-2xl font-bold mb-8 flex items-center gap-2">
+<span class="w-8 h-1 bg-primary rounded-full"></span>
+                    Key Features
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="bg-white dark:bg-white/5 p-6 rounded-xl border border-[#e8e8f3] dark:border-white/10 hover:shadow-lg transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">devices</span>
+<h3 class="text-lg font-bold mb-2">Responsive Design</h3>
+<p class="text-[#545095] dark:text-gray-400 text-sm">Perfectly optimized for mobile, tablet, and desktop shoppers.</p>
+</div>
+<div class="bg-white dark:bg-white/5 p-6 rounded-xl border border-[#e8e8f3] dark:border-white/10 hover:shadow-lg transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">search_insights</span>
+<h3 class="text-lg font-bold mb-2">SEO Optimization</h3>
+<p class="text-[#545095] dark:text-gray-400 text-sm">Built-in tools to help your store rank higher on search engines.</p>
+</div>
+<div class="bg-white dark:bg-white/5 p-6 rounded-xl border border-[#e8e8f3] dark:border-white/10 hover:shadow-lg transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">payments</span>
+<h3 class="text-lg font-bold mb-2">Secure Payments</h3>
+<p class="text-[#545095] dark:text-gray-400 text-sm">Integration with Stripe, PayPal, and major credit cards.</p>
+</div>
+<div class="bg-white dark:bg-white/5 p-6 rounded-xl border border-[#e8e8f3] dark:border-white/10 hover:shadow-lg transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">inventory_2</span>
+<h3 class="text-lg font-bold mb-2">Inventory Sync</h3>
+<p class="text-[#545095] dark:text-gray-400 text-sm">Real-time stock tracking across all sales channels.</p>
+</div>
+<div class="bg-white dark:bg-white/5 p-6 rounded-xl border border-[#e8e8f3] dark:border-white/10 hover:shadow-lg transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">bolt</span>
+<h3 class="text-lg font-bold mb-2">Lightning Fast</h3>
+<p class="text-[#545095] dark:text-gray-400 text-sm">Sub-second page loads to minimize cart abandonment.</p>
+</div>
+<div class="bg-white dark:bg-white/5 p-6 rounded-xl border border-[#e8e8f3] dark:border-white/10 hover:shadow-lg transition-shadow">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">query_stats</span>
+<h3 class="text-lg font-bold mb-2">Advanced Analytics</h3>
+<p class="text-[#545095] dark:text-gray-400 text-sm">Detailed insights into customer behavior and sales.</p>
+</div>
+</div>
+</div>
+<!-- Pricing Section -->
+<div class="mb-20" id="pricing">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-black mb-4">Simple, Transparent Pricing</h2>
+<p class="text-[#545095] dark:text-gray-400 max-w-lg mx-auto mb-8">Choose the plan that fits your business stage. No hidden fees, cancel anytime.</p>
+<!-- Toggle -->
+<div class="inline-flex p-1 bg-[#e8e8f3] dark:bg-white/5 rounded-xl">
+<button class="px-6 py-2 rounded-lg text-sm font-bold bg-white dark:bg-white/10 shadow-sm">Monthly</button>
+<button class="px-6 py-2 rounded-lg text-sm font-medium text-[#545095] dark:text-gray-400">6 Months</button>
+<button class="px-6 py-2 rounded-lg text-sm font-medium text-[#545095] dark:text-gray-400 flex items-center gap-2">
+                            1 Year <span class="bg-success text-white text-[10px] px-1.5 py-0.5 rounded-full uppercase">Save 25%</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+<!-- Plan 1 -->
+<div class="flex flex-col bg-white dark:bg-white/5 p-8 rounded-2xl border border-[#e8e8f3] dark:border-white/10">
+<div class="mb-8">
+<h3 class="text-xl font-bold mb-1">Starter</h3>
+<p class="text-sm text-[#545095] dark:text-gray-400">For new small businesses</p>
+<div class="mt-6 flex items-baseline gap-1">
+<span class="text-4xl font-black">$49</span>
+<span class="text-sm text-[#545095]">/month</span>
+</div>
+</div>
+<ul class="flex-1 space-y-4 mb-8">
+<li class="flex items-start gap-3 text-sm">
+<span class="material-symbols-outlined text-success">check_circle</span>
+                                Up to 50 products
+                            </li>
+<li class="flex items-start gap-3 text-sm text-gray-400">
+<span class="material-symbols-outlined">check_circle</span>
+                                Standard Checkout
+                            </li>
+<li class="flex items-start gap-3 text-sm text-gray-400">
+<span class="material-symbols-outlined">check_circle</span>
+                                Community Support
+                            </li>
+</ul>
+<button class="w-full py-4 rounded-xl border-2 border-[#e8e8f3] dark:border-white/10 font-bold hover:bg-[#e8e8f3] dark:hover:bg-white/10 transition-colors">Select Plan</button>
+</div>
+<!-- Plan 2: Best Value -->
+<div class="relative flex flex-col bg-white dark:bg-[#1a1930] p-8 rounded-2xl border-2 border-primary shadow-xl scale-105 z-10">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold px-4 py-1 rounded-full uppercase">Best Value</div>
+<div class="mb-8">
+<h3 class="text-xl font-bold mb-1">Professional</h3>
+<p class="text-sm text-[#545095] dark:text-gray-300">For growing online brands</p>
+<div class="mt-6 flex items-baseline gap-1">
+<span class="text-4xl font-black">$129</span>
+<span class="text-sm text-[#545095] dark:text-gray-300">/month</span>
+</div>
+</div>
+<ul class="flex-1 space-y-4 mb-8">
+<li class="flex items-start gap-3 text-sm">
+<span class="material-symbols-outlined text-success">check_circle</span>
+                                Unlimited products
+                            </li>
+<li class="flex items-start gap-3 text-sm">
+<span class="material-symbols-outlined text-success">check_circle</span>
+                                Advanced Abandoned Cart
+                            </li>
+<li class="flex items-start gap-3 text-sm">
+<span class="material-symbols-outlined text-success">check_circle</span>
+                                24/7 Priority Support
+                            </li>
+<li class="flex items-start gap-3 text-sm">
+<span class="material-symbols-outlined text-success">check_circle</span>
+                                Custom Domain Integration
+                            </li>
+</ul>
+<button class="w-full py-4 rounded-xl bg-primary text-white font-bold hover:opacity-90 transition-opacity">Get Started Now</button>
+</div>
+<!-- Plan 3 -->
+<div class="flex flex-col bg-white dark:bg-white/5 p-8 rounded-2xl border border-[#e8e8f3] dark:border-white/10">
+<div class="mb-8">
+<h3 class="text-xl font-bold mb-1">Enterprise</h3>
+<p class="text-sm text-[#545095] dark:text-gray-400">Scale without limits</p>
+<div class="mt-6 flex items-baseline gap-1">
+<span class="text-4xl font-black">$399</span>
+<span class="text-sm text-[#545095]">/month</span>
+</div>
+</div>
+<ul class="flex-1 space-y-4 mb-8">
+<li class="flex items-start gap-3 text-sm">
+<span class="material-symbols-outlined text-success">check_circle</span>
+                                Dedicated Account Manager
+                            </li>
+<li class="flex items-start gap-3 text-sm">
+<span class="material-symbols-outlined text-success">check_circle</span>
+                                Custom API Access
+                            </li>
+<li class="flex items-start gap-3 text-sm">
+<span class="material-symbols-outlined text-success">check_circle</span>
+                                SLA Guarantee
+                            </li>
+</ul>
+<button class="w-full py-4 rounded-xl border-2 border-[#e8e8f3] dark:border-white/10 font-bold hover:bg-[#e8e8f3] dark:hover:bg-white/10 transition-colors">Contact Sales</button>
+</div>
+</div>
+</div>
+<!-- Sticky CTA Bar -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-3xl bg-white dark:bg-[#1a1930] border border-[#e8e8f3] dark:border-white/10 shadow-2xl rounded-2xl px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="hidden sm:block">
+<p class="font-bold text-lg">E-commerce Solution</p>
+<p class="text-xs text-[#545095] dark:text-gray-400">Starting from $49/mo</p>
+</div>
+<div class="flex gap-4 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-8 h-12 bg-success text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl">shopping_cart</span>
+                        Buy Now
+                    </button>
+<button class="flex-1 sm:flex-none px-8 h-12 bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl">event</span>
+                        Book Consultation
+                    </button>
+</div>
+</div>
+<!-- FAQ Accordion -->
+<div class="mb-32">
+<h2 class="text-2xl font-bold mb-8">Frequently Asked Questions</h2>
+<div class="space-y-4 max-w-3xl">
+<div class="group border-b border-[#e8e8f3] dark:border-white/10 pb-4">
+<button class="flex items-center justify-between w-full py-2 text-left hover:text-primary transition-colors">
+<span class="font-semibold">How long does the setup process take?</span>
+<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</button>
+<div class="mt-2 text-[#545095] dark:text-gray-400 text-sm leading-relaxed">
+                            Most stores are live within 48-72 hours. Our automated deployment engine builds your core infrastructure instantly, followed by our designers' final touches.
+                        </div>
+</div>
+<div class="group border-b border-[#e8e8f3] dark:border-white/10 pb-4">
+<button class="flex items-center justify-between w-full py-2 text-left hover:text-primary transition-colors">
+<span class="font-semibold">Can I migrate my data from Shopify or WooCommerce?</span>
+<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</button>
+<div class="mt-2 text-[#545095] dark:text-gray-400 text-sm leading-relaxed">
+                            Yes, we offer free migration services for all Professional and Enterprise plans. Our team handles your product catalog, customer data, and order history.
+                        </div>
+</div>
+<div class="group border-b border-[#e8e8f3] dark:border-white/10 pb-4">
+<button class="flex items-center justify-between w-full py-2 text-left hover:text-primary transition-colors">
+<span class="font-semibold">What kind of support do you provide?</span>
+<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</button>
+<div class="mt-2 text-[#545095] dark:text-gray-400 text-sm leading-relaxed">
+                            We provide 24/7 technical support via email and live chat. Enterprise customers also get a dedicated account manager and phone support access.
+                        </div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-white dark:bg-white/5 border-t border-[#e8e8f3] dark:border-white/10 py-12">
+<div class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#0f0e1b] dark:text-white text-lg font-bold">WaaS Marketplace</h2>
+</div>
+<div class="flex gap-8 text-sm text-[#545095] dark:text-gray-400">
+<a class="hover:text-primary" href="#">Terms of Service</a>
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Cookie Settings</a>
+</div>
+<p class="text-sm text-[#545095] dark:text-gray-400">© 2024 WaaS Marketplace Inc. All rights reserved.</p>
+</div>
+</footer>
+</div>
+</body></html>

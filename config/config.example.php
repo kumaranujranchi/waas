@@ -7,8 +7,8 @@
 
 // Site Settings
 define('SITE_NAME', 'WaaS Marketplace');
-define('SITE_URL', 'http://localhost'); // Update with your domain
-define('SITE_EMAIL', 'info@example.com');
+define('SITE_URL', 'https://honestchoicereview.com');
+define('SITE_EMAIL', 'info@honestchoicereview.com');
 
 // Paths
 define('BASE_PATH', dirname(__DIR__));
@@ -50,7 +50,7 @@ define('PASSWORD_MIN_LENGTH', 8);
 define('HASH_ALGO', PASSWORD_DEFAULT);
 
 // Error Reporting (set to false in production)
-define('DEBUG_MODE', true);
+define('DEBUG_MODE', false);
 
 if (DEBUG_MODE) {
     error_reporting(E_ALL);

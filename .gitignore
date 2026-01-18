@@ -1,6 +1,8 @@
 # Ignore sensitive files
 config/database.php
 config/config.php
+config/database.example.php
+config/config.example.php
 
 # Ignore system files
 .DS_Store

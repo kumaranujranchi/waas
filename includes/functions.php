@@ -50,6 +50,7 @@ function getCurrentUser()
         return null;
     }
 
+    require_once __DIR__ . '/../classes/Database.php';
     $db = Database::getInstance();
     return $db->fetchOne("SELECT * FROM users WHERE id = ?", [$_SESSION['user_id']]);
 }

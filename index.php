@@ -35,57 +35,162 @@ if ($searchQuery) {
 
 <main>
     <!-- Hero Section -->
-    <div class="max-w-[1200px] mx-auto px-6 py-12 md:py-24">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div class="flex flex-col gap-8">
-                <div class="flex flex-col gap-4">
-                    <span
-                        class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider w-fit">
-                        Ready-to-launch solutions
-                    </span>
-                    <h1
-                        class="text-[#0f0e1b] dark:text-white text-5xl md:text-6xl font-black leading-[1.1] tracking-[-0.033em]">
-                        Premium Websites & Business Software <span class="text-primary">Without Development
-                            Cost</span>
-                    </h1>
-                    <p class="text-[#545095] dark:text-white/60 text-lg md:text-xl font-normal max-w-[540px]">
-                        Launch your professional online presence in minutes with our curated collection of
-                        high-performance WaaS solutions.
+    <div
+        class="relative bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-background-dark dark:via-purple-900/10 dark:to-pink-900/10 overflow-hidden">
+        <div class="max-w-[1200px] mx-auto px-6 py-20 md:py-32">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left Content -->
+                <div class="flex flex-col gap-8 relative z-10">
+                    <div class="flex flex-col gap-6">
+                        <span
+                            class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-bold uppercase tracking-wider w-fit border border-primary/20">
+                            🚀 Ready-to-Launch Solutions
+                        </span>
+                        <h1
+                            class="text-[#0f0e1b] dark:text-white text-5xl md:text-7xl font-black leading-[1.1] tracking-tight">
+                            Premium Websites<br>
+                            <span class="text-primary">Powered by AI</span>
+                        </h1>
+                        <p class="text-[#545095] dark:text-white/70 text-xl font-medium max-w-[540px] leading-relaxed">
+                            Boost sales, enhance customer experience, and streamline operations with our cutting-edge
+                            WaaS solutions.
+                        </p>
+                    </div>
+
+                    <!-- Email Input -->
+                    <div class="flex flex-col sm:flex-row gap-4 max-w-md">
+                        <input type="email" placeholder="Enter your email"
+                            class="flex-1 px-6 py-4 rounded-xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-base">
+                        <a href="<?php echo baseUrl('consultation.php'); ?>"
+                            class="px-8 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 shadow-lg shadow-primary/25 transition-all whitespace-nowrap text-center">
+                            Get Started
+                        </a>
+                    </div>
+
+                    <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                        30 day free trial, no credit card required
                     </p>
                 </div>
-                <div class="flex flex-wrap items-center gap-5">
-                    <a href="#solutions"
-                        class="flex min-w-[160px] cursor-pointer items-center justify-center rounded-xl h-14 px-6 bg-primary text-white text-base font-bold shadow-lg hover:shadow-primary/30 transition-all">
-                        View Solutions
-                    </a>
-                    <a class="flex items-center gap-2 text-primary font-bold hover:underline"
-                        href="<?php echo baseUrl('consultation.php'); ?>">
-                        Book Free Consultation <span class="material-symbols-outlined">arrow_forward</span>
-                    </a>
-                </div>
-                <div class="flex items-center gap-6 pt-4 border-t border-[#e8e8f3] dark:border-white/10">
-                    <div class="flex -space-x-3">
-                        <div class="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden"
-                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                        <div class="w-10 h-10 rounded-full border-2 border-white bg-gray-300 overflow-hidden"
-                            style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
-                        <div class="w-10 h-10 rounded-full border-2 border-white bg-gray-400 overflow-hidden"
-                            style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+
+                <!-- Right Visual with Floating Cards -->
+                <div class="relative h-[500px] lg:h-[600px]">
+                    <!-- Main Dashboard Preview -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
+                        <div
+                            class="aspect-[3/4] bg-gradient-to-br from-primary to-purple-600 rounded-3xl shadow-2xl flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 bg-grid-white/10"></div>
+                            <span class="material-symbols-outlined text-white text-9xl relative z-10">dashboard</span>
+                        </div>
                     </div>
-                    <p class="text-sm text-[#545095] dark:text-white/60 font-medium">Joined by 2,000+ businesses
-                        worldwide</p>
+
+                    <!-- Floating Card 1 - Trophy -->
+                    <div
+                        class="absolute top-8 left-0 bg-white dark:bg-white/10 backdrop-blur-lg rounded-2xl p-4 shadow-xl border border-gray-100 dark:border-white/20 animate-float">
+                        <div class="flex items-center gap-3">
+                            <div class="text-4xl">🏆</div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-500 dark:text-gray-400">#1</p>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white">Best WaaS Platform</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Card 2 - Stats -->
+                    <div
+                        class="absolute top-32 right-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 shadow-xl animate-float-delayed">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="material-symbols-outlined text-white text-sm">trending_up</span>
+                            <p class="text-xs font-bold text-white/80">Revenue Increase</p>
+                        </div>
+                        <p class="text-3xl font-black text-white">5x</p>
+                        <p class="text-xs text-white/80 mt-1">Average growth</p>
+                    </div>
+
+                    <!-- Floating Card 3 - Users -->
+                    <div
+                        class="absolute bottom-8 left-4 bg-white dark:bg-white/10 backdrop-blur-lg rounded-2xl p-5 shadow-xl border border-gray-100 dark:border-white/20 animate-float">
+                        <div class="flex -space-x-2 mb-3">
+                            <div
+                                class="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-purple-400 to-pink-400">
+                            </div>
+                            <div
+                                class="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-cyan-400">
+                            </div>
+                            <div
+                                class="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-green-400 to-emerald-400">
+                            </div>
+                        </div>
+                        <p class="text-2xl font-black text-gray-900 dark:text-white">2000+</p>
+                        <p class="text-xs font-bold text-gray-500 dark:text-gray-400">Satisfied Users</p>
+                    </div>
+
+                    <!-- Floating Card 4 - Features -->
+                    <div
+                        class="absolute bottom-32 right-4 bg-white dark:bg-white/10 backdrop-blur-lg rounded-xl p-4 shadow-xl border border-gray-100 dark:border-white/20 animate-float-delayed">
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300">AI Powered</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-blue-500 text-sm">security</span>
+                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300">100% Secure</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-purple-500 text-sm">support_agent</span>
+                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300">24/7 Support</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Background Decorations -->
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-10 -left-10 w-56 h-56 bg-purple-500/20 rounded-full blur-3xl"></div>
                 </div>
-            </div>
-            <div class="relative">
-                <div
-                    class="w-full aspect-[4/3] bg-primary/5 rounded-3xl overflow-hidden border border-primary/10 shadow-2xl relative z-10 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-primary text-9xl">dashboard</span>
-                </div>
-                <div class="absolute -top-6 -right-6 w-32 h-32 bg-accent-green/20 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-primary/20 rounded-full blur-3xl"></div>
             </div>
         </div>
     </div>
+
+    <style>
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes float-delayed {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+            animation: float-delayed 6s ease-in-out infinite 1s;
+        }
+
+        .bg-grid-white\/10 {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+    </style>
 
     <!-- Marketplace Browsing -->
     <div class="bg-white dark:bg-background-dark/50 py-16 border-y border-[#e8e8f3] dark:border-white/10"

@@ -3,7 +3,7 @@
  * Consultation Booking Page
  */
 
-$pageTitle = 'Book a Consultation | ' . SITE_NAME;
+$pageTitle = 'Book a Consultation | SiteOnSub';
 include __DIR__ . '/includes/header.php';
 
 require_once __DIR__ . '/models/Consultation.php';

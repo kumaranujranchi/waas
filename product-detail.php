@@ -4,7 +4,7 @@
  */
 
 // Include header
-$pageTitle = 'Product Details | ' . SITE_NAME;
+$pageTitle = 'Product Details | SiteOnSub';
 include __DIR__ . '/includes/header.php';
 
 // Include models

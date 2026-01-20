@@ -3,7 +3,7 @@
  * User Dashboard
  */
 
-$pageTitle = 'Dashboard | ' . SITE_NAME;
+$pageTitle = 'Dashboard | SiteOnSub';
 include __DIR__ . '/../includes/header.php';
 
 // Require login

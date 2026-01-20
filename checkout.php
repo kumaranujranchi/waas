@@ -3,7 +3,7 @@
  * Checkout Page - Simplified
  */
 
-$pageTitle = 'Checkout | ' . SITE_NAME;
+$pageTitle = 'Checkout | SiteOnSub';
 include __DIR__ . '/includes/header.php';
 
 // Require login

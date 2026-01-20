@@ -4,7 +4,7 @@
  */
 
 // Include header
-$pageTitle = 'Login | ' . SITE_NAME;
+$pageTitle = 'Login | SiteOnSub';
 include __DIR__ . '/../includes/header.php';
 
 // Include models

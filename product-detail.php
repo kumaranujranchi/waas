@@ -6,6 +6,72 @@
 // Include header
 $pageTitle = 'Product Details | SiteOnSub';
 include __DIR__ . '/includes/header.php';
+?>
+<style>
+    .rich-text-content h1 {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+        margin-top: 1em;
+    }
+
+    .rich-text-content h2 {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+        margin-top: 1em;
+    }
+
+    .rich-text-content h3 {
+        font-size: 1.25em;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+        margin-top: 1em;
+    }
+
+    .rich-text-content p {
+        margin-bottom: 1em;
+        line-height: 1.6;
+    }
+
+    .rich-text-content ul {
+        list-style-type: disc;
+        padding-left: 1.5em;
+        margin-bottom: 1em;
+    }
+
+    .rich-text-content ol {
+        list-style-type: decimal;
+        padding-left: 1.5em;
+        margin-bottom: 1em;
+    }
+
+    .rich-text-content li {
+        margin-bottom: 0.5em;
+    }
+
+    .rich-text-content a {
+        color: #3b82f6;
+        text-decoration: underline;
+    }
+
+    .rich-text-content blockquote {
+        border-left: 4px solid #e5e7eb;
+        padding-left: 1em;
+        font-style: italic;
+        color: #6b7280;
+        margin-bottom: 1em;
+    }
+
+    .rich-text-content strong {
+        font-weight: bold;
+    }
+
+    .rich-text-content em {
+        font-style: italic;
+    }
+</style>
+<?php
 
 // Include models
 require_once __DIR__ . '/models/Product.php';
@@ -49,9 +115,9 @@ $faqs = $productModel->getProductFAQs($product['id']);
                     class="text-5xl lg:text-6xl font-black text-[#0f0e1b] dark:text-white leading-[1.1] tracking-tight mb-6">
                     <?php echo e($product['name']); ?>
                 </h1>
-                <p class="text-xl text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl">
+                <div class="rich-text-content text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl">
                     <?php echo html_entity_decode($product['full_description']); ?>
-                </p>
+                </div>
             </div>
 
             <div class="flex flex-wrap gap-3">

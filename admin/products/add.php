@@ -208,126 +208,130 @@ include __DIR__ . '/../includes/header.php';
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Long
                         Description</label>
-                    <div id="editor-container" class="h-[300px] bg-white dark:bg-black/5 rounded-lg"></div>
+                    <div id="editor-container" class="h-[300px] bg-white dark:bg-black/5 rounded-lg mb-4"></div>
                     <input type="hidden" name="full_description" id="full_description">
                 </div>
-            </div>
-        </div>
 
-        <!-- TinyMCE Integration -->
-        <!-- Quill Editor Integration -->
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-        <script>
-            var quill = new Quill('#editor-container', {
-                theme: 'snow',
-                placeholder: 'Detailed explanation of the service...',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        ['blockquote', 'code-block'],
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        [{ 'color': [] }, { 'background': [] }],
-                        ['link', 'image'],
-                        ['clean']
-                    ]
-                }
-            });
-
-            // Update hidden input on change
-            quill.on('text-change', function () {
-                document.getElementById('full_description').value = quill.root.innerHTML;
-            });
-        </script>
-
-        <div class="flex items-center gap-3 mt-4">
-            <input type="checkbox" name="is_featured" id="is_featured"
-                class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
-            <label for="is_featured" class="text-sm font-medium text-[#0f0e1b] dark:text-white">
-                Mark as Featured Product
-            </label>
-        </div>
-
-
-        <!-- Pricing Plans -->
-        <div class="bg-white dark:bg-white/5 rounded-xl p-8 border border-[#e8e8f3] dark:border-white/10 shadow-sm">
-            <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                <span class="material-symbols-outlined text-accent-green">payments</span>
-                Pricing Plans
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Monthly Price
-                        ($)</label>
-                    <input type="number" step="0.01" name="price_monthly"
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                        placeholder="0.00" />
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Half-Yearly Price
-                        ($)</label>
-                    <input type="number" step="0.01" name="price_half_yearly"
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                        placeholder="0.00" />
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Yearly Price
-                        ($)</label>
-                    <input type="number" step="0.01" name="price_yearly"
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                        placeholder="0.00" />
-                </div>
-            </div>
-        </div>
-
-        <!-- FAQ Section -->
-        <div class="bg-white dark:bg-white/5 rounded-xl p-8 border border-[#e8e8f3] dark:border-white/10 shadow-sm">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold flex items-center gap-2">
-                    <span class="material-symbols-outlined text-purple-600">quiz</span>
-                    Frequently Asked Questions
-                </h2>
-                <button type="button" id="add-faq"
-                    class="flex items-center gap-1 text-sm font-bold text-primary hover:text-primary/80 transition-colors">
-                    <span class="material-symbols-outlined text-lg">add_circle</span>
-                    Add FAQ
-                </button>
-            </div>
-
-            <div id="faq-container" class="space-y-4">
                 <div
-                    class="faq-item p-4 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10 relative">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Question</label>
-                            <input type="text" name="faq_question[]"
-                                class="w-full px-3 py-2 rounded border border-gray-300 dark:border-white/10 dark:bg-white/5 outline-none"
-                                placeholder="e.g. What is the turnaround time?" />
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Answer</label>
-                            <textarea name="faq_answer[]" rows="2"
-                                class="w-full px-3 py-2 rounded border border-gray-300 dark:border-white/10 dark:bg-white/5 outline-none"
-                                placeholder="e.g. Usually 2-3 business days..."></textarea>
-                        </div>
-                    </div>
+                    class="md:col-span-2 flex items-center gap-3 mt-4 pt-4 border-t border-gray-100 dark:border-white/5">
+                    <input type="checkbox" name="is_featured" id="is_featured"
+                        class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
+                    <label for="is_featured" class="text-sm font-medium text-[#0f0e1b] dark:text-white">
+                        Mark as Featured Product
+                    </label>
                 </div>
             </div>
         </div>
+</div>
 
-        <!-- Actions -->
-        <div class="flex gap-4 pt-4">
-            <button type="submit"
-                class="flex-1 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg text-lg">
-                Create Product Listing
-            </button>
-            <a href="<?php echo baseUrl('admin/products/list.php'); ?>"
-                class="px-10 py-4 border-2 border-gray-300 dark:border-white/10 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-white/5 transition-all text-lg">
-                Cancel
-            </a>
+<!-- TinyMCE Integration -->
+<!-- Quill Editor Integration -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    var quill = new Quill('#editor-container', {
+        theme: 'snow',
+        placeholder: 'Detailed explanation of the service...',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                ['blockquote', 'code-block'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'color': [] }, { 'background': [] }],
+                ['link', 'image'],
+                ['clean']
+            ]
+        }
+    });
+
+    // Update hidden input on change
+    quill.on('text-change', function () {
+        document.getElementById('full_description').value = quill.root.innerHTML;
+    });
+</script>
+
+
+
+
+<!-- Pricing Plans -->
+<div class="bg-white dark:bg-white/5 rounded-xl p-8 border border-[#e8e8f3] dark:border-white/10 shadow-sm">
+    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+        <span class="material-symbols-outlined text-accent-green">payments</span>
+        Pricing Plans
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Monthly Price
+                ($)</label>
+            <input type="number" step="0.01" name="price_monthly"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                placeholder="0.00" />
         </div>
-    </form>
+        <div>
+            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Half-Yearly Price
+                ($)</label>
+            <input type="number" step="0.01" name="price_half_yearly"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                placeholder="0.00" />
+        </div>
+        <div>
+            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Yearly Price
+                ($)</label>
+            <input type="number" step="0.01" name="price_yearly"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                placeholder="0.00" />
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="bg-white dark:bg-white/5 rounded-xl p-8 border border-[#e8e8f3] dark:border-white/10 shadow-sm">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-purple-600">quiz</span>
+            Frequently Asked Questions
+        </h2>
+        <button type="button" id="add-faq"
+            class="flex items-center gap-1 text-sm font-bold text-primary hover:text-primary/80 transition-colors">
+            <span class="material-symbols-outlined text-lg">add_circle</span>
+            Add FAQ
+        </button>
+    </div>
+
+    <div id="faq-container" class="space-y-4">
+        <div
+            class="faq-item p-4 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10 relative">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Question</label>
+                    <input type="text" name="faq_question[]"
+                        class="w-full px-3 py-2 rounded border border-gray-300 dark:border-white/10 dark:bg-white/5 outline-none"
+                        placeholder="e.g. What is the turnaround time?" />
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Answer</label>
+                    <textarea name="faq_answer[]" rows="2"
+                        class="w-full px-3 py-2 rounded border border-gray-300 dark:border-white/10 dark:bg-white/5 outline-none"
+                        placeholder="e.g. Usually 2-3 business days..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="flex gap-4 pt-4">
+    <button type="submit"
+        class="flex-1 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg text-lg">
+        Create Product Listing
+    </button>
+    <a href="<?php echo baseUrl('admin/products/list.php'); ?>"
+        class="px-10 py-4 border-2 border-gray-300 dark:border-white/10 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-white/5 transition-all text-lg">
+        Cancel
+    </a>
+</div>
+</form>
 </div>
 </main>
 

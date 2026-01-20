@@ -254,12 +254,13 @@ if ($searchQuery) {
             </div>
 
             <!-- Solution Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 <?php foreach ($products as $product): ?>
                     <a href="<?php echo baseUrl('product-detail.php?slug=' . $product['slug']); ?>"
-                        class="group bg-white dark:bg-white/5 rounded-2xl border border-[#e8e8f3] dark:border-white/10 overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-                        <div
-                            class="aspect-video w-full bg-[#f0f2f9] dark:bg-white/10 relative overflow-hidden flex items-center justify-center">
+                        class="group relative bg-white dark:bg-[#1a1c2e] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500">
+
+                        <!-- Image Container -->
+                        <div class="aspect-[4/3] w-full bg-[#f0f2f9] dark:bg-white/5 relative overflow-hidden">
                             <?php
                             $imageUrl = $product['image_url'];
                             if (!empty($imageUrl)) {
@@ -270,43 +271,72 @@ if ($searchQuery) {
                             ?>
                             <?php if (!empty($imageUrl)): ?>
                                 <img src="<?php echo e($imageUrl); ?>" alt="<?php echo e($product['name']); ?>"
-                                    class="w-full h-full object-cover"
+                                    class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                <div style="display:none;" class="absolute inset-0 flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-primary text-6xl">web</span>
+                                <div style="display:none;"
+                                    class="absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-white/5">
+                                    <span class="material-symbols-outlined text-gray-300 text-6xl">image</span>
                                 </div>
                             <?php else: ?>
-                                <span class="material-symbols-outlined text-primary text-6xl">web</span>
+                                <div class="absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-white/5">
+                                    <span class="material-symbols-outlined text-gray-300 text-6xl">image</span>
+                                </div>
                             <?php endif; ?>
+
+                            <!-- Gradient Overlay -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            </div>
+
+                            <!-- Badge -->
                             <?php if ($product['badge']): ?>
-                                <div
-                                    class="absolute top-3 left-3 bg-white dark:bg-background-dark/80 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">
-                                    <?php echo e($product['badge']); ?>
+                                <div class="absolute top-4 left-4">
+                                    <span
+                                        class="px-3 py-1.5 bg-white/95 dark:bg-black/80 backdrop-blur-md rounded-xl text-[10px] font-black uppercase tracking-widest text-[#0f0e1b] dark:text-white shadow-lg">
+                                        <?php echo e($product['badge']); ?>
+                                    </span>
                                 </div>
                             <?php endif; ?>
                         </div>
-                        <div class="p-5 flex flex-col gap-4">
-                            <div>
+
+                        <!-- Content -->
+                        <div class="p-6">
+                            <div class="mb-6">
                                 <h3
-                                    class="text-[#0f0e1b] dark:text-white text-lg font-bold group-hover:text-primary transition-colors">
+                                    class="text-xl font-black text-[#0f0e1b] dark:text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors">
                                     <?php echo e($product['name']); ?>
                                 </h3>
-                                <p class="text-[#545095] dark:text-white/60 text-sm mt-1 line-clamp-2">
+                                <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 h-10 leading-relaxed">
                                     <?php echo e($product['short_description']); ?>
                                 </p>
                             </div>
-                            <div class="flex items-center justify-between">
+
+                            <!-- Divider -->
+                            <div
+                                class="h-px w-full bg-gray-100 dark:bg-white/5 mb-6 group-hover:bg-primary/10 transition-colors">
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="flex items-end justify-between">
                                 <?php
-                                // Get the lowest price for this product
                                 $plans = $productModel->getProductPricingPlans($product['id']);
                                 $minPrice = !empty($plans) ? min(array_column($plans, 'price')) : 0;
                                 ?>
-                                <span class="text-primary font-bold">
-                                    <?php echo formatPrice($minPrice); ?>/mo
-                                </span>
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Starting
+                                        from</p>
+                                    <div class="flex items-baseline gap-1">
+                                        <span class="text-2xl font-black text-primary">
+                                            <?php echo formatPrice($minPrice); ?>
+                                        </span>
+                                        <span class="text-xs font-bold text-gray-400">/mo</span>
+                                    </div>
+                                </div>
+
                                 <button
-                                    class="px-4 py-2 bg-background-light dark:bg-white/10 rounded-lg text-xs font-bold hover:bg-primary hover:text-white transition-all">
-                                    View Details
+                                    class="size-12 rounded-full bg-gray-50 dark:bg-white/5 text-[#0f0e1b] dark:text-white flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/30">
+                                    <span
+                                        class="material-symbols-outlined transform group-hover:rotate-[-45deg] transition-transform duration-300">arrow_forward</span>
                                 </button>
                             </div>
                         </div>

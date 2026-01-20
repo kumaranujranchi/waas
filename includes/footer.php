@@ -11,7 +11,8 @@
                         <?php echo SITE_NAME; ?>
                     </h2>
                 </div>
-                <p class="text-xs font-bold text-primary mb-6"><?php echo SITE_TAGLINE; ?></p>
+                <p class="text-xs font-bold text-primary mb-6">
+                    <?php echo defined('SITE_TAGLINE') ? SITE_TAGLINE : 'WaaS Marketplace'; ?></p>
                 <p class="text-[#545095] dark:text-white/60 text-sm max-w-xs mb-6 leading-relaxed">
                     Modern websites and enterprise-grade software delivered as a service. No dev costs, no maintenance
                     headaches.

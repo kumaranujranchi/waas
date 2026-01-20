@@ -260,8 +260,16 @@ if ($searchQuery) {
                         class="group bg-white dark:bg-white/5 rounded-2xl border border-[#e8e8f3] dark:border-white/10 overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
                         <div
                             class="aspect-video w-full bg-[#f0f2f9] dark:bg-white/10 relative overflow-hidden flex items-center justify-center">
-                            <?php if (!empty($product['image_url']) && filter_var($product['image_url'], FILTER_VALIDATE_URL)): ?>
-                                <img src="<?php echo e($product['image_url']); ?>" alt="<?php echo e($product['name']); ?>"
+                            <?php
+                            $imageUrl = $product['image_url'];
+                            if (!empty($imageUrl)) {
+                                if (!filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+                                    $imageUrl = baseUrl($imageUrl);
+                                }
+                            }
+                            ?>
+                            <?php if (!empty($imageUrl)): ?>
+                                <img src="<?php echo e($imageUrl); ?>" alt="<?php echo e($product['name']); ?>"
                                     class="w-full h-full object-cover"
                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                 <div style="display:none;" class="absolute inset-0 flex items-center justify-center">

@@ -227,9 +227,14 @@ include __DIR__ . '/../includes/header.php';
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Thumbnail Image
                         (Optional)</label>
-                    <?php if (!empty($product['image_url'])): ?>
+                    <?php if (!empty($product['image_url'])):
+                        $imageUrl = $product['image_url'];
+                        if (!filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+                            $imageUrl = baseUrl($imageUrl);
+                        }
+                        ?>
                         <div class="mb-3">
-                            <img src="<?php echo baseUrl($product['image_url']); ?>" alt="Current Image"
+                            <img src="<?php echo $imageUrl; ?>" alt="Current Image"
                                 class="h-20 w-auto rounded border border-gray-200 dark:border-white/10">
                         </div>
                     <?php endif; ?>

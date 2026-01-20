@@ -35,8 +35,16 @@ $products = $productModel->getAllProducts();
                 class="bg-white dark:bg-white/5 rounded-2xl border-2 border-gray-300 dark:border-white/10 overflow-hidden hover:shadow-xl transition-all group shadow-sm">
                 <div
                     class="aspect-video w-full bg-gray-100 dark:bg-white/10 flex items-center justify-center relative overflow-hidden">
-                    <?php if ($product['image_url']): ?>
-                        <img src="<?php echo e($product['image_url']); ?>" alt="<?php echo e($product['name']); ?>"
+                    <?php
+                    $imageUrl = $product['image_url'];
+                    if (!empty($imageUrl)) {
+                        if (!filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+                            $imageUrl = baseUrl($imageUrl);
+                        }
+                    }
+                    ?>
+                    <?php if ($imageUrl): ?>
+                        <img src="<?php echo e($imageUrl); ?>" alt="<?php echo e($product['name']); ?>"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     <?php else: ?>
                         <span class="material-symbols-outlined text-6xl text-gray-300">image</span>

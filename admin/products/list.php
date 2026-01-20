@@ -32,7 +32,7 @@ $products = $productModel->getAllProducts();
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <?php foreach ($products as $product): ?>
             <div
-                class="bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden hover:shadow-xl transition-all group shadow-sm">
+                class="bg-white dark:bg-white/5 rounded-2xl border-2 border-gray-300 dark:border-white/10 overflow-hidden hover:shadow-xl transition-all group shadow-sm">
                 <div
                     class="aspect-video w-full bg-gray-100 dark:bg-white/10 flex items-center justify-center relative overflow-hidden">
                     <?php if ($product['image_url']): ?>
@@ -63,11 +63,11 @@ $products = $productModel->getAllProducts();
                     </p>
                     <div class="flex gap-2">
                         <a href="<?php echo baseUrl('admin/products/edit.php?id=' . $product['id']); ?>"
-                            class="flex-1 text-center px-4 py-3 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all">
+                            class="flex-1 text-center px-4 py-3 bg-gray-50 dark:bg-white/5 border-2 border-gray-300 dark:border-white/10 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all">
                             Edit
                         </a>
                         <a href="<?php echo baseUrl('product-detail.php?slug=' . $product['slug']); ?>" target="_blank"
-                            class="size-11 flex items-center justify-center border border-gray-100 dark:border-white/10 rounded-xl text-gray-400 hover:text-primary transition-all">
+                            class="size-11 flex items-center justify-center border-2 border-gray-300 dark:border-white/10 rounded-xl text-gray-400 hover:text-primary transition-all">
                             <span class="material-symbols-outlined">visibility</span>
                         </a>
                     </div>

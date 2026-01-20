@@ -6,7 +6,7 @@ include __DIR__ . '/../includes/header.php';
     <!-- Header -->
     <div class="flex items-center gap-4 mb-8">
         <a href="<?php echo baseUrl('admin/products/list.php'); ?>"
-            class="size-10 rounded-xl bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-white/10 transition-all shadow-sm">
+            class="size-10 rounded-xl bg-white dark:bg-white/5 border-2 border-gray-300 dark:border-white/10 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-white/10 transition-all shadow-sm">
             <span class="material-symbols-outlined">arrow_back</span>
         </a>
         <div>

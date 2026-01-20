@@ -35,7 +35,7 @@ $users = $userModel->getAllUsers();
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php foreach ($users as $user): ?>
                 <div
-                    class="bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden hover:shadow-xl transition-all shadow-sm">
+                    class="bg-white dark:bg-white/5 rounded-2xl border-2 border-gray-300 dark:border-white/10 overflow-hidden hover:shadow-xl transition-all shadow-sm">
                     <div class="p-6">
                         <!-- User Avatar & Info -->
                         <div class="flex items-start gap-4 mb-4">
@@ -113,7 +113,7 @@ $users = $userModel->getAllUsers();
                         <!-- Actions -->
                         <div class="flex gap-2">
                             <a href="<?php echo baseUrl('admin/users/view.php?id=' . $user['id']); ?>"
-                                class="flex-1 text-center px-4 py-3 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all">
+                                class="flex-1 text-center px-4 py-3 bg-gray-50 dark:bg-white/5 border-2 border-gray-300 dark:border-white/10 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all">
                                 View Details
                             </a>
                         </div>

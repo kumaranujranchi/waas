@@ -26,7 +26,7 @@ $activeSubscriptions = count($subscriptionModel->getAllSubscriptions());
 <div class="p-8">
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <div class="bg-white dark:bg-white/5 rounded-2xl p-6 border border-gray-100 dark:border-white/10 shadow-sm">
+        <div class="bg-white dark:bg-white/5 rounded-2xl p-6 border-2 border-gray-300 dark:border-white/10 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <div class="size-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                     <span class="material-symbols-outlined text-3xl">inventory_2</span>
@@ -40,7 +40,7 @@ $activeSubscriptions = count($subscriptionModel->getAllSubscriptions());
             <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Services</p>
         </div>
 
-        <div class="bg-white dark:bg-white/5 rounded-2xl p-6 border border-gray-100 dark:border-white/10 shadow-sm">
+        <div class="bg-white dark:bg-white/5 rounded-2xl p-6 border-2 border-gray-300 dark:border-white/10 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <div class="size-12 bg-accent-green/10 rounded-xl flex items-center justify-center text-accent-green">
                     <span class="material-symbols-outlined text-3xl">group</span>
@@ -54,7 +54,7 @@ $activeSubscriptions = count($subscriptionModel->getAllSubscriptions());
             <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Customers</p>
         </div>
 
-        <div class="bg-white dark:bg-white/5 rounded-2xl p-6 border border-gray-100 dark:border-white/10 shadow-sm">
+        <div class="bg-white dark:bg-white/5 rounded-2xl p-6 border-2 border-gray-300 dark:border-white/10 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <div class="size-12 bg-purple-600/10 rounded-xl flex items-center justify-center text-purple-600">
                     <span class="material-symbols-outlined text-3xl">payments</span>
@@ -68,7 +68,7 @@ $activeSubscriptions = count($subscriptionModel->getAllSubscriptions());
             <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Revenue</p>
         </div>
 
-        <div class="bg-white dark:bg-white/5 rounded-2xl p-6 border border-gray-100 dark:border-white/10 shadow-sm">
+        <div class="bg-white dark:bg-white/5 rounded-2xl p-6 border-2 border-gray-300 dark:border-white/10 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <div class="size-12 bg-orange-600/10 rounded-xl flex items-center justify-center text-orange-600">
                     <span class="material-symbols-outlined text-3xl">subscriptions</span>
@@ -100,14 +100,14 @@ $activeSubscriptions = count($subscriptionModel->getAllSubscriptions());
         </a>
 
         <a href="<?php echo baseUrl('admin/orders/list.php'); ?>"
-            class="bg-white dark:bg-white/5 rounded-2xl p-8 border border-gray-100 dark:border-white/10 hover:shadow-lg transition-all group">
+            class="bg-white dark:bg-white/5 rounded-2xl p-8 border-2 border-gray-300 dark:border-white/10 hover:shadow-lg transition-all group">
             <span class="material-symbols-outlined text-5xl text-accent-green mb-4 block">shopping_cart_checkout</span>
             <h3 class="text-xl font-bold mb-2">Check Orders</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400">Review pending and completed transactions</p>
         </a>
 
         <a href="<?php echo baseUrl('admin/users/list.php'); ?>"
-            class="bg-white dark:bg-white/5 rounded-2xl p-8 border border-gray-100 dark:border-white/10 hover:shadow-lg transition-all group">
+            class="bg-white dark:bg-white/5 rounded-2xl p-8 border-2 border-gray-300 dark:border-white/10 hover:shadow-lg transition-all group">
             <span class="material-symbols-outlined text-5xl text-purple-600 mb-4 block">person_search</span>
             <h3 class="text-xl font-bold mb-2">Manage Users</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400">Update customer profiles and access</p>
@@ -116,7 +116,7 @@ $activeSubscriptions = count($subscriptionModel->getAllSubscriptions());
 
     <!-- Recent Activity -->
     <div
-        class="bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm overflow-hidden">
+        class="bg-white dark:bg-white/5 rounded-2xl border-2 border-gray-300 dark:border-white/10 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-gray-100 dark:border-white/5 flex justify-between items-center">
             <h2 class="text-xl font-black">Recent Orders</h2>
             <a href="<?php echo baseUrl('admin/orders/list.php'); ?>"

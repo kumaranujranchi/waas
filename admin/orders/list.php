@@ -34,7 +34,7 @@ $orders = $orderModel->getAllOrders();
     <?php else: ?>
         <!-- Orders Table -->
         <div
-            class="bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm overflow-hidden">
+            class="bg-white dark:bg-white/5 rounded-2xl border-2 border-gray-300 dark:border-white/10 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
                     <thead>
@@ -124,7 +124,7 @@ $orders = $orderModel->getAllOrders();
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <a href="<?php echo baseUrl('admin/orders/view.php?id=' . $order['id']); ?>"
-                                        class="inline-flex items-center gap-1 px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all">
+                                        class="inline-flex items-center gap-1 px-3 py-2 bg-gray-50 dark:bg-white/5 border-2 border-gray-300 dark:border-white/10 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all">
                                         <span class="material-symbols-outlined text-sm">visibility</span>
                                         View
                                     </a>

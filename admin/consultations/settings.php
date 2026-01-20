@@ -4,8 +4,8 @@
  */
 
 $pageTitle = 'Availability Settings';
-include __DIR__ . '/../../includes/header.php';
-require_once __DIR__ . '/../../../models/Consultation.php';
+include __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../../models/Consultation.php';
 
 $consultationModel = new Consultation();
 
@@ -186,4 +186,4 @@ $weekDays = ['mon' => 'Monday', 'tue' => 'Tuesday', 'wed' => 'Wednesday', 'thu' 
     </div>
 </div>
 
-<?php include __DIR__ . '/../../includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

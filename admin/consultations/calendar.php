@@ -34,6 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_slot'])) {
     redirect($_SERVER['PHP_SELF']);
 }
 
+// NOW include header (after all redirects are done)
+$pageTitle = 'Consultation Calendar';
+include __DIR__ . '/../includes/header.php';
+
 // Get next 7 days
 $dates = [];
 for ($i = 0; $i < 7; $i++) {

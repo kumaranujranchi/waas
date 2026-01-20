@@ -98,20 +98,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
+
                 // Handle FAQs
                 if (!empty($_POST['faq_question'])) {
+                    // Debug: Log what we received
+                    error_log("FAQ Questions received: " . print_r($_POST['faq_question'], true));
+                    error_log("FAQ Answers received: " . print_r($_POST['faq_answer'], true));
+
                     foreach ($_POST['faq_question'] as $index => $question) {
                         $answer = $_POST['faq_answer'][$index] ?? '';
+
+                        // Debug: Log each FAQ before processing
+                        error_log("Processing FAQ #$index - Q: $question | A: $answer");
+
                         if (!empty($question) && !empty($answer)) {
-                            $productModel->createFAQ([
+                            $faqData = [
                                 'product_id' => $productId,
                                 'question' => sanitizeInput($question),
                                 'answer' => sanitizeInput($answer),
                                 'display_order' => $index
-                            ]);
+                            ];
+
+                            // Debug: Log sanitized data
+                            error_log("Sanitized FAQ #$index: " . print_r($faqData, true));
+
+                            $faqId = $productModel->createFAQ($faqData);
+                            error_log("FAQ #$index created with ID: $faqId");
+                        } else {
+                            error_log("FAQ #$index skipped - empty question or answer");
                         }
                     }
                 }
+
 
                 $db->commit();
                 setFlashMessage('success', 'Product created successfully with pricing and FAQs!');

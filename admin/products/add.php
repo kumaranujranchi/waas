@@ -241,7 +241,7 @@ include __DIR__ . '/../includes/header.php';
             });
         </script>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 mt-4">
             <input type="checkbox" name="is_featured" id="is_featured"
                 class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
             <label for="is_featured" class="text-sm font-medium text-[#0f0e1b] dark:text-white">

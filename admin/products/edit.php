@@ -294,7 +294,7 @@ include __DIR__ . '/../includes/header.php';
             });
         </script>
 
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 mt-4">
                     <input type="checkbox" name="is_featured" id="is_featured" value="1" <?php echo $product['is_featured'] ? 'checked' : ''; ?>
                         class="w-5 h-5 rounded border-2 border-gray-300 text-primary focus:ring-primary">
                     <label for="is_featured" class="text-sm font-bold text-[#0f0e1b] dark:text-white">Mark as

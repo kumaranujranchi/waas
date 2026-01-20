@@ -1,6 +1,6 @@
 <?php
 /**
- * Consultation Booking Page
+ * Consultation Booking Page - Calendly Style
  */
 
 // Include dependencies first
@@ -9,17 +9,16 @@ require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/models/Consultation.php';
 
-// Start session if needed (functions.php might do it, but good to be safe for flash messages)
+// Start session if needed
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 $pageTitle = 'Book a Consultation | SiteOnSub';
+$consultationModel = new Consultation();
 
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $consultationModel = new Consultation();
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_consultation'])) {
     $data = [
         'user_id' => getCurrentUserId(),
         'full_name' => sanitizeInput($_POST['full_name'] ?? ''),
@@ -42,265 +41,276 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Phone number is required';
     if (empty($data['business_type']))
         $errors[] = 'Business type is required';
+    if (empty($data['preferred_date']) || empty($data['preferred_time']))
+        $errors[] = 'Please select a date and time';
 
     if (empty($errors)) {
-        $bookingId = $consultationModel->createBooking($data);
-
-        if ($bookingId) {
-            setFlashMessage('success', 'Consultation request submitted successfully! We will contact you soon.');
-            redirect(baseUrl('index.php'));
+        // Check if slot is still available
+        $slotId = $_POST['slot_id'] ?? null;
+        if ($slotId && $consultationModel->isSlotAvailable($slotId)) {
+            $bookingId = $consultationModel->createBooking($data);
+            
+            if ($bookingId) {
+                // Mark slot as booked
+                $consultationModel->bookSlot($slotId, $bookingId);
+                setFlashMessage('success', 'Consultation booked successfully! We will contact you soon.');
+                redirect(baseUrl('index.php'));
+            } else {
+                setFlashMessage('error', 'Failed to book consultation. Please try again.');
+            }
         } else {
-            setFlashMessage('error', 'Failed to submit consultation request. Please try again.');
+            setFlashMessage('error', 'This slot is no longer available. Please select another time.');
         }
     } else {
         setFlashMessage('error', implode('<br>', $errors));
     }
 }
 
-// Handle AJAX Slot Fetching
-if (isset($_GET['action']) && $_GET['action'] === 'get_slots' && isset($_GET['date'])) {
-    header('Content-Type: application/json');
-    $date = $_GET['date'];
-
-    $consultationModel = new Consultation();
-    $slots = $consultationModel->getAvailableSlots($date);
-
-    // Format slots for frontend
-    $formattedSlots = [];
-    foreach ($slots as $slot) {
-        $formattedSlots[] = [
-            'id' => $slot['id'],
-            'value' => $slot['start_time'],
-            'label' => date('g:i A', strtotime($slot['start_time'])) . ' - ' . date('g:i A', strtotime($slot['end_time']))
-        ];
-    }
-
-    echo json_encode(['slots' => $formattedSlots]);
-    exit;
-}
-
-// Handle AJAX Available Dates Fetching
+// Get available dates for AJAX
 if (isset($_GET['action']) && $_GET['action'] === 'get_dates') {
     header('Content-Type: application/json');
-    $consultationModel = new Consultation();
     $dates = $consultationModel->getAvailableDates();
     echo json_encode(['dates' => $dates]);
     exit;
 }
 
-// Include header (Output starts here)
-include __DIR__ . '/includes/header.php';
+// Get slots for a date (AJAX)
+if (isset($_GET['action']) && $_GET['action'] === 'get_slots' && isset($_GET['date'])) {
+    header('Content-Type: application/json');
+    $date = $_GET['date'];
+    $slots = $consultationModel->getAvailableSlots($date);
+    
+    $formattedSlots = [];
+    foreach ($slots as $slot) {
+        $formattedSlots[] = [
+            'id' => $slot['id'],
+            'start_time' => $slot['start_time'],
+            'end_time' => $slot['end_time'],
+            'label' => date('g:i A', strtotime($slot['start_time'])) . ' - ' . date('g:i A', strtotime($slot['end_time']))
+        ];
+    }
+    
+    echo json_encode(['slots' => $formattedSlots]);
+    exit;
+}
+
+// Get current month/year for calendar
+$currentMonth = isset($_GET['month']) ? (int)$_GET['month'] : date('n');
+$currentYear = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+
+$firstDay = mktime(0, 0, 0, $currentMonth, 1, $currentYear);
+$daysInMonth = date('t', $firstDay);
+$dayOfWeek = date('w', $firstDay);
+$monthName = date('F Y', $firstDay);
+
+// Get available dates for this month
+$availableDates = $consultationModel->getAvailableDates();
 
 // Pre-fill data if user is logged in
 $currentUser = getCurrentUser();
 $prefillName = $currentUser['full_name'] ?? '';
 $prefillEmail = $currentUser['email'] ?? '';
 $prefillPhone = $currentUser['phone'] ?? '';
+
+// Include header
+include __DIR__ . '/includes/header.php';
 ?>
 
-<main class="flex-1 flex items-center justify-center py-12 px-6 md:px-20">
-    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-        <!-- Left Side: Value Proposition -->
-        <div class="flex flex-col space-y-8">
-            <div>
-                <span class="text-primary font-semibold text-sm tracking-widest uppercase">Expert Consultations</span>
-                <h1 class="text-4xl md:text-5xl font-bold leading-tight mt-4 text-[#0f0e1b] dark:text-white">
-                    Transform Your Digital Presence with a Strategy Call
-                </h1>
-                <p class="text-lg text-slate-600 dark:text-slate-400 mt-6 leading-relaxed">
-                    Discuss your project with our WaaS experts and find the perfect software solution for your business
-                    growth. We help you skip the technical hurdles and focus on scaling.
-                </p>
-            </div>
-
-            <div class="space-y-4">
-                <div class="flex items-start gap-4">
-                    <div class="bg-primary/10 p-2 rounded-lg text-primary">
-                        <span class="material-symbols-outlined">map</span>
-                    </div>
-                    <div>
-                        <h4 class="font-bold">Custom solution mapping</h4>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">Tailored strategies to fit your unique
-                            business model and goals.</p>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-4">
-                    <div class="bg-primary/10 p-2 rounded-lg text-primary">
-                        <span class="material-symbols-outlined">payments</span>
-                    </div>
-                    <div>
-                        <h4 class="font-bold">Transparent pricing & subscription</h4>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">No hidden fees. Predictable monthly costs
-                            for high-end software.</p>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-4">
-                    <div class="bg-primary/10 p-2 rounded-lg text-primary">
-                        <span class="material-symbols-outlined">trending_up</span>
-                    </div>
-                    <div>
-                        <h4 class="font-bold">Scalability consultation</h4>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">Infrastructure advice that grows as fast
-                            as your user base does.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pt-8 border-t border-slate-200 dark:border-white/10">
-                <p class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                    <span class="flex -space-x-2">
-                        <div class="w-8 h-8 rounded-full border-2 border-background-light"
-                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                        <div class="w-8 h-8 rounded-full border-2 border-background-light"
-                            style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
-                        <div class="w-8 h-8 rounded-full border-2 border-background-light"
-                            style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
-                    </span>
-                    <span class="ml-2">Trusted by 500+ businesses worldwide</span>
-                </p>
-            </div>
+<main class="flex-1 py-12 px-6 md:px-20">
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <span class="text-primary font-semibold text-sm tracking-widest uppercase">Book a Consultation</span>
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight mt-4 text-[#0f0e1b] dark:text-white">
+                Select a Date & Time
+            </h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400 mt-4">
+                Choose a convenient time for your free 1-hour consultation
+            </p>
         </div>
 
-        <!-- Right Side: Booking Form -->
-        <div
-            class="bg-white dark:bg-[#1c1b2e] rounded-2xl shadow-xl shadow-primary/5 p-8 border border-slate-100 dark:border-white/5">
-            <div class="flex items-center justify-between mb-8">
-                <div class="flex gap-2">
-                    <div class="h-1.5 w-8 rounded-full bg-primary"></div>
-                    <div class="h-1.5 w-8 rounded-full bg-slate-200 dark:bg-slate-700"></div>
-                    <div class="h-1.5 w-8 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Calendar Section -->
+            <div class="bg-white dark:bg-[#1c1b2e] rounded-2xl shadow-xl p-6 border border-slate-100 dark:border-white/5">
+                <!-- Month Navigation -->
+                <div class="flex items-center justify-between mb-6">
+                    <a href="?month=<?php echo $currentMonth == 1 ? 12 : $currentMonth - 1; ?>&year=<?php echo $currentMonth == 1 ? $currentYear - 1 : $currentYear; ?>"
+                        class="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-all">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </a>
+                    <span class="text-lg font-bold text-[#0f0e1b] dark:text-white">
+                        <?php echo $monthName; ?>
+                    </span>
+                    <a href="?month=<?php echo $currentMonth == 12 ? 1 : $currentMonth + 1; ?>&year=<?php echo $currentMonth == 12 ? $currentYear + 1 : $currentYear; ?>"
+                        class="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-all">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </a>
                 </div>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Step 1 of 3</span>
+
+                <!-- Calendar Grid -->
+                <div class="grid grid-cols-7 gap-2">
+                    <?php foreach (['S', 'M', 'T', 'W', 'T', 'F', 'S'] as $day): ?>
+                    <div class="text-center text-xs font-bold text-gray-500 py-2">
+                        <?php echo $day; ?>
+                    </div>
+                    <?php endforeach; ?>
+
+                    <?php
+                    // Empty cells before first day
+                    for ($i = 0; $i < $dayOfWeek; $i++) {
+                        echo '<div class="aspect-square"></div>';
+                    }
+
+                    // Days of month
+                    for ($day = 1; $day <= $daysInMonth; $day++) {
+                        $date = sprintf('%04d-%02d-%02d', $currentYear, $currentMonth, $day);
+                        $isToday = $date === date('Y-m-d');
+                        $isPast = strtotime($date) < strtotime('today');
+                        $hasSlots = in_array($date, $availableDates);
+                    ?>
+                    <button type="button"
+                        onclick="<?php echo (!$isPast && $hasSlots) ? "selectDate('$date')" : ''; ?>"
+                        class="aspect-square rounded-lg flex items-center justify-center text-sm font-bold transition-all
+                            <?php echo $isPast ? 'text-gray-300 dark:text-gray-700 cursor-not-allowed' : ''; ?>
+                            <?php echo (!$isPast && $hasSlots) ? 'hover:bg-primary/10 hover:text-primary cursor-pointer' : ''; ?>
+                            <?php echo (!$isPast && !$hasSlots) ? 'text-gray-400 cursor-not-allowed' : ''; ?>
+                            <?php echo $isToday ? 'border-2 border-primary' : ''; ?>"
+                        <?php echo ($isPast || !$hasSlots) ? 'disabled' : ''; ?>>
+                        <?php echo $day; ?>
+                        <?php if ($hasSlots && !$isPast): ?>
+                        <span class="absolute w-1.5 h-1.5 bg-primary rounded-full mt-6"></span>
+                        <?php endif; ?>
+                    </button>
+                    <?php } ?>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-gray-200 dark:border-white/10">
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <div class="w-3 h-3 bg-primary rounded-full"></div>
+                        <span>Available dates</span>
+                    </div>
+                </div>
             </div>
 
-            <form method="POST" action="" class="space-y-6">
-                <!-- Contact Info -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Name</label>
-                        <input type="text" name="full_name" required value="<?php echo e($prefillName); ?>"
-                            class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="John Doe" />
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Work Email</label>
-                        <input type="email" name="email" required value="<?php echo e($prefillEmail); ?>"
-                            class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="john@company.com" />
-                    </div>
+            <!-- Booking Form Section -->
+            <div id="bookingForm" class="bg-white dark:bg-[#1c1b2e] rounded-2xl shadow-xl p-6 border border-slate-100 dark:border-white/5">
+                <div id="selectDatePrompt" class="flex flex-col items-center justify-center h-full text-center py-12">
+                    <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-700 mb-4">event</span>
+                    <p class="text-gray-500 dark:text-gray-400">Select a date from the calendar to see available time slots</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone Number</label>
-                        <input type="tel" name="phone" required value="<?php echo e($prefillPhone); ?>"
-                            class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="+1 (555) 000-0000" />
+                <form id="consultationForm" method="POST" class="hidden space-y-6">
+                    <input type="hidden" name="book_consultation" value="1">
+                    <input type="hidden" name="slot_id" id="selectedSlotId">
+                    <input type="hidden" name="preferred_date" id="selectedDate">
+                    <input type="hidden" name="preferred_time" id="selectedTime">
+
+                    <div>
+                        <h3 class="font-bold text-lg mb-2" id="selectedDateDisplay"></h3>
+                        <p class="text-sm text-gray-500">Select a time slot</p>
                     </div>
 
-                    <div class="space-y-2">
-                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Business Type</label>
-                        <select name="business_type" required
-                            class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
-                            <option value="">Select type</option>
-                            <option value="E-commerce">E-commerce</option>
-                            <option value="SaaS Start-up">SaaS Start-up</option>
-                            <option value="Real Estate">Real Estate</option>
-                            <option value="Professional Services">Professional Services</option>
-                            <option value="Agency">Agency</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Project Requirements</label>
-                    <textarea name="requirements" rows="3"
-                        class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="Tell us about your project goals..."></textarea>
-                </div>
-
-                <!-- Availability Section -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-primary/5 p-4 rounded-xl border border-primary/10">
-                    <div class="space-y-2">
-                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-primary text-sm">calendar_month</span>
-                            Preferred Date
-                        </label>
-                        <input type="date" name="preferred_date" id="date-picker" required
-                            min="<?php echo date('Y-m-d'); ?>"
-                            class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
+                    <div id="timeSlots" class="space-y-2 max-h-48 overflow-y-auto">
+                        <!-- Time slots will be loaded here -->
                     </div>
 
-                    <div class="space-y-2">
-                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-primary text-sm">schedule</span>
-                            Available Slot
-                        </label>
-                        <select name="preferred_time" id="time-picker" required disabled
-                            class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-                            <option value="">Select Date First</option>
-                        </select>
-                    </div>
-                </div>
+                    <div class="space-y-4 pt-4 border-t border-gray-200 dark:border-white/10">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Name</label>
+                                <input type="text" name="full_name" required value="<?php echo e($prefillName); ?>"
+                                    class="w-full px-4 py-2 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm">
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Email</label>
+                                <input type="email" name="email" required value="<?php echo e($prefillEmail); ?>"
+                                    class="w-full px-4 py-2 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm">
+                            </div>
+                        </div>
 
-                <div class="flex flex-col gap-4 pt-4">
-                    <button type="submit"
-                        class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all">
-                        Confirm Booking
-                    </button>
-                    <div class="flex items-center justify-center gap-2 text-slate-400 text-xs">
-                        <span class="material-symbols-outlined text-[16px]">lock</span>
-                        Secured & Encrypted Data Handling
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone</label>
+                                <input type="tel" name="phone" required value="<?php echo e($prefillPhone); ?>"
+                                    class="w-full px-4 py-2 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm">
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Business Type</label>
+                                <select name="business_type" required
+                                    class="w-full px-4 py-2 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm">
+                                    <option value="">Select</option>
+                                    <option value="E-commerce">E-commerce</option>
+                                    <option value="SaaS">SaaS</option>
+                                    <option value="Agency">Agency</option>
+                                    <option value="Startup">Startup</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Requirements (Optional)</label>
+                            <textarea name="requirements" rows="3"
+                                class="w-full px-4 py-2 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm"
+                                placeholder="Tell us about your project..."></textarea>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-primary/90 transition-all">
+                            Confirm Booking
+                        </button>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const datePicker = document.getElementById('date-picker');
-        const timePicker = document.getElementById('time-picker');
-
-        datePicker.addEventListener('change', function () {
-            const date = this.value;
-            if (!date) return;
-
-            // Reset Time Picker
-            timePicker.innerHTML = '<option value="">Loading slots...</option>';
-            timePicker.disabled = true;
-
-            // Fetch Slots
-            fetch(`consultation.php?action=get_slots&date=${date}`)
-                .then(response => response.json())
-                .then(data => {
-                    timePicker.innerHTML = '<option value="">Select Time</option>';
-
-                    if (data.slots && data.slots.length > 0) {
-                        data.slots.forEach(slot => {
-                            const option = document.createElement('option');
-                            option.value = slot.value;
-                            option.textContent = slot.label;
-                            timePicker.appendChild(option);
-                        });
-                        timePicker.disabled = false;
-                    } else {
-                        const option = document.createElement('option');
-                        option.textContent = "No slots available";
-                        timePicker.appendChild(option);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching slots:', error);
-                    timePicker.innerHTML = '<option value="">Error loading slots</option>';
-                });
-        });
+function selectDate(date) {
+    document.getElementById('selectedDate').value = date;
+    document.getElementById('selectedDateDisplay').textContent = new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     });
+
+    // Load time slots
+    fetch(`?action=get_slots&date=${date}`)
+        .then(r => r.json())
+        .then(data => {
+            const container = document.getElementById('timeSlots');
+            
+            if (data.slots.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center py-4">No available slots for this date</p>';
+                return;
+            }
+
+            container.innerHTML = data.slots.map(slot => `
+                <button type="button" onclick="selectSlot(${slot.id}, '${slot.start_time}', '${slot.label}')"
+                    class="w-full px-4 py-3 border-2 border-gray-200 dark:border-white/10 rounded-lg hover:border-primary hover:bg-primary/5 transition-all text-left font-medium slot-btn">
+                    ${slot.label}
+                </button>
+            `).join('');
+
+            document.getElementById('selectDatePrompt').classList.add('hidden');
+            document.getElementById('consultationForm').classList.remove('hidden');
+        });
+}
+
+function selectSlot(slotId, time, label) {
+    document.getElementById('selectedSlotId').value = slotId;
+    document.getElementById('selectedTime').value = time;
+    
+    // Highlight selected slot
+    document.querySelectorAll('.slot-btn').forEach(btn => {
+        btn.classList.remove('border-primary', 'bg-primary/10');
+        btn.classList.add('border-gray-200', 'dark:border-white/10');
+    });
+    event.target.classList.add('border-primary', 'bg-primary/10');
+    event.target.classList.remove('border-gray-200', 'dark:border-white/10');
+}
 </script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

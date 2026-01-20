@@ -160,11 +160,11 @@ $isLoggedIn = isLoggedIn();
             </div>
             <nav class="hidden md:flex items-center gap-8">
                 <a class="text-[#0f0e1b] dark:text-white/80 text-sm font-medium hover:text-primary transition-colors"
-                    href="<?php echo baseUrl('index.php'); ?>">Websites</a>
-                <a class="text-[#0f0e1b] dark:text-white/80 text-sm font-medium hover:text-primary transition-colors"
-                    href="<?php echo baseUrl('index.php#pricing'); ?>">Pricing</a>
+                    href="<?php echo baseUrl('index.php'); ?>">Service</a>
                 <a class="text-[#0f0e1b] dark:text-white/80 text-sm font-medium hover:text-primary transition-colors"
                     href="<?php echo baseUrl('consultation.php'); ?>">Book Consultation</a>
+                <a class="text-[#0f0e1b] dark:text-white/80 text-sm font-medium hover:text-primary transition-colors"
+                    href="<?php echo baseUrl('how-it-works.php'); ?>">How it works</a>
             </nav>
             <div class="flex items-center gap-4">
                 <?php if ($isLoggedIn): ?>

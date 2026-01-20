@@ -146,4 +146,108 @@ class Consultation
     {
         return $this->db->delete('consultations', 'id = ?', [$id]);
     }
+
+    // --- Availability System ---
+
+    /**
+     * Get availability settings for all days
+     */
+    public function getAvailabilitySettings()
+    {
+        $sql = "SELECT * FROM consultation_availability ORDER BY FIELD(day_of_week, 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun')";
+        return $this->db->fetchAll($sql);
+    }
+
+    /**
+     * Update availability for a specific day
+     */
+    public function updateAvailability($day, $isActive, $startTime, $endTime)
+    {
+        $sql = "INSERT INTO consultation_availability (day_of_week, is_active, start_time, end_time) 
+                VALUES (?, ?, ?, ?) 
+                ON DUPLICATE KEY UPDATE is_active = VALUES(is_active), start_time = VALUES(start_time), end_time = VALUES(end_time)";
+        return $this->db->query($sql, [$day, $isActive, $startTime, $endTime]);
+    }
+
+    /**
+     * Get blocked dates
+     */
+    public function getBlockedDates()
+    {
+        $sql = "SELECT * FROM consultation_blocked_dates ORDER BY date ASC";
+        return $this->db->fetchAll($sql);
+    }
+
+    /**
+     * Add a blocked date
+     */
+    public function addBlockedDate($date, $reason)
+    {
+        $sql = "INSERT IGNORE INTO consultation_blocked_dates (date, reason) VALUES (?, ?)";
+        return $this->db->query($sql, [$date, $reason]);
+    }
+
+    /**
+     * delete blocked date
+     */
+    public function deleteBlockedDate($id)
+    {
+        return $this->db->delete('consultation_blocked_dates', 'id = ?', [$id]);
+    }
+
+    /**
+     * Get available time slots for a specific date
+     */
+    public function getAvailableSlots($date)
+    {
+        // 1. Check if date is blocked
+        $blockedSql = "SELECT COUNT(*) as total FROM consultation_blocked_dates WHERE date = ?";
+        $isBlocked = $this->db->fetchOne($blockedSql, [$date]);
+        if ($isBlocked['total'] > 0) {
+            return []; // Date is blocked
+        }
+
+        // 2. Get Day of Week (mon, tue...)
+        $dayOfWeek = strtolower(date('D', strtotime($date)));
+
+        // 3. Get Operating Hours
+        $availSql = "SELECT * FROM consultation_availability WHERE day_of_week = ? AND is_active = 1";
+        $availability = $this->db->fetchOne($availSql, [$dayOfWeek]);
+
+        if (!$availability) {
+            return []; // Not a working day
+        }
+
+        // 4. Generate Slots (30 min intervals)
+        $slots = [];
+        $start = strtotime($date . ' ' . $availability['start_time']);
+        $end = strtotime($date . ' ' . $availability['end_time']);
+        $interval = 30 * 60; // 30 mins
+
+        // 5. Get existing bookings for this date (confirmed or pending)
+        $bookingSql = "SELECT preferred_time FROM consultations 
+                       WHERE preferred_date = ? AND status IN ('pending', 'confirmed')";
+        $existingBookings = $this->db->fetchAll($bookingSql, [$date]);
+
+        $bookedTimes = array_map(function ($b) {
+            return date('H:i', strtotime($b['preferred_time']));
+        }, $existingBookings);
+
+        // Loop to create slots
+        for ($current = $start; $current < $end; $current += $interval) {
+            $timeLabel = date('h:i A', $current);
+            $timeValue = date('H:i', $current);
+
+            // Check if slot is already booked
+            if (!in_array($timeValue, $bookedTimes)) {
+                // For today, exclude past times
+                if ($date === date('Y-m-d') && $current < time()) {
+                    continue;
+                }
+                $slots[] = ['value' => $timeValue, 'label' => $timeLabel];
+            }
+        }
+
+        return $slots;
+    }
 }

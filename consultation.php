@@ -3,10 +3,18 @@
  * Consultation Booking Page
  */
 
-$pageTitle = 'Book a Consultation | SiteOnSub';
-include __DIR__ . '/includes/header.php';
-
+// Include dependencies first
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/models/Consultation.php';
+
+// Start session if needed (functions.php might do it, but good to be safe for flash messages)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$pageTitle = 'Book a Consultation | SiteOnSub';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -48,6 +56,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         setFlashMessage('error', implode('<br>', $errors));
     }
 }
+
+// Handle AJAX Slot Fetching
+if (isset($_GET['action']) && $_GET['action'] === 'get_slots' && isset($_GET['date'])) {
+    header('Content-Type: application/json');
+    $date = $_GET['date'];
+    
+    // Logic to fetch slots
+    $consultationModel = new Consultation();
+    $slots = $consultationModel->getAvailableSlots($date);
+    
+    echo json_encode(['slots' => $slots]);
+    exit;
+}
+
+// Include header (Output starts here)
+include __DIR__ . '/includes/header.php';
 
 // Pre-fill data if user is logged in
 $currentUser = getCurrentUser();
@@ -134,6 +158,7 @@ $prefillPhone = $currentUser['phone'] ?? '';
             </div>
 
             <form method="POST" action="" class="space-y-6">
+                <!-- Contact Info -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Name</label>
@@ -180,17 +205,26 @@ $prefillPhone = $currentUser['phone'] ?? '';
                         placeholder="Tell us about your project goals..."></textarea>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Availability Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-primary/5 p-4 rounded-xl border border-primary/10">
                     <div class="space-y-2">
-                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Preferred Date</label>
-                        <input type="date" name="preferred_date" min="<?php echo date('Y-m-d'); ?>"
+                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                           <span class="material-symbols-outlined text-primary text-sm">calendar_month</span>
+                           Preferred Date
+                       </label>
+                        <input type="date" name="preferred_date" id="date-picker" required min="<?php echo date('Y-m-d'); ?>"
                             class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
                     </div>
 
                     <div class="space-y-2">
-                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Preferred Time</label>
-                        <input type="time" name="preferred_time"
-                            class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
+                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                           <span class="material-symbols-outlined text-primary text-sm">schedule</span>
+                           Available Slot
+                        </label>
+                        <select name="preferred_time" id="time-picker" required disabled
+                            class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                            <option value="">Select Date First</option>
+                        </select>
                     </div>
                 </div>
 
@@ -208,5 +242,46 @@ $prefillPhone = $currentUser['phone'] ?? '';
         </div>
     </div>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const datePicker = document.getElementById('date-picker');
+    const timePicker = document.getElementById('time-picker');
+
+    datePicker.addEventListener('change', function() {
+        const date = this.value;
+        if (!date) return;
+
+        // Reset Time Picker
+        timePicker.innerHTML = '<option value="">Loading slots...</option>';
+        timePicker.disabled = true;
+
+        // Fetch Slots
+        fetch(`consultation.php?action=get_slots&date=${date}`)
+            .then(response => response.json())
+            .then(data => {
+                timePicker.innerHTML = '<option value="">Select Time</option>';
+                
+                if (data.slots && data.slots.length > 0) {
+                    data.slots.forEach(slot => {
+                        const option = document.createElement('option');
+                        option.value = slot.value;
+                        option.textContent = slot.label;
+                        timePicker.appendChild(option);
+                    });
+                    timePicker.disabled = false;
+                } else {
+                    const option = document.createElement('option');
+                    option.textContent = "No slots available";
+                    timePicker.appendChild(option);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching slots:', error);
+                timePicker.innerHTML = '<option value="">Error loading slots</option>';
+            });
+    });
+});
+</script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

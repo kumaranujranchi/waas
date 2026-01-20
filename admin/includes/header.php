@@ -99,6 +99,18 @@ $currentUser = getCurrentUser();
                     <span class="font-bold text-sm">Users</span>
                 </a>
 
+                <a href="<?php echo baseUrl('admin/consultations/index.php'); ?>"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo strpos($_SERVER['PHP_SELF'], 'consultations/index.php') !== false ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5'; ?>">
+                    <span class="material-symbols-outlined">perm_phone_msg</span>
+                    <span class="font-bold text-sm">Consultations</span>
+                </a>
+
+                <a href="<?php echo baseUrl('admin/consultations/settings.php'); ?>"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo strpos($_SERVER['PHP_SELF'], 'consultations/settings.php') !== false ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5'; ?>">
+                    <span class="material-symbols-outlined">settings_calendar</span>
+                    <span class="font-bold text-sm">Availability</span>
+                </a>
+
                 <div class="pt-4 pb-2 px-4">
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Settings</p>
                 </div>

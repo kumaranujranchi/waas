@@ -66,7 +66,7 @@ $users = $userModel->getAllUsers();
                                     // Count user's orders
                                     require_once __DIR__ . '/../../models/Order.php';
                                     $orderModel = new Order();
-                                    $userOrders = $orderModel->getOrdersByUserId($user['id']);
+                                    $userOrders = $orderModel->getUserOrders($user['id']);
                                     echo count($userOrders);
                                     ?>
                                 </p>

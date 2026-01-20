@@ -31,21 +31,7 @@ if (!$product) {
 // Get product features and pricing plans
 $features = $productModel->getProductFeatures($product['id']);
 $pricingPlans = $productModel->getProductPricingPlans($product['id']);
-
-// Group plans by type
-$plansByType = [
-    'monthly' => [],
-    'semi_annual' => [],
-    'yearly' => []
-];
-
-foreach ($pricingPlans as $plan) {
-    $plansByType[$plan['plan_type']][] = $plan;
-}
-
-// Current selected plan type (default: monthly)
-$selectedPlanType = $_GET['plan_type'] ?? 'monthly';
-$currentPlans = $plansByType[$selectedPlanType];
+$faqs = $productModel->getProductFAQs($product['id']);
 ?>
 
 <main class="flex-1 max-w-[1200px] mx-auto w-full px-6 py-12">
@@ -104,7 +90,7 @@ $currentPlans = $plansByType[$selectedPlanType];
         <div class="relative">
             <div class="absolute inset-0 bg-primary/20 blur-[100px] rounded-full"></div>
             <div
-                class="relative bg-white dark:bg-[#1a1c2e] rounded-[2.5rem] p-4 shadow-2xl border border-gray-100 dark:border-white/10 rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
+                class="relative bg-white dark:bg-[#1a1c2e] rounded-[2.5rem] p-4 shadow-2xl border border-gray-100 dark:border-white/10 transition-transform duration-500">
                 <div class="aspect-[4/3] rounded-[2rem] overflow-hidden bg-gray-50 dark:bg-white/5 relative group">
                     <?php
                     $imageUrl = $product['image_url'];
@@ -163,27 +149,12 @@ $currentPlans = $plansByType[$selectedPlanType];
     <div id="pricing" class="mb-20 scroll-mt-20">
         <div class="text-center mb-16">
             <h2 class="text-4xl text-[#0f0e1b] dark:text-white font-black mb-6">Transparent Pricing</h2>
-            <div class="inline-flex items-center p-1.5 bg-gray-100 dark:bg-white/5 rounded-2xl">
-                <a href="?slug=<?php echo $slug; ?>&plan_type=monthly"
-                    class="px-8 py-3 rounded-xl text-sm font-bold transition-all <?php echo $selectedPlanType === 'monthly' ? 'bg-white dark:bg-[#1a1c2e] text-[#0f0e1b] dark:text-white shadow-lg shadow-black/5' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'; ?>">
-                    Monthly
-                </a>
-                <a href="?slug=<?php echo $slug; ?>&plan_type=semi_annual"
-                    class="px-8 py-3 rounded-xl text-sm font-bold transition-all <?php echo $selectedPlanType === 'semi_annual' ? 'bg-white dark:bg-[#1a1c2e] text-[#0f0e1b] dark:text-white shadow-lg shadow-black/5' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'; ?>">
-                    6 Months
-                </a>
-                <a href="?slug=<?php echo $slug; ?>&plan_type=yearly"
-                    class="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 <?php echo $selectedPlanType === 'yearly' ? 'bg-white dark:bg-[#1a1c2e] text-[#0f0e1b] dark:text-white shadow-lg shadow-black/5' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'; ?>">
-                    Yearly
-                    <span
-                        class="bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wide">Save
-                        25%</span>
-                </a>
-            </div>
+            <p class="text-[#545095] dark:text-gray-400 max-w-lg mx-auto">Choose the plan that fits your business
+                stage. No hidden fees, cancel anytime.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <?php foreach ($currentPlans as $index => $plan):
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
+            <?php foreach ($pricingPlans as $index => $plan):
                 $isPopular = $plan['is_popular'] ?? false;
                 $features = !empty($plan['features']) ? json_decode($plan['features'], true) : [];
                 $features = is_array($features) ? $features : [];
@@ -230,5 +201,49 @@ $currentPlans = $plansByType[$selectedPlanType];
             <?php endforeach; ?>
         </div>
     </div>
+
+    <!-- FAQ Section -->
+    <?php if (!empty($faqs)): ?>
+        <div class="mb-32 max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-black text-[#0f0e1b] dark:text-white mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-500 dark:text-gray-400">Everything you need to know about this solution.</p>
+            </div>
+
+            <div class="space-y-4">
+                <?php foreach ($faqs as $index => $faq): ?>
+                    <div
+                        class="bg-white dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
+                        <button onclick="toggleFaq('faq-<?php echo $index; ?>')"
+                            class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                            <span
+                                class="font-bold text-lg text-[#0f0e1b] dark:text-white"><?php echo e($faq['question']); ?></span>
+                            <span id="icon-faq-<?php echo $index; ?>"
+                                class="material-symbols-outlined text-gray-400 transition-transform duration-300">expand_more</span>
+                        </button>
+                        <div id="faq-<?php echo $index; ?>" class="hidden px-6 pb-6 pt-0">
+                            <p
+                                class="text-gray-500 dark:text-gray-400 leading-relaxed border-t border-gray-100 dark:border-white/10 pt-4">
+                                <?php echo nl2br(e($faq['answer'])); ?>
+                            </p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <script>
+                function toggleFaq(id) {
+                    const content = document.getElementById(id);
+                    const icon = document.getElementById('icon-' + id);
+                    if (content.classList.contains('hidden')) {
+                        content.classList.remove('hidden');
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        content.classList.add('hidden');
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                }
+            </script>
+        </div>
+    <?php endif; ?>
 </main>
 <?php include __DIR__ . '/includes/footer.php'; ?>

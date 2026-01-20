@@ -3,10 +3,24 @@
  * Admin Dashboard - Main Page
  */
 
+require_once __DIR__ . '/../models/Product.php';
+require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Order.php';
+require_once __DIR__ . '/../models/Subscription.php';
+
+$productModel = new Product();
+$userModel = new User();
+$orderModel = new Order();
+$subscriptionModel = new Subscription();
+
+// Get statistics
+$totalProducts = $productModel->countProducts();
+$totalUsers = count($userModel->getAllUsers());
+$totalRevenue = $orderModel->getTotalRevenue();
+$activeSubscriptions = count($subscriptionModel->getAllSubscriptions());
+
 $pageTitle = 'Dashboard Overview';
 include __DIR__ . '/includes/header.php';
-
-// Model logic already exists above...
 ?>
 
 <div class="p-8">

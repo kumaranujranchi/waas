@@ -3,8 +3,6 @@
  * Homepage - Dynamic Product Listing
  */
 
-$pageTitle = SITE_NAME . ' | ' . SITE_TAGLINE;
-
 // Include header
 include __DIR__ . '/includes/header.php';
 

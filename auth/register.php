@@ -3,9 +3,15 @@
  * User Registration Page
  */
 
-// Include header
-$pageTitle = 'Sign Up | SiteOnSub';
-include __DIR__ . '/../includes/header.php';
+// Include dependencies first
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/functions.php';
+
+// Start session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Include models
 require_once __DIR__ . '/../models/User.php';
@@ -60,6 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         setFlashMessage('error', implode('<br>', $errors));
     }
 }
+
+// Include header after logic
+$pageTitle = 'Sign Up | SiteOnSub';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <main class="flex-1 flex items-center justify-center py-12 px-6">

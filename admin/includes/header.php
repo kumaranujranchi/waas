@@ -25,6 +25,7 @@ $currentUser = getCurrentUser();
     <title>
         <?php echo $pageTitle ?? 'Admin Panel | SiteOnSub'; ?>
     </title>
+    <link rel="icon" type="image/png" href="<?php echo baseUrl('assets/images/favicon.png'); ?>">
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet" />

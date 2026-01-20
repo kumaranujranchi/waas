@@ -123,8 +123,20 @@ class Product
     public function getProductPricingPlans($productId)
     {
         $sql = "SELECT * FROM pricing_plans 
-                WHERE product_id = ? AND status = 'active' 
-                ORDER BY price ASC";
+                WHERE product_id = ? 
+                ORDER BY billing_cycle ASC";
+
+        return $this->db->fetchAll($sql, [$productId]);
+    }
+
+    /**
+     * Get product FAQs
+     */
+    public function getProductFAQs($productId)
+    {
+        $sql = "SELECT * FROM product_faqs 
+                WHERE product_id = ? 
+                ORDER BY display_order ASC";
 
         return $this->db->fetchAll($sql, [$productId]);
     }
@@ -174,5 +186,21 @@ class Product
     public function deleteProduct($id)
     {
         return $this->db->delete('products', 'id = ?', [$id]);
+    }
+
+    /**
+     * Create pricing plan (Admin)
+     */
+    public function createPricingPlan($data)
+    {
+        return $this->db->insert('pricing_plans', $data);
+    }
+
+    /**
+     * Create FAQ (Admin)
+     */
+    public function createFAQ($data)
+    {
+        return $this->db->insert('product_faqs', $data);
     }
 }

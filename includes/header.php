@@ -110,12 +110,20 @@ $isLoggedIn = isLoggedIn();
             </nav>
             <div class="flex items-center gap-4">
                 <?php if ($isLoggedIn): ?>
-                    <a href="<?php echo baseUrl('dashboard/index.php'); ?>"
-                        class="hidden sm:block text-sm font-medium text-[#0f0e1b] dark:text-white/80">
-                        <?php echo e($currentUser['full_name']); ?>
-                    </a>
+                    <?php if (isAdmin()): ?>
+                        <a href="<?php echo baseUrl('admin/index.php'); ?>"
+                            class="hidden sm:flex items-center gap-1 text-sm font-bold text-primary px-3 py-1 bg-primary/10 rounded-full">
+                            <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                            Admin Panel
+                        </a>
+                    <?php else: ?>
+                        <a href="<?php echo baseUrl('dashboard/index.php'); ?>"
+                            class="hidden sm:block text-sm font-medium text-[#0f0e1b] dark:text-white/80">
+                            <?php echo e($currentUser['full_name']); ?>
+                        </a>
+                    <?php endif; ?>
                     <a href="<?php echo baseUrl('auth/logout.php'); ?>"
-                        class="flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-accent-green text-white text-sm font-bold shadow-sm hover:opacity-90 transition-all">
+                        class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-accent-green text-white text-sm font-bold shadow-sm hover:opacity-90 transition-all">
                         <span>Logout</span>
                     </a>
                 <?php else: ?>

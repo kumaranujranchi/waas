@@ -12,7 +12,11 @@ require_once __DIR__ . '/../models/User.php';
 
 // Redirect if already logged in
 if (isLoggedIn()) {
-    redirect(baseUrl('dashboard/index.php'));
+    if (isAdmin()) {
+        redirect(baseUrl('admin/index.php'));
+    } else {
+        redirect(baseUrl('dashboard/index.php'));
+    }
 }
 
 // Handle login form submission
@@ -28,7 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result['success']) {
             setFlashMessage('success', 'Welcome back!');
-            redirect(baseUrl('dashboard/index.php'));
+            if (isAdmin()) {
+                redirect(baseUrl('admin/index.php'));
+            } else {
+                redirect(baseUrl('dashboard/index.php'));
+            }
         } else {
             setFlashMessage('error', $result['message']);
         }

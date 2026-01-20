@@ -254,23 +254,43 @@ include __DIR__ . '/../includes/header.php';
 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Long Description</label>
-                    <textarea name="full_description" id="full_description" rows="6"
-                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="Detailed explanation of the service..."><?php echo e($product['full_description']); ?></textarea>
+                    <div id="editor-container" class="h-[300px] bg-white dark:bg-black/5 rounded-lg"></div>
+                    <input type="hidden" name="full_description" id="full_description" value="<?php echo e($product['full_description']); ?>">
                 </div>
             </div>
         </div>
         
         <!-- TinyMCE Integration -->
-        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+        <!-- Quill Editor Integration -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
         <script>
-            tinymce.init({
-                selector: '#full_description',
-                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-                skin: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oxide-dark' : 'oxide',
-                content_css: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
-                height: 400
+            var quill = new Quill('#editor-container', {
+                theme: 'snow',
+                placeholder: 'Detailed explanation of the service...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['blockquote', 'code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'color': [] }, { 'background': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+            
+            // Set initial content
+            // We need to decode the HTML entities back to normal HTML for the editor
+            var initialContent = document.getElementById('full_description').value;
+            var txt = document.createElement("textarea");
+            txt.innerHTML = initialContent;
+            quill.root.innerHTML = txt.value;
+
+            // Update hidden input on change
+            quill.on('text-change', function() {
+                document.getElementById('full_description').value = quill.root.innerHTML;
             });
         </script>
 

@@ -208,99 +208,114 @@ include __DIR__ . '/../includes/header.php';
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Long
                         Description</label>
-                    <textarea name="full_description" rows="6"
+                    <textarea name="full_description" id="full_description" rows="6"
                         class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                         placeholder="Detailed explanation of the service..."></textarea>
                 </div>
-
-                <div class="flex items-center gap-3">
-                    <input type="checkbox" name="is_featured" id="is_featured"
-                        class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
-                    <label for="is_featured" class="text-sm font-medium text-[#0f0e1b] dark:text-white">
-                        Mark as Featured Product
-                    </label>
-                </div>
             </div>
         </div>
 
-        <!-- Pricing Plans -->
-        <div class="bg-white dark:bg-white/5 rounded-xl p-8 border border-[#e8e8f3] dark:border-white/10 shadow-sm">
-            <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                <span class="material-symbols-outlined text-accent-green">payments</span>
-                Pricing Plans
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- TinyMCE Integration -->
+        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: '#full_description',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                skin: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oxide-dark' : 'oxide',
+                content_css: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+                height: 400
+            });
+        </script>
+
+        <div class="flex items-center gap-3">
+            <input type="checkbox" name="is_featured" id="is_featured"
+                class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
+            <label for="is_featured" class="text-sm font-medium text-[#0f0e1b] dark:text-white">
+                Mark as Featured Product
+            </label>
+        </div>
+</div>
+</div>
+
+<!-- Pricing Plans -->
+<div class="bg-white dark:bg-white/5 rounded-xl p-8 border border-[#e8e8f3] dark:border-white/10 shadow-sm">
+    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+        <span class="material-symbols-outlined text-accent-green">payments</span>
+        Pricing Plans
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Monthly Price
+                ($)</label>
+            <input type="number" step="0.01" name="price_monthly"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                placeholder="0.00" />
+        </div>
+        <div>
+            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Half-Yearly Price
+                ($)</label>
+            <input type="number" step="0.01" name="price_half_yearly"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                placeholder="0.00" />
+        </div>
+        <div>
+            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Yearly Price
+                ($)</label>
+            <input type="number" step="0.01" name="price_yearly"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                placeholder="0.00" />
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="bg-white dark:bg-white/5 rounded-xl p-8 border border-[#e8e8f3] dark:border-white/10 shadow-sm">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-purple-600">quiz</span>
+            Frequently Asked Questions
+        </h2>
+        <button type="button" id="add-faq"
+            class="flex items-center gap-1 text-sm font-bold text-primary hover:text-primary/80 transition-colors">
+            <span class="material-symbols-outlined text-lg">add_circle</span>
+            Add FAQ
+        </button>
+    </div>
+
+    <div id="faq-container" class="space-y-4">
+        <div
+            class="faq-item p-4 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10 relative">
+            <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Monthly Price
-                        ($)</label>
-                    <input type="number" step="0.01" name="price_monthly"
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                        placeholder="0.00" />
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Question</label>
+                    <input type="text" name="faq_question[]"
+                        class="w-full px-3 py-2 rounded border border-gray-300 dark:border-white/10 dark:bg-white/5 outline-none"
+                        placeholder="e.g. What is the turnaround time?" />
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Half-Yearly Price
-                        ($)</label>
-                    <input type="number" step="0.01" name="price_half_yearly"
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                        placeholder="0.00" />
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Yearly Price
-                        ($)</label>
-                    <input type="number" step="0.01" name="price_yearly"
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                        placeholder="0.00" />
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Answer</label>
+                    <textarea name="faq_answer[]" rows="2"
+                        class="w-full px-3 py-2 rounded border border-gray-300 dark:border-white/10 dark:bg-white/5 outline-none"
+                        placeholder="e.g. Usually 2-3 business days..."></textarea>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- FAQ Section -->
-        <div class="bg-white dark:bg-white/5 rounded-xl p-8 border border-[#e8e8f3] dark:border-white/10 shadow-sm">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold flex items-center gap-2">
-                    <span class="material-symbols-outlined text-purple-600">quiz</span>
-                    Frequently Asked Questions
-                </h2>
-                <button type="button" id="add-faq"
-                    class="flex items-center gap-1 text-sm font-bold text-primary hover:text-primary/80 transition-colors">
-                    <span class="material-symbols-outlined text-lg">add_circle</span>
-                    Add FAQ
-                </button>
-            </div>
-
-            <div id="faq-container" class="space-y-4">
-                <div
-                    class="faq-item p-4 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10 relative">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Question</label>
-                            <input type="text" name="faq_question[]"
-                                class="w-full px-3 py-2 rounded border border-gray-300 dark:border-white/10 dark:bg-white/5 outline-none"
-                                placeholder="e.g. What is the turnaround time?" />
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Answer</label>
-                            <textarea name="faq_answer[]" rows="2"
-                                class="w-full px-3 py-2 rounded border border-gray-300 dark:border-white/10 dark:bg-white/5 outline-none"
-                                placeholder="e.g. Usually 2-3 business days..."></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex gap-4 pt-4">
-            <button type="submit"
-                class="flex-1 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg text-lg">
-                Create Product Listing
-            </button>
-            <a href="<?php echo baseUrl('admin/products/list.php'); ?>"
-                class="px-10 py-4 border-2 border-gray-300 dark:border-white/10 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-white/5 transition-all text-lg">
-                Cancel
-            </a>
-        </div>
-    </form>
+<!-- Actions -->
+<div class="flex gap-4 pt-4">
+    <button type="submit"
+        class="flex-1 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg text-lg">
+        Create Product Listing
+    </button>
+    <a href="<?php echo baseUrl('admin/products/list.php'); ?>"
+        class="px-10 py-4 border-2 border-gray-300 dark:border-white/10 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-white/5 transition-all text-lg">
+        Cancel
+    </a>
+</div>
+</form>
 </div>
 </main>
 

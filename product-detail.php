@@ -50,7 +50,7 @@ $faqs = $productModel->getProductFAQs($product['id']);
                     <?php echo e($product['name']); ?>
                 </h1>
                 <p class="text-xl text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl">
-                    <?php echo e($product['full_description']); ?>
+                    <?php echo html_entity_decode($product['full_description']); ?>
                 </p>
             </div>
 

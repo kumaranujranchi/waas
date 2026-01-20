@@ -253,11 +253,26 @@ include __DIR__ . '/../includes/header.php';
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Full Description</label>
-                    <textarea name="full_description" rows="6"
+                    <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Long Description</label>
+                    <textarea name="full_description" id="full_description" rows="6"
                         class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="Detailed product description"><?php echo e($product['full_description']); ?></textarea>
+                        placeholder="Detailed explanation of the service..."><?php echo e($product['full_description']); ?></textarea>
                 </div>
+            </div>
+        </div>
+        
+        <!-- TinyMCE Integration -->
+        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: '#full_description',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                skin: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oxide-dark' : 'oxide',
+                content_css: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+                height: 400
+            });
+        </script>
 
                 <div class="flex items-center gap-3">
                     <input type="checkbox" name="is_featured" id="is_featured" value="1" <?php echo $product['is_featured'] ? 'checked' : ''; ?>

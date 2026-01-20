@@ -61,12 +61,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['action']) && $_GET['action'] === 'get_slots' && isset($_GET['date'])) {
     header('Content-Type: application/json');
     $date = $_GET['date'];
-    
-    // Logic to fetch slots
+
     $consultationModel = new Consultation();
     $slots = $consultationModel->getAvailableSlots($date);
-    
-    echo json_encode(['slots' => $slots]);
+
+    // Format slots for frontend
+    $formattedSlots = [];
+    foreach ($slots as $slot) {
+        $formattedSlots[] = [
+            'id' => $slot['id'],
+            'value' => $slot['start_time'],
+            'label' => date('g:i A', strtotime($slot['start_time'])) . ' - ' . date('g:i A', strtotime($slot['end_time']))
+        ];
+    }
+
+    echo json_encode(['slots' => $formattedSlots]);
+    exit;
+}
+
+// Handle AJAX Available Dates Fetching
+if (isset($_GET['action']) && $_GET['action'] === 'get_dates') {
+    header('Content-Type: application/json');
+    $consultationModel = new Consultation();
+    $dates = $consultationModel->getAvailableDates();
+    echo json_encode(['dates' => $dates]);
     exit;
 }
 
@@ -209,17 +227,18 @@ $prefillPhone = $currentUser['phone'] ?? '';
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-primary/5 p-4 rounded-xl border border-primary/10">
                     <div class="space-y-2">
                         <label class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                           <span class="material-symbols-outlined text-primary text-sm">calendar_month</span>
-                           Preferred Date
-                       </label>
-                        <input type="date" name="preferred_date" id="date-picker" required min="<?php echo date('Y-m-d'); ?>"
+                            <span class="material-symbols-outlined text-primary text-sm">calendar_month</span>
+                            Preferred Date
+                        </label>
+                        <input type="date" name="preferred_date" id="date-picker" required
+                            min="<?php echo date('Y-m-d'); ?>"
                             class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
                     </div>
 
                     <div class="space-y-2">
                         <label class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                           <span class="material-symbols-outlined text-primary text-sm">schedule</span>
-                           Available Slot
+                            <span class="material-symbols-outlined text-primary text-sm">schedule</span>
+                            Available Slot
                         </label>
                         <select name="preferred_time" id="time-picker" required disabled
                             class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed">
@@ -244,44 +263,44 @@ $prefillPhone = $currentUser['phone'] ?? '';
 </main>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const datePicker = document.getElementById('date-picker');
-    const timePicker = document.getElementById('time-picker');
+    document.addEventListener('DOMContentLoaded', function () {
+        const datePicker = document.getElementById('date-picker');
+        const timePicker = document.getElementById('time-picker');
 
-    datePicker.addEventListener('change', function() {
-        const date = this.value;
-        if (!date) return;
+        datePicker.addEventListener('change', function () {
+            const date = this.value;
+            if (!date) return;
 
-        // Reset Time Picker
-        timePicker.innerHTML = '<option value="">Loading slots...</option>';
-        timePicker.disabled = true;
+            // Reset Time Picker
+            timePicker.innerHTML = '<option value="">Loading slots...</option>';
+            timePicker.disabled = true;
 
-        // Fetch Slots
-        fetch(`consultation.php?action=get_slots&date=${date}`)
-            .then(response => response.json())
-            .then(data => {
-                timePicker.innerHTML = '<option value="">Select Time</option>';
-                
-                if (data.slots && data.slots.length > 0) {
-                    data.slots.forEach(slot => {
+            // Fetch Slots
+            fetch(`consultation.php?action=get_slots&date=${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    timePicker.innerHTML = '<option value="">Select Time</option>';
+
+                    if (data.slots && data.slots.length > 0) {
+                        data.slots.forEach(slot => {
+                            const option = document.createElement('option');
+                            option.value = slot.value;
+                            option.textContent = slot.label;
+                            timePicker.appendChild(option);
+                        });
+                        timePicker.disabled = false;
+                    } else {
                         const option = document.createElement('option');
-                        option.value = slot.value;
-                        option.textContent = slot.label;
+                        option.textContent = "No slots available";
                         timePicker.appendChild(option);
-                    });
-                    timePicker.disabled = false;
-                } else {
-                    const option = document.createElement('option');
-                    option.textContent = "No slots available";
-                    timePicker.appendChild(option);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching slots:', error);
-                timePicker.innerHTML = '<option value="">Error loading slots</option>';
-            });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching slots:', error);
+                    timePicker.innerHTML = '<option value="">Error loading slots</option>';
+                });
+        });
     });
-});
 </script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

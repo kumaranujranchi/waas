@@ -105,10 +105,10 @@ $currentUser = getCurrentUser();
                     <span class="font-bold text-sm">Consultations</span>
                 </a>
 
-                <a href="<?php echo baseUrl('admin/consultations/settings.php'); ?>"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo strpos($_SERVER['PHP_SELF'], 'consultations/settings.php') !== false ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5'; ?>">
-                    <span class="material-symbols-outlined">event_available</span>
-                    <span class="font-bold text-sm">Availability</span>
+                <a href="<?php echo baseUrl('admin/consultations/calendar.php'); ?>"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo strpos($_SERVER['PHP_SELF'], 'consultations/calendar.php') !== false ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5'; ?>">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    <span class="font-bold text-sm">Calendar</span>
                 </a>
 
                 <div class="pt-4 pb-2 px-4">

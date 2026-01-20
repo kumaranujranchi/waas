@@ -63,13 +63,10 @@ $currentUser = getCurrentUser();
         <aside
             class="w-64 bg-white dark:bg-[#1c1b2e] border-r border-gray-200 dark:border-white/5 flex flex-col sticky top-0 h-screen">
             <div class="p-6 flex items-center gap-3 border-b border-gray-100 dark:border-white/5">
-                <div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
-                    <span class="material-symbols-outlined text-xl">admin_panel_settings</span>
-                </div>
-                <div>
-                    <h2 class="text-[#0f0e1b] dark:text-white text-lg font-bold leading-tight">Admin Portal</h2>
-                    <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Control Center</p>
-                </div>
+                <a href="<?php echo baseUrl('admin/index.php'); ?>">
+                    <img src="<?php echo baseUrl('assets/images/logo.png'); ?>" alt="SiteOnSub Logo"
+                        class="h-10 w-auto">
+                </a>
             </div>
 
             <nav class="flex-1 p-4 space-y-1 overflow-y-auto">

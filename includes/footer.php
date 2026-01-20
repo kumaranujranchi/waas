@@ -4,12 +4,10 @@
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12">
             <div class="col-span-2">
                 <div class="flex items-center gap-3 mb-2">
-                    <div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
-                        <span class="material-symbols-outlined text-xl">layers</span>
-                    </div>
-                    <h2 class="text-[#0f0e1b] dark:text-white text-xl font-bold">
-                        SiteOnSub
-                    </h2>
+                    <a href="<?php echo baseUrl('index.php'); ?>">
+                        <img src="<?php echo baseUrl('assets/images/logo.png'); ?>" alt="SiteOnSub Logo"
+                            class="h-10 w-auto">
+                    </a>
                 </div>
                 <p class="text-xs font-bold text-primary mb-6">
                     <?php echo defined('SITE_TAGLINE') ? SITE_TAGLINE : 'WaaS Marketplace'; ?>

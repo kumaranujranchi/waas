@@ -139,13 +139,9 @@ $isLoggedIn = isLoggedIn();
         class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-solid border-[#e8e8f3] dark:border-white/10">
         <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
-                    <span class="material-symbols-outlined text-xl">layers</span>
-                </div>
                 <a href="<?php echo baseUrl('index.php'); ?>">
-                    <h2 class="text-[#0f0e1b] dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">
-                        SiteOnSub
-                    </h2>
+                    <img src="<?php echo baseUrl('assets/images/logo.png'); ?>" alt="SiteOnSub Logo"
+                        class="h-10 w-auto">
                 </a>
             </div>
             <nav class="hidden md:flex items-center gap-8">

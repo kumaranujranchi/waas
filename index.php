@@ -53,7 +53,7 @@ if ($searchQuery) {
                             <span class="text-primary">Without Development Cost</span>
                         </h1>
                         <p class="text-[#545095] dark:text-white/70 text-xl font-medium max-w-[540px] leading-relaxed">
-                            Launch your professional online presence in minutes with our curated collection of
+                            Launch your professional online presence in affordable cost with our curated service of
                             high-performance WaaS solutions.
                         </p>
                     </div>

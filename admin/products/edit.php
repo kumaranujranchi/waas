@@ -291,8 +291,7 @@ include __DIR__ . '/../includes/header.php';
                             Inactive</option>
                     </select>
                 </div>
-            </div>
-        </div>
+
 
         <!-- Pricing Plans -->
         <div class="bg-white dark:bg-white/5 rounded-xl p-8 border-2 border-gray-300 dark:border-white/10 shadow-sm">

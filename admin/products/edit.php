@@ -369,7 +369,8 @@ include __DIR__ . '/../includes/header.php';
                         <span class="text-sm font-bold text-gray-500">FAQ #
                             <?php echo $index + 1; ?>
                         </span>
-                        <button type="button" onclick="this.parentElement.parentElement.remove()"
+                        <button type="button"
+                            onclick="if(confirm('Are you sure you want to delete this FAQ?')) { this.parentElement.parentElement.remove(); }"
                             class="text-red-500 hover:text-red-700">
                             <span class="material-symbols-outlined">delete</span>
                         </button>

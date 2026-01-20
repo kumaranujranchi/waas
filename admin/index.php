@@ -3,6 +3,9 @@
  * Admin Dashboard - Main Page
  */
 
+$pageTitle = 'Dashboard Overview';
+include __DIR__ . '/includes/header.php';
+
 require_once __DIR__ . '/../models/Product.php';
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Order.php';
@@ -18,9 +21,6 @@ $totalProducts = $productModel->countProducts();
 $totalUsers = count($userModel->getAllUsers());
 $totalRevenue = $orderModel->getTotalRevenue();
 $activeSubscriptions = count($subscriptionModel->getAllSubscriptions());
-
-$pageTitle = 'Dashboard Overview';
-include __DIR__ . '/includes/header.php';
 ?>
 
 <div class="p-8">

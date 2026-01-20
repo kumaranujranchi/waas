@@ -3,13 +3,13 @@
  * Admin - Products List
  */
 
+$pageTitle = 'Manage Services';
+include __DIR__ . '/../includes/header.php';
+
 require_once __DIR__ . '/../../models/Product.php';
 
 $productModel = new Product();
 $products = $productModel->getAllProducts();
-
-$pageTitle = 'Manage Services';
-include __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="p-8">

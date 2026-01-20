@@ -3,14 +3,14 @@
  * Admin - Orders List
  */
 
+$pageTitle = 'Manage Orders';
+include __DIR__ . '/../includes/header.php';
+
 require_once __DIR__ . '/../../models/Order.php';
 require_once __DIR__ . '/../../models/User.php';
 
 $orderModel = new Order();
 $orders = $orderModel->getAllOrders();
-
-$pageTitle = 'Manage Orders';
-include __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="p-8">

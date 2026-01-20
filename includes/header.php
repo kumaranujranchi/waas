@@ -62,6 +62,54 @@ $isLoggedIn = isLoggedIn();
 
         body {
             font-family: 'Inter', sans-serif;
+            position: relative;
+        }
+
+        /* Premium Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(80, 72, 229, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
+            background-color: #f6f6f8;
+        }
+
+        body.dark::before {
+            background:
+                radial-gradient(circle at 20% 50%, rgba(80, 72, 229, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            background-color: #121121;
+        }
+
+        /* Subtle Grid Pattern */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(80, 72, 229, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(80, 72, 229, 0.02) 1px, transparent 1px);
+            background-size: 100px 100px;
+            opacity: 0.5;
+        }
+
+        body.dark::after {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            opacity: 0.3;
         }
     </style>
 </head>

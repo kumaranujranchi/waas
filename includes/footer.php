@@ -83,7 +83,10 @@
             </p>
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-accent-green animate-pulse"></span>
-                <span class="text-xs font-medium text-[#545095] dark:text-white/60">All systems operational</span>
+                <span class="text-xs font-medium text-[#545095] dark:text-white/60">
+                    A group of <a href="https://synergybrandarchitect.in" target="_blank"
+                        class="hover:text-primary transition-colors">Synergy Brand Architect</a> Co.
+                </span>
             </div>
         </div>
     </div>

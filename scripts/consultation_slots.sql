@@ -1,9 +1,9 @@
--- Drop old weekly availability tables
+-- Drop old tables if they exist
 DROP TABLE IF EXISTS `consultation_availability`;
 DROP TABLE IF EXISTS `consultation_blocked_dates`;
 
 -- Create new slot-based table
-CREATE TABLE IF NOT EXISTS `consultation_slots` (
+CREATE TABLE `consultation_slots` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   `start_time` time NOT NULL,

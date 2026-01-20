@@ -3,13 +3,18 @@
  * Admin - Consultation Calendar (Slot Management)
  */
 
-$pageTitle = 'Consultation Calendar';
-include __DIR__ . '/../includes/header.php';
+// Load dependencies FIRST (before any output)
 require_once __DIR__ . '/../../models/Consultation.php';
+require_once __DIR__ . '/../../includes/functions.php';
+
+// Start session if needed
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $consultationModel = new Consultation();
 
-// Handle Add Slot
+// Handle Add Slot (BEFORE any output/header)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_slot'])) {
     $date = $_POST['date'];
     $startTime = $_POST['start_time'];
@@ -26,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_slot'])) {
     redirect($_SERVER['PHP_SELF']);
 }
 
-// Handle Delete Slot
+// Handle Delete Slot (BEFORE any output/header)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_slot'])) {
     $slotId = $_POST['slot_id'];
     $consultationModel->deleteSlot($slotId);

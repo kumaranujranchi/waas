@@ -44,33 +44,47 @@ if ($searchQuery) {
                     <div class="flex flex-col gap-6">
                         <span
                             class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-bold uppercase tracking-wider w-fit border border-primary/20">
-                            🚀 Ready-to-Launch Solutions
+                            Ready-to-Launch Solutions
                         </span>
                         <h1
                             class="text-[#0f0e1b] dark:text-white text-5xl md:text-7xl font-black leading-[1.1] tracking-tight">
                             Premium Websites<br>
-                            <span class="text-primary">Powered by AI</span>
+                            & Business Software —<br>
+                            <span class="text-primary">Without Development Cost</span>
                         </h1>
                         <p class="text-[#545095] dark:text-white/70 text-xl font-medium max-w-[540px] leading-relaxed">
-                            Boost sales, enhance customer experience, and streamline operations with our cutting-edge
-                            WaaS solutions.
+                            Launch your professional online presence in minutes with our curated collection of
+                            high-performance WaaS solutions.
                         </p>
                     </div>
 
-                    <!-- Email Input -->
-                    <div class="flex flex-col sm:flex-row gap-4 max-w-md">
-                        <input type="email" placeholder="Enter your email"
-                            class="flex-1 px-6 py-4 rounded-xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-base">
-                        <a href="<?php echo baseUrl('consultation.php'); ?>"
-                            class="px-8 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 shadow-lg shadow-primary/25 transition-all whitespace-nowrap text-center">
-                            Get Started
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap items-center gap-5">
+                        <a href="#solutions"
+                            class="flex min-w-[160px] cursor-pointer items-center justify-center rounded-xl h-14 px-6 bg-primary text-white text-base font-bold shadow-lg hover:shadow-primary/30 transition-all">
+                            View Solutions
+                        </a>
+                        <a class="flex items-center gap-2 text-primary font-bold hover:underline"
+                            href="<?php echo baseUrl('consultation.php'); ?>">
+                            Book Free Consultation <span class="material-symbols-outlined">arrow_forward</span>
                         </a>
                     </div>
 
-                    <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-green-500 text-lg">check_circle</span>
-                        30 day free trial, no credit card required
-                    </p>
+                    <div class="flex items-center gap-6 pt-4">
+                        <div class="flex -space-x-3">
+                            <div
+                                class="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-purple-400 to-pink-400">
+                            </div>
+                            <div
+                                class="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-cyan-400">
+                            </div>
+                            <div
+                                class="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-green-400 to-emerald-400">
+                            </div>
+                        </div>
+                        <p class="text-sm text-[#545095] dark:text-white/60 font-medium">Joined by 2,000+ businesses
+                            worldwide</p>
+                    </div>
                 </div>
 
                 <!-- Right Visual with Floating Cards -->

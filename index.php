@@ -47,7 +47,7 @@ if ($searchQuery) {
                             Ready-to-Launch Solutions
                         </span>
                         <h1
-                            class="text-[#0f0e1b] dark:text-white text-5xl md:text-7xl font-black leading-[1.1] tracking-tight">
+                            class="text-[#0f0e1b] dark:text-white text-4xl md:text-6xl font-black leading-[1.1] tracking-tight">
                             Premium Websites<br>
                             & Business Software<br>
                             <span class="text-primary">Without Development Cost</span>

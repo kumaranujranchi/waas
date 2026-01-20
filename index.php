@@ -373,123 +373,247 @@ if ($searchQuery) {
                 </p>
             </div>
 
-            <!-- Comparison Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-                <!-- Traditional -->
-                <div class="bg-gray-100 dark:bg-white/5 rounded-3xl p-8 md:p-12 border border-transparent">
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="size-12 rounded-xl bg-gray-200 dark:bg-white/10 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-gray-500 text-2xl">history</span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-700 dark:text-gray-300">Traditional Web Development</h3>
-                    </div>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
-                            <span class="text-gray-600 dark:text-gray-400">High upfront development cost</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
-                            <span class="text-gray-600 dark:text-gray-400">One-time project delivery (static)</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
-                            <span class="text-gray-600 dark:text-gray-400">Separate hosting & maintanence fees</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
-                            <span class="text-gray-600 dark:text-gray-400">You manage updates & security</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
-                            <span class="text-gray-600 dark:text-gray-400">Weeks or months to launch</span>
-                        </li>
-                    </ul>
+            <!-- Comparison Cards with WOW Factor -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 relative">
+                <!-- Animated Background Gradient -->
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-primary/5 via-purple-500/5 to-pink-500/5 rounded-3xl blur-3xl -z-10 animate-pulse">
                 </div>
 
-                <!-- WaaS (Highlighted) -->
+                <!-- Traditional (Left Card) -->
                 <div
-                    class="bg-white dark:bg-[#1a1c2e] rounded-3xl p-8 md:p-12 border-2 border-primary shadow-xl relative overflow-hidden group">
-                    <div
-                        class="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-4 py-2 rounded-bl-2xl">
-                        Recommended
+                    class="group relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-white/5 dark:to-white/10 rounded-3xl p-8 md:p-10 border border-gray-200 dark:border-white/10 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
+                    <!-- Subtle Pattern Overlay -->
+                    <div class="absolute inset-0 opacity-5"
+                        style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
                     </div>
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-primary text-2xl">rocket_launch</span>
+
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div
+                                class="size-14 rounded-2xl bg-gradient-to-br from-gray-300 to-gray-400 dark:from-white/20 dark:to-white/10 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
+                                <span
+                                    class="material-symbols-outlined text-gray-600 dark:text-gray-300 text-3xl">history</span>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-black text-gray-700 dark:text-gray-200">Traditional Web</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Old School Approach</p>
+                            </div>
                         </div>
-                        <h3 class="text-2xl font-bold text-[#0f0e1b] dark:text-white">Website as a Service</h3>
+
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
+                                    <span
+                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                </div>
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">High upfront development
+                                    cost</span>
+                            </li>
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
+                                    <span
+                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                </div>
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">One-time project delivery
+                                    (static)</span>
+                            </li>
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
+                                    <span
+                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                </div>
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">Separate hosting &
+                                    maintenance fees</span>
+                            </li>
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
+                                    <span
+                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                </div>
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">You manage updates &
+                                    security</span>
+                            </li>
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
+                                    <span
+                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                </div>
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">Weeks or months to
+                                    launch</span>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
-                            <span class="text-[#0f0e1b] dark:text-white font-medium">Zero upfront development
-                                cost</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
-                            <span class="text-[#0f0e1b] dark:text-white font-medium">Simple monthly/yearly
-                                subscription</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
-                            <span class="text-[#0f0e1b] dark:text-white font-medium">Hosting & maintenance
-                                included</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
-                            <span class="text-[#0f0e1b] dark:text-white font-medium">Regular updates & support</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
-                            <span class="text-[#0f0e1b] dark:text-white font-medium">Faster go-live (Days, not
-                                weeks)</span>
-                        </li>
-                    </ul>
+                </div>
+
+                <!-- WaaS (Right Card - Premium) -->
+                <div
+                    class="group relative bg-gradient-to-br from-white via-blue-50/50 to-purple-50/50 dark:from-[#1a1c2e] dark:via-[#1e2140] dark:to-[#1a1c2e] rounded-3xl p-8 md:p-10 border-2 border-primary shadow-2xl shadow-primary/20 hover:scale-[1.02] hover:shadow-3xl hover:shadow-primary/30 transition-all duration-500 overflow-hidden">
+                    <!-- Animated Gradient Background -->
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 opacity-50 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+
+                    <!-- Floating Particles Effect -->
+                    <div class="absolute top-10 right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl animate-pulse">
+                    </div>
+                    <div
+                        class="absolute bottom-10 left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000">
+                    </div>
+
+                    <!-- Recommended Badge -->
+                    <div
+                        class="absolute top-0 right-0 bg-gradient-to-r from-primary to-purple-600 text-white text-xs font-black px-6 py-2.5 rounded-bl-2xl shadow-lg flex items-center gap-2 animate-bounce">
+                        <span class="material-symbols-outlined text-sm">star</span>
+                        RECOMMENDED
+                    </div>
+
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div
+                                class="size-14 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-xl shadow-primary/50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                                <span class="material-symbols-outlined text-white text-3xl">rocket_launch</span>
+                            </div>
+                            <div>
+                                <h3
+                                    class="text-2xl font-black bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                                    Website as a Service</h3>
+                                <p class="text-xs text-primary font-bold">The Future is Here</p>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                                </div>
+                                <span class="text-[#0f0e1b] dark:text-white font-bold">Zero upfront development
+                                    cost</span>
+                            </li>
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                                </div>
+                                <span class="text-[#0f0e1b] dark:text-white font-bold">Simple monthly/yearly
+                                    subscription</span>
+                            </li>
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                                </div>
+                                <span class="text-[#0f0e1b] dark:text-white font-bold">Hosting & maintenance
+                                    included</span>
+                            </li>
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                                </div>
+                                <span class="text-[#0f0e1b] dark:text-white font-bold">Regular updates & support</span>
+                            </li>
+                            <li class="flex items-start gap-3 group/item">
+                                <div
+                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                                </div>
+                                <span class="text-[#0f0e1b] dark:text-white font-bold">Faster go-live (Days, not
+                                    weeks)</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <!-- Comparison Table (Hidden on mobile) -->
+            <!-- Premium Comparison Table -->
             <div
-                class="hidden md:block bg-white dark:bg-[#1a1c2e] rounded-3xl border border-gray-100 dark:border-white/5 overflow-hidden shadow-sm mb-16">
+                class="hidden md:block bg-gradient-to-br from-white to-gray-50 dark:from-[#1a1c2e] dark:to-[#151729] rounded-3xl border border-gray-100 dark:border-white/10 overflow-hidden shadow-xl mb-16 hover:shadow-2xl transition-shadow duration-500">
                 <table class="w-full">
                     <thead>
-                        <tr class="bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/5">
-                            <th class="py-6 px-8 text-left text-sm font-bold text-gray-500 uppercase tracking-widest">
+                        <tr
+                            class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-white/10 dark:to-white/5 border-b-2 border-primary/20">
+                            <th
+                                class="py-6 px-8 text-left text-sm font-black text-gray-600 dark:text-gray-300 uppercase tracking-widest">
                                 Feature
                             </th>
-                            <th class="py-6 px-8 text-left text-sm font-bold text-gray-500 uppercase tracking-widest">
-                                Traditional Development</th>
-                            <th class="py-6 px-8 text-left text-sm font-bold text-primary uppercase tracking-widest">
-                                Website
-                                as a Service</th>
+                            <th
+                                class="py-6 px-8 text-left text-sm font-black text-gray-600 dark:text-gray-300 uppercase tracking-widest">
+                                Traditional Development
+                            </th>
+                            <th
+                                class="py-6 px-8 text-left text-sm font-black bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent uppercase tracking-widest">
+                                Website as a Service
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-                        <tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Upfront Cost</td>
-                            <td class="py-6 px-8 text-red-500 font-medium">High</td>
-                            <td class="py-6 px-8 text-green-500 font-bold">Zero</td>
+                            <td class="py-6 px-8">
+                                <span
+                                    class="inline-flex items-center gap-2 px-3 py-1 bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-full font-bold text-sm">
+                                    <span class="material-symbols-outlined text-xs">trending_up</span>
+                                    High
+                                </span>
+                            </td>
+                            <td class="py-6 px-8">
+                                <span
+                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
+                                    <span class="material-symbols-outlined text-xs">check_circle</span>
+                                    Zero
+                                </span>
+                            </td>
                         </tr>
-                        <tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Maintenance</td>
-                            <td class="py-6 px-8 text-gray-500">Extra Fees</td>
-                            <td class="py-6 px-8 text-green-500 font-bold">Included</td>
+                            <td class="py-6 px-8 text-gray-600 dark:text-gray-400 font-medium">Extra Fees</td>
+                            <td class="py-6 px-8">
+                                <span
+                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
+                                    <span class="material-symbols-outlined text-xs">check_circle</span>
+                                    Included
+                                </span>
+                            </td>
                         </tr>
-                        <tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Hosting</td>
-                            <td class="py-6 px-8 text-gray-500">Separate Bill</td>
-                            <td class="py-6 px-8 text-green-500 font-bold">Included</td>
+                            <td class="py-6 px-8 text-gray-600 dark:text-gray-400 font-medium">Separate Bill</td>
+                            <td class="py-6 px-8">
+                                <span
+                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
+                                    <span class="material-symbols-outlined text-xs">check_circle</span>
+                                    Included
+                                </span>
+                            </td>
                         </tr>
-                        <tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Updates</td>
-                            <td class="py-6 px-8 text-gray-500">Manual / Paid</td>
-                            <td class="py-6 px-8 text-green-500 font-bold">Fully Managed</td>
+                            <td class="py-6 px-8 text-gray-600 dark:text-gray-400 font-medium">Manual / Paid</td>
+                            <td class="py-6 px-8">
+                                <span
+                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
+                                    <span class="material-symbols-outlined text-xs">check_circle</span>
+                                    Fully Managed
+                                </span>
+                            </td>
                         </tr>
-                        <tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Time to Launch</td>
-                            <td class="py-6 px-8 text-gray-500">Weeks / Months</td>
-                            <td class="py-6 px-8 text-green-500 font-bold">Days</td>
+                            <td class="py-6 px-8 text-gray-600 dark:text-gray-400 font-medium">Weeks / Months</td>
+                            <td class="py-6 px-8">
+                                <span
+                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
+                                    <span class="material-symbols-outlined text-xs">bolt</span>
+                                    Days
+                                </span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

@@ -45,7 +45,7 @@ if ($searchQuery) {
                     </span>
                     <h1
                         class="text-[#0f0e1b] dark:text-white text-5xl md:text-6xl font-black leading-[1.1] tracking-[-0.033em]">
-                        Premium Websites & Business Software — <span class="text-primary">Without Development
+                        Premium Websites & Business Software <span class="text-primary">Without Development
                             Cost</span>
                     </h1>
                     <p class="text-[#545095] dark:text-white/60 text-lg md:text-xl font-normal max-w-[540px]">

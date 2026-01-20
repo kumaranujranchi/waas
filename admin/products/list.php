@@ -74,6 +74,11 @@ $products = $productModel->getAllProducts();
                             class="flex-1 text-center px-4 py-3 bg-gray-50 dark:bg-white/5 border-2 border-gray-300 dark:border-white/10 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all">
                             Edit
                         </a>
+                        <a href="<?php echo baseUrl('admin/products/delete.php?id=' . $product['id']); ?>"
+                            class="size-11 flex items-center justify-center border-2 border-red-100 bg-red-50 rounded-xl text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all"
+                            onclick="return confirm('Are you sure you want to delete this product?');">
+                            <span class="material-symbols-outlined">delete</span>
+                        </a>
                         <a href="<?php echo baseUrl('product-detail.php?slug=' . $product['slug']); ?>" target="_blank"
                             class="size-11 flex items-center justify-center border-2 border-gray-300 dark:border-white/10 rounded-xl text-gray-400 hover:text-primary transition-all">
                             <span class="material-symbols-outlined">visibility</span>

@@ -67,7 +67,7 @@ function redirect($url)
 /**
  * Format price with currency symbol
  */
-function formatPrice($amount, $currency = '$')
+function formatPrice($amount, $currency = '₹')
 {
     $val = floatval($amount);
     return $currency . ' ' . number_format($val, 2);

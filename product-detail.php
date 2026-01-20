@@ -172,7 +172,7 @@ $faqs = $productModel->getProductFAQs($product['id']);
                     <div class="mb-8">
                         <h3 class="text-2xl font-black mb-2"><?php echo e($plan['plan_name']); ?></h3>
                         <div class="flex items-baseline gap-1 my-6">
-                            <span class="text-5xl font-black tracking-tight">
+                            <span class="text-4xl font-black tracking-tight">
                                 <?php echo formatPrice($plan['price']); ?>
                             </span>
                             <span class="text-sm font-bold opacity-60">/<?php echo $plan['billing_cycle']; ?>mo</span>

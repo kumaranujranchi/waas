@@ -90,11 +90,13 @@ if ($searchQuery) {
                 <!-- Right Visual with Floating Cards -->
                 <div class="relative h-[500px] lg:h-[600px]">
                     <!-- Main Dashboard Preview -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
-                        <div
-                            class="aspect-[3/4] bg-gradient-to-br from-primary to-purple-600 rounded-3xl shadow-2xl flex items-center justify-center relative overflow-hidden">
-                            <div class="absolute inset-0 bg-grid-white/10"></div>
-                            <span class="material-symbols-outlined text-white text-9xl relative z-10">dashboard</span>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
+                        <div class="relative rounded-3xl shadow-2xl overflow-hidden group">
+                            <img src="assets/images/hero_dashboard.jpg" alt="Dashboard Preview"
+                                class="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none">
+                            </div>
                         </div>
                     </div>
 

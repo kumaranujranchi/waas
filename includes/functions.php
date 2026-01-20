@@ -67,9 +67,10 @@ function redirect($url)
 /**
  * Format price with currency symbol
  */
-function formatPrice($amount, $currency = CURRENCY_SYMBOL)
+function formatPrice($amount, $currency = '$')
 {
-    return $currency . number_format($amount, 2);
+    $val = floatval($amount);
+    return $currency . ' ' . number_format($val, 2);
 }
 
 /**

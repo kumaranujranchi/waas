@@ -48,82 +48,109 @@ $selectedPlanType = $_GET['plan_type'] ?? 'monthly';
 $currentPlans = $plansByType[$selectedPlanType];
 ?>
 
-<main class="flex-1 max-w-[1200px] mx-auto w-full px-6 py-8">
-    <!-- Breadcrumbs -->
-    <div class="flex flex-wrap gap-2 py-4">
-        <a class="text-[#545095] dark:text-gray-400 text-sm font-medium hover:text-primary"
-            href="<?php echo baseUrl('index.php'); ?>">Home</a>
-        <span class="text-[#545095] dark:text-gray-400 text-sm font-medium">/</span>
-        <a class="text-[#545095] dark:text-gray-400 text-sm font-medium hover:text-primary"
-            href="<?php echo baseUrl('index.php'); ?>">Solutions</a>
-        <span class="text-[#545095] dark:text-gray-400 text-sm font-medium">/</span>
-        <span class="text-[#0f0e1b] dark:text-white text-sm font-medium">
-            <?php echo e($product['name']); ?>
-        </span>
-    </div>
+<main class="flex-1 max-w-[1200px] mx-auto w-full px-6 py-12">
+    <!-- Hero Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+        <div class="space-y-8">
+            <div class="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                <a href="<?php echo baseUrl('index.php'); ?>" class="hover:text-primary transition-colors">Home</a>
+                <span class="text-gray-300">/</span>
+                <span class="text-[#0f0e1b] dark:text-white"><?php echo e($product['name']); ?></span>
+            </div>
 
-    <!-- Page Heading & Trust Badges -->
-    <div class="flex flex-col lg:flex-row justify-between items-start gap-8 mt-4 mb-12">
-        <div class="flex flex-col gap-4 max-w-2xl">
-            <h1 class="text-[#0f0e1b] dark:text-white text-5xl font-black leading-tight tracking-[-0.033em]">
-                <?php echo e($product['name']); ?>
-            </h1>
-            <p class="text-[#545095] dark:text-gray-400 text-lg font-normal leading-relaxed">
-                <?php echo e($product['full_description']); ?>
-            </p>
-            <div class="flex flex-wrap gap-4 mt-2">
+            <div>
+                <h1
+                    class="text-5xl lg:text-6xl font-black text-[#0f0e1b] dark:text-white leading-[1.1] tracking-tight mb-6">
+                    <?php echo e($product['name']); ?>
+                </h1>
+                <p class="text-xl text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl">
+                    <?php echo e($product['full_description']); ?>
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
                 <div
-                    class="flex items-center gap-2 bg-white dark:bg-white/5 border border-[#e8e8f3] dark:border-white/10 px-3 py-1.5 rounded-full">
-                    <span class="material-symbols-outlined text-primary text-lg">verified</span>
-                    <span class="text-sm font-medium">PCI Compliant</span>
+                    class="flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-white/5 rounded-full border border-gray-100 dark:border-white/10">
+                    <span class="material-symbols-outlined text-green-500 text-xl">verified_user</span>
+                    <span class="font-bold text-sm text-[#0f0e1b] dark:text-white">Enterprise Ready</span>
                 </div>
                 <div
-                    class="flex items-center gap-2 bg-white dark:bg-white/5 border border-[#e8e8f3] dark:border-white/10 px-3 py-1.5 rounded-full">
-                    <span class="material-symbols-outlined text-primary text-lg">support_agent</span>
-                    <span class="text-sm font-medium">24/7 Support</span>
+                    class="flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-white/5 rounded-full border border-gray-100 dark:border-white/10">
+                    <span class="material-symbols-outlined text-blue-500 text-xl">rocket_launch</span>
+                    <span class="font-bold text-sm text-[#0f0e1b] dark:text-white">Instant Deployment</span>
                 </div>
-                <div
-                    class="flex items-center gap-2 bg-white dark:bg-white/5 border border-[#e8e8f3] dark:border-white/10 px-3 py-1.5 rounded-full">
-                    <span class="material-symbols-outlined text-primary text-lg">speed</span>
-                    <span class="text-sm font-medium">99.9% Uptime</span>
+            </div>
+
+            <div class="flex items-center gap-6 pt-4">
+                <a href="#pricing"
+                    class="px-8 py-4 bg-primary text-white rounded-2xl font-black text-lg shadow-xl shadow-primary/25 hover:translate-y-[-2px] hover:shadow-2xl hover:shadow-primary/40 transition-all duration-300">
+                    View Pricing
+                </a>
+                <div class="flex items-center gap-3">
+                    <div class="flex -space-x-4">
+                        <div class="size-10 rounded-full border-2 border-white bg-gray-200"></div>
+                        <div class="size-10 rounded-full border-2 border-white bg-gray-300"></div>
+                        <div class="size-10 rounded-full border-2 border-white bg-gray-400"></div>
+                    </div>
+                    <div class="text-sm">
+                        <p class="font-bold text-[#0f0e1b] dark:text-white">5,000+ businesses</p>
+                        <p class="text-gray-400">trust this solution</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="flex flex-col items-end gap-4 min-w-[300px]">
-            <div class="flex items-center -space-x-4 px-4 py-3">
-                <div class="rounded-full size-12 border-4 border-white"
-                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                <div class="rounded-full size-12 border-4 border-white"
-                    style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
-                <div class="rounded-full size-12 border-4 border-white"
-                    style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
-                <div
-                    class="bg-primary flex items-center justify-center border-4 border-white rounded-full size-12 text-white text-xs font-bold">
-                    5k+</div>
+
+        <!-- Product Visual -->
+        <div class="relative">
+            <div class="absolute inset-0 bg-primary/20 blur-[100px] rounded-full"></div>
+            <div
+                class="relative bg-white dark:bg-[#1a1c2e] rounded-[2.5rem] p-4 shadow-2xl border border-gray-100 dark:border-white/10 rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
+                <div class="aspect-[4/3] rounded-[2rem] overflow-hidden bg-gray-50 dark:bg-white/5 relative group">
+                    <?php
+                    $imageUrl = $product['image_url'];
+                    if (!empty($imageUrl)) {
+                        if (!filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+                            $imageUrl = baseUrl($imageUrl);
+                        }
+                    }
+                    ?>
+                    <?php if (!empty($imageUrl)): ?>
+                        <img src="<?php echo e($imageUrl); ?>" alt="<?php echo e($product['name']); ?>"
+                            class="w-full h-full object-cover">
+                    <?php else: ?>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-gray-300 text-8xl">image</span>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
-            <p class="text-right text-sm text-[#545095] dark:text-gray-400">Trusted by over 5,000 businesses globally
-            </p>
         </div>
     </div>
 
-    <!-- Features Grid -->
+    <!-- Features Section -->
     <?php if (!empty($features)): ?>
-        <div class="mb-20">
-            <h2 class="text-[#0f0e1b] dark:text-white text-2xl font-bold mb-8 flex items-center gap-2">
-                <span class="w-8 h-1 bg-primary rounded-full"></span>
-                Key Features
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="mb-32">
+            <div class="flex items-center gap-4 mb-16">
+                <div class="h-px flex-1 bg-gray-100 dark:bg-white/10"></div>
+                <h2 class="text-2xl font-black text-[#0f0e1b] dark:text-white uppercase tracking-widest">Everything Included
+                </h2>
+                <div class="h-px flex-1 bg-gray-100 dark:bg-white/10"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <?php foreach ($features as $feature): ?>
                     <div
-                        class="bg-white dark:bg-white/5 p-6 rounded-xl border border-[#e8e8f3] dark:border-white/10 hover:shadow-lg transition-shadow">
-                        <span class="material-symbols-outlined text-primary text-4xl mb-4">
-                            <?php echo e($feature['feature_icon']); ?>
-                        </span>
-                        <h3 class="text-lg font-bold mb-2">
+                        class="group p-8 rounded-3xl bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 hover:border-primary/20 hover:bg-primary/5 transition-all duration-300">
+                        <div
+                            class="size-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-symbols-outlined text-3xl">
+                                <?php echo e($feature['feature_icon'] ?: 'star'); ?>
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-3">
                             <?php echo e($feature['feature_title']); ?>
                         </h3>
-                        <p class="text-[#545095] dark:text-gray-400 text-sm">
+                        <p class="text-gray-500 dark:text-gray-400 leading-relaxed">
                             <?php echo e($feature['feature_description']); ?>
                         </p>
                     </div>
@@ -133,102 +160,75 @@ $currentPlans = $plansByType[$selectedPlanType];
     <?php endif; ?>
 
     <!-- Pricing Section -->
-    <div class="mb-20" id="pricing">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-black mb-4">Simple, Transparent Pricing</h2>
-            <p class="text-[#545095] dark:text-gray-400 max-w-lg mx-auto mb-8">Choose the plan that fits your business
-                stage. No hidden fees, cancel anytime.</p>
-
-            <!-- Plan Type Toggle -->
-            <div class="inline-flex p-1 bg-[#e8e8f3] dark:bg-white/5 rounded-xl">
+    <div id="pricing" class="mb-20 scroll-mt-20">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl text-[#0f0e1b] dark:text-white font-black mb-6">Transparent Pricing</h2>
+            <div class="inline-flex items-center p-1.5 bg-gray-100 dark:bg-white/5 rounded-2xl">
                 <a href="?slug=<?php echo $slug; ?>&plan_type=monthly"
-                    class="px-6 py-2 rounded-lg text-sm font-bold <?php echo $selectedPlanType === 'monthly' ? 'bg-white dark:bg-white/10 shadow-sm' : 'text-[#545095] dark:text-gray-400'; ?>">
+                    class="px-8 py-3 rounded-xl text-sm font-bold transition-all <?php echo $selectedPlanType === 'monthly' ? 'bg-white dark:bg-[#1a1c2e] text-[#0f0e1b] dark:text-white shadow-lg shadow-black/5' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'; ?>">
                     Monthly
                 </a>
                 <a href="?slug=<?php echo $slug; ?>&plan_type=semi_annual"
-                    class="px-6 py-2 rounded-lg text-sm font-medium <?php echo $selectedPlanType === 'semi_annual' ? 'bg-white dark:bg-white/10 shadow-sm' : 'text-[#545095] dark:text-gray-400'; ?>">
+                    class="px-8 py-3 rounded-xl text-sm font-bold transition-all <?php echo $selectedPlanType === 'semi_annual' ? 'bg-white dark:bg-[#1a1c2e] text-[#0f0e1b] dark:text-white shadow-lg shadow-black/5' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'; ?>">
                     6 Months
                 </a>
                 <a href="?slug=<?php echo $slug; ?>&plan_type=yearly"
-                    class="px-6 py-2 rounded-lg text-sm font-medium <?php echo $selectedPlanType === 'yearly' ? 'bg-white dark:bg-white/10 shadow-sm' : 'text-[#545095] dark:text-gray-400'; ?> flex items-center gap-2">
-                    1 Year <span
-                        class="bg-accent-green text-white text-[10px] px-1.5 py-0.5 rounded-full uppercase">Save
+                    class="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 <?php echo $selectedPlanType === 'yearly' ? 'bg-white dark:bg-[#1a1c2e] text-[#0f0e1b] dark:text-white shadow-lg shadow-black/5' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'; ?>">
+                    Yearly
+                    <span
+                        class="bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wide">Save
                         25%</span>
                 </a>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <?php foreach ($currentPlans as $index => $plan):
-                $isPopular = $plan['is_popular'];
-                $features = json_decode($plan['features'], true) ?? [];
+                $isPopular = $plan['is_popular'] ?? false;
+                $features = !empty($plan['features']) ? json_decode($plan['features'], true) : [];
+                $features = is_array($features) ? $features : [];
                 ?>
                 <div
-                    class="<?php echo $isPopular ? 'relative flex flex-col bg-white dark:bg-[#1a1930] p-8 rounded-2xl border-2 border-primary shadow-xl scale-105 z-10' : 'flex flex-col bg-white dark:bg-white/5 p-8 rounded-2xl border border-[#e8e8f3] dark:border-white/10'; ?>">
+                    class="relative flex flex-col p-8 rounded-[2rem] transition-all duration-300 <?php echo $isPopular ? 'bg-[#0f0e1b] dark:bg-white text-white dark:text-[#0f0e1b] shadow-2xl scale-105 z-10' : 'bg-white dark:bg-[#1a1c2e] border border-gray-100 dark:border-white/5 text-[#0f0e1b] dark:text-white hover:shadow-xl'; ?>">
+
                     <?php if ($isPopular): ?>
                         <div
-                            class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold px-4 py-1 rounded-full uppercase">
-                            Best Value</div>
+                            class="absolute -top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                            Most Popular
+                        </div>
                     <?php endif; ?>
 
                     <div class="mb-8">
-                        <h3 class="text-xl font-bold mb-1">
-                            <?php echo e($plan['plan_name']); ?>
-                        </h3>
-                        <p class="text-sm text-[#545095] dark:text-gray-400">For growing businesses</p>
-                        <div class="mt-6 flex items-baseline gap-1">
-                            <span class="text-4xl font-black">
+                        <h3 class="text-2xl font-black mb-2"><?php echo e($plan['plan_name']); ?></h3>
+                        <div class="flex items-baseline gap-1 my-6">
+                            <span class="text-5xl font-black tracking-tight">
                                 <?php echo formatPrice($plan['price']); ?>
                             </span>
-                            <span class="text-sm text-[#545095]">/
-                                <?php echo $plan['billing_cycle']; ?> months
-                            </span>
+                            <span class="text-sm font-bold opacity-60">/<?php echo $plan['billing_cycle']; ?>mo</span>
                         </div>
+                        <p class="text-sm opacity-60 leading-relaxed">Perfect for growing businesses that need a complete
+                            solution.</p>
                     </div>
 
-                    <ul class="flex-1 space-y-4 mb-8">
-                        <?php foreach ($features as $feature): ?>
-                            <li class="flex items-start gap-3 text-sm">
-                                <span class="material-symbols-outlined text-accent-green">check_circle</span>
-                                <?php echo e($feature); ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
+                    <div class="flex-1 mb-8">
+                        <ul class="space-y-4">
+                            <?php foreach ($features as $feature): ?>
+                                <li class="flex items-start gap-3 text-sm font-medium opacity-80">
+                                    <span
+                                        class="material-symbols-outlined text-[20px] <?php echo $isPopular ? 'text-green-400 dark:text-green-600' : 'text-green-500'; ?> shrink-0">check_circle</span>
+                                    <?php echo e($feature); ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
 
                     <a href="<?php echo baseUrl('checkout.php?plan_id=' . $plan['id']); ?>"
-                        class="w-full py-4 rounded-xl <?php echo $isPopular ? 'bg-primary text-white hover:opacity-90' : 'border-2 border-[#e8e8f3] dark:border-white/10 hover:bg-[#e8e8f3] dark:hover:bg-white/10'; ?> font-bold text-center transition-all">
-                        <?php echo $isPopular ? 'Get Started Now' : 'Select Plan'; ?>
+                        class="w-full py-4 rounded-xl font-bold text-center transition-all duration-300 <?php echo $isPopular ? 'bg-white text-black hover:bg-gray-100 dark:bg-black dark:text-white' : 'bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black'; ?>">
+                        Choose Plan
                     </a>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
-
-    <!-- Sticky CTA Bar -->
-    <div
-        class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-3xl bg-white dark:bg-[#1a1930] border border-[#e8e8f3] dark:border-white/10 shadow-2xl rounded-2xl px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="hidden sm:block">
-            <p class="font-bold text-lg">
-                <?php echo e($product['name']); ?>
-            </p>
-            <p class="text-xs text-[#545095] dark:text-gray-400">
-                Starting from
-                <?php echo formatPrice(min(array_column($pricingPlans, 'price'))); ?>/mo
-            </p>
-        </div>
-        <div class="flex gap-4 w-full sm:w-auto">
-            <a href="<?php echo baseUrl('checkout.php?product_id=' . $product['id']); ?>"
-                class="flex-1 sm:flex-none px-8 h-12 bg-accent-green text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-xl">shopping_cart</span>
-                Buy Now
-            </a>
-            <a href="<?php echo baseUrl('consultation.php'); ?>"
-                class="flex-1 sm:flex-none px-8 h-12 bg-primary text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-xl">event</span>
-                Book Consultation
-            </a>
-        </div>
-    </div>
 </main>
-
 <?php include __DIR__ . '/includes/footer.php'; ?>

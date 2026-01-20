@@ -321,7 +321,7 @@ include __DIR__ . '/../includes/header.php';
 </div>
 
 <!-- Actions -->
-<div class="flex gap-4 pt-4">
+<div class="flex gap-4 pt-4 mb-12">
     <button type="submit"
         class="flex-1 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg text-lg">
         Create Product Listing

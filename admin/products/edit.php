@@ -387,7 +387,7 @@ include __DIR__ . '/../includes/header.php';
 </div>
 
 <!-- Submit Button -->
-<div class="flex gap-4">
+<div class="flex gap-4 mb-12">
     <button type="submit"
         class="px-8 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 shadow-lg shadow-primary/25 transition-all">
         Update Product

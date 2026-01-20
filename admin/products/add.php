@@ -1,4 +1,134 @@
 <?php
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../models/Product.php';
+require_once __DIR__ . '/../../models/Category.php';
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+requireAdmin();
+
+$productModel = new Product();
+$categoryModel = new Category();
+
+$categories = $categoryModel->getAllCategories();
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = [
+        'category_id' => $_POST['category_id'] ?? null,
+        'name' => sanitizeInput($_POST['name'] ?? ''),
+        'slug' => generateSlug($_POST['name'] ?? ''),
+        'short_description' => sanitizeInput($_POST['short_description'] ?? ''),
+        'full_description' => $_POST['full_description'] ?? '', // Allow HTML
+        'badge' => sanitizeInput($_POST['badge'] ?? ''),
+        'is_featured' => isset($_POST['is_featured']) ? 1 : 0,
+        'status' => 'active'
+    ];
+
+    $image_url = '';
+
+    // Handle File Upload
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        $fileType = mime_content_type($_FILES['image']['tmp_name']);
+
+        if (in_array($fileType, $allowedTypes)) {
+            $uploadDir = __DIR__ . '/../../uploads/products/';
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            $fileExtension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+            $fileName = uniqid('prod_') . '.' . $fileExtension;
+            $targetPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
+                $image_url = 'uploads/products/' . $fileName;
+            } else {
+                setFlashMessage('error', 'Failed to upload image.');
+            }
+        } else {
+            setFlashMessage('error', 'Invalid file type. Only JPG, PNG, WEBP, and GIF are allowed.');
+        }
+    }
+
+    // Assign image URL to data (either uploaded or empty)
+    $data['image_url'] = $image_url;
+
+    $errors = [];
+
+    if (empty($data['name']))
+        $errors[] = 'Product name is required';
+    if (empty($data['category_id']))
+        $errors[] = 'Category is required';
+    if (empty($data['short_description']))
+        $errors[] = 'Short description is required';
+
+    if (empty($errors)) {
+        try {
+            // Start Transaction via Database instance
+            $db = Database::getInstance();
+            $db->beginTransaction();
+
+            $productId = $productModel->createProduct($data);
+
+            if ($productId) {
+                // Handle Pricing Plans
+                $pricing = [
+                    ['name' => 'Monthly', 'type' => 'monthly', 'price' => $_POST['price_monthly'] ?? 0, 'cycle' => 1],
+                    ['name' => 'Half-Yearly', 'type' => 'semi_annual', 'price' => $_POST['price_half_yearly'] ?? 0, 'cycle' => 6],
+                    ['name' => 'Yearly', 'type' => 'yearly', 'price' => $_POST['price_yearly'] ?? 0, 'cycle' => 12]
+                ];
+
+                foreach ($pricing as $plan) {
+                    if ($plan['price'] > 0) {
+                        $productModel->createPricingPlan([
+                            'product_id' => $productId,
+                            'plan_name' => $plan['name'],
+                            'plan_type' => $plan['type'],
+                            'price' => $plan['price'],
+                            'billing_cycle' => $plan['cycle'],
+                            'status' => 'active'
+                        ]);
+                    }
+                }
+
+                // Handle FAQs
+                if (!empty($_POST['faq_question'])) {
+                    foreach ($_POST['faq_question'] as $index => $question) {
+                        $answer = $_POST['faq_answer'][$index] ?? '';
+                        if (!empty($question) && !empty($answer)) {
+                            $productModel->createFAQ([
+                                'product_id' => $productId,
+                                'question' => sanitizeInput($question),
+                                'answer' => sanitizeInput($answer),
+                                'display_order' => $index
+                            ]);
+                        }
+                    }
+                }
+
+                $db->commit();
+                setFlashMessage('success', 'Product created successfully with pricing and FAQs!');
+                redirect(baseUrl('admin/products/list.php'));
+            } else {
+                $db->rollback();
+                setFlashMessage('error', 'Failed to save product to database.');
+            }
+        } catch (Exception $e) {
+            $db->rollback();
+            setFlashMessage('error', 'Error: ' . $e->getMessage());
+        }
+    } else {
+        setFlashMessage('error', implode('<br>', $errors));
+    }
+}
+
 $pageTitle = 'Add New Solution';
 include __DIR__ . '/../includes/header.php';
 ?>
@@ -17,102 +147,8 @@ include __DIR__ . '/../includes/header.php';
         </div>
     </div>
 
-    <?php
-    require_once __DIR__ . '/../../models/Product.php';
-    require_once __DIR__ . '/../../models/Category.php';
-
-    $productModel = new Product();
-    $categoryModel = new Category();
-
-    $categories = $categoryModel->getAllCategories();
-
-    // Handle form submission
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = [
-            'category_id' => $_POST['category_id'] ?? null,
-            'name' => sanitizeInput($_POST['name'] ?? ''),
-            'slug' => generateSlug($_POST['name'] ?? ''),
-            'short_description' => sanitizeInput($_POST['short_description'] ?? ''),
-            'full_description' => $_POST['full_description'] ?? '', // Allow HTML if needed, but sanitize later if needed
-            'image_url' => sanitizeInput($_POST['image_url'] ?? ''),
-            'badge' => sanitizeInput($_POST['badge'] ?? ''),
-            'is_featured' => isset($_POST['is_featured']) ? 1 : 0,
-            'status' => 'active'
-        ];
-
-        $errors = [];
-
-        if (empty($data['name']))
-            $errors[] = 'Product name is required';
-        if (empty($data['category_id']))
-            $errors[] = 'Category is required';
-        if (empty($data['short_description']))
-            $errors[] = 'Short description is required';
-
-        if (empty($errors)) {
-            try {
-                // Start Transaction via Database instance
-                $db = Database::getInstance();
-                $db->beginTransaction();
-
-                $productId = $productModel->createProduct($data);
-
-                if ($productId) {
-                    // Handle Pricing Plans
-                    $pricing = [
-                        ['name' => 'Monthly', 'type' => 'monthly', 'price' => $_POST['price_monthly'] ?? 0, 'cycle' => 1],
-                        ['name' => 'Half-Yearly', 'type' => 'semi_annual', 'price' => $_POST['price_half_yearly'] ?? 0, 'cycle' => 6],
-                        ['name' => 'Yearly', 'type' => 'yearly', 'price' => $_POST['price_yearly'] ?? 0, 'cycle' => 12]
-                    ];
-
-                    foreach ($pricing as $plan) {
-                        if ($plan['price'] > 0) {
-                            $productModel->createPricingPlan([
-                                'product_id' => $productId,
-                                'plan_name' => $plan['name'],
-                                'plan_type' => $plan['type'],
-                                'price' => $plan['price'],
-                                'billing_cycle' => $plan['cycle'],
-                                'status' => 'active'
-                            ]);
-                        }
-                    }
-
-                    // Handle FAQs
-                    if (!empty($_POST['faq_question'])) {
-                        foreach ($_POST['faq_question'] as $index => $question) {
-                            $answer = $_POST['faq_answer'][$index] ?? '';
-                            if (!empty($question) && !empty($answer)) {
-                                $productModel->createFAQ([
-                                    'product_id' => $productId,
-                                    'question' => sanitizeInput($question),
-                                    'answer' => sanitizeInput($answer),
-                                    'display_order' => $index
-                                ]);
-                            }
-                        }
-                    }
-
-                    $db->commit();
-                    setFlashMessage('success', 'Product created successfully with pricing and FAQs!');
-                    redirect(baseUrl('admin/products/list.php'));
-                } else {
-                    $db->rollback();
-                    setFlashMessage('error', 'Failed to create product base data');
-                }
-            } catch (Exception $e) {
-                if (isset($db))
-                    $db->rollback();
-                setFlashMessage('error', 'Error: ' . $e->getMessage());
-            }
-        } else {
-            setFlashMessage('error', implode('<br>', $errors));
-        }
-    }
-    ?>
-
     <!-- Form -->
-    <form method="POST" action="" class="space-y-8">
+    <form method="POST" action="" enctype="multipart/form-data" class="space-y-8">
 
 
         <!-- Basic Information -->
@@ -154,10 +190,11 @@ include __DIR__ . '/../includes/header.php';
 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Thumbnail Image
-                        URL</label>
-                    <input type="url" name="image_url"
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                        placeholder="https://example.com/image.jpg" />
+                        (Optional)</label>
+                    <input type="file" name="image" accept="image/*"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                    <p class="text-xs text-gray-500 mt-1">Leave empty to use default icon. Supported formats: JPG, PNG,
+                        WEBP, GIF</p>
                 </div>
 
                 <div class="md:col-span-2">

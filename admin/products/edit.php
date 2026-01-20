@@ -1,13 +1,16 @@
 <?php
-/**
- * Admin - Edit Product
- */
-
-$pageTitle = 'Edit Product';
-include __DIR__ . '/../includes/header.php';
-
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/functions.php';
 require_once __DIR__ . '/../../models/Product.php';
 require_once __DIR__ . '/../../models/Category.php';
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+requireAdmin();
 
 $productModel = new Product();
 $categoryModel = new Category();
@@ -40,11 +43,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'slug' => generateSlug($_POST['name'] ?? ''),
         'short_description' => sanitizeInput($_POST['short_description'] ?? ''),
         'full_description' => $_POST['full_description'] ?? '',
-        'image_url' => sanitizeInput($_POST['image_url'] ?? ''),
         'badge' => sanitizeInput($_POST['badge'] ?? ''),
         'is_featured' => isset($_POST['is_featured']) ? 1 : 0,
         'status' => $_POST['status'] ?? 'active'
     ];
+
+    // Handle Image
+    $image_url = $_POST['existing_image_url'] ?? '';
+
+    // Handle File Upload
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        $fileType = mime_content_type($_FILES['image']['tmp_name']);
+
+        if (in_array($fileType, $allowedTypes)) {
+            $uploadDir = __DIR__ . '/../../uploads/products/';
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            $fileExtension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+            $fileName = uniqid('prod_') . '.' . $fileExtension;
+            $targetPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
+                $image_url = 'uploads/products/' . $fileName;
+            } else {
+                setFlashMessage('error', 'Failed to upload image.');
+            }
+        } else {
+            setFlashMessage('error', 'Invalid file type. Only JPG, PNG, WEBP, and GIF are allowed.');
+        }
+    }
+
+    $data['image_url'] = $image_url;
 
     $errors = [];
 
@@ -65,8 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($updated) {
                 // Delete existing pricing plans and FAQs
-                $db->execute("DELETE FROM pricing_plans WHERE product_id = ?", [$productId]);
-                $db->execute("DELETE FROM product_faqs WHERE product_id = ?", [$productId]);
+                $db->query("DELETE FROM pricing_plans WHERE product_id = ?", [$productId]);
+                $db->query("DELETE FROM product_faqs WHERE product_id = ?", [$productId]);
 
                 // Add new pricing plans
                 $pricing = [
@@ -136,6 +168,9 @@ foreach ($pricingPlans as $plan) {
         $pricingData['yearly'] = $plan['price'];
     }
 }
+
+$pageTitle = 'Edit Product';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="p-8">
@@ -152,7 +187,8 @@ foreach ($pricingPlans as $plan) {
     </div>
 
     <!-- Form -->
-    <form method="POST" action="" class="space-y-8">
+    <form method="POST" action="" enctype="multipart/form-data" class="space-y-8">
+        <input type="hidden" name="existing_image_url" value="<?php echo e($product['image_url']); ?>">
 
         <!-- Basic Information -->
         <div class="bg-white dark:bg-white/5 rounded-xl p-8 border-2 border-gray-300 dark:border-white/10 shadow-sm">
@@ -190,10 +226,17 @@ foreach ($pricingPlans as $plan) {
 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Thumbnail Image
-                        URL</label>
-                    <input type="url" name="image_url" value="<?php echo e($product['image_url']); ?>"
-                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="https://example.com/image.jpg">
+                        (Optional)</label>
+                    <?php if (!empty($product['image_url'])): ?>
+                        <div class="mb-3">
+                            <img src="<?php echo baseUrl($product['image_url']); ?>" alt="Current Image"
+                                class="h-20 w-auto rounded border border-gray-200 dark:border-white/10">
+                        </div>
+                    <?php endif; ?>
+                    <input type="file" name="image" accept="image/*"
+                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                    <p class="text-xs text-gray-500 mt-1">Leave empty to keep current image. Supported formats: JPG,
+                        PNG, WEBP, GIF</p>
                 </div>
 
                 <div class="md:col-span-2">
@@ -213,7 +256,7 @@ foreach ($pricingPlans as $plan) {
 
                 <div class="flex items-center gap-3">
                     <input type="checkbox" name="is_featured" id="is_featured" value="1" <?php echo $product['is_featured'] ? 'checked' : ''; ?>
-                    class="w-5 h-5 rounded border-2 border-gray-300 text-primary focus:ring-primary">
+                        class="w-5 h-5 rounded border-2 border-gray-300 text-primary focus:ring-primary">
                     <label for="is_featured" class="text-sm font-bold text-[#0f0e1b] dark:text-white">Mark as
                         Featured</label>
                 </div>
@@ -224,8 +267,8 @@ foreach ($pricingPlans as $plan) {
                         class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
                         <option value="active" <?php echo $product['status'] === 'active' ? 'selected' : ''; ?>>Active
                         </option>
-                        <option value="inactive" <?php echo $product['status'] === 'inactive' ? 'selected' : ''; ?>
-                            >Inactive</option>
+                        <option value="inactive" <?php echo $product['status'] === 'inactive' ? 'selected' : ''; ?>>
+                            Inactive</option>
                     </select>
                 </div>
             </div>

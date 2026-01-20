@@ -622,7 +622,7 @@ if ($searchQuery) {
             <!-- Key Takeaway & CTA -->
             <div class="text-center">
                 <p class="text-2xl md:text-3xl font-bold text-[#0f0e1b] dark:text-white mb-10 max-w-4xl mx-auto">
-                    "Website as a Service is not cheaper websites — <span class="text-primary">it’s a smarter way to own
+                    "Website as a Service is not cheaper websites, <span class="text-primary">it’s a smarter way to own
                         one.</span>"
                 </p>
 

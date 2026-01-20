@@ -8,11 +8,12 @@
                         <span class="material-symbols-outlined text-xl">layers</span>
                     </div>
                     <h2 class="text-[#0f0e1b] dark:text-white text-xl font-bold">
-                        <?php echo SITE_NAME; ?>
+                        SiteOnSub
                     </h2>
                 </div>
                 <p class="text-xs font-bold text-primary mb-6">
-                    <?php echo defined('SITE_TAGLINE') ? SITE_TAGLINE : 'WaaS Marketplace'; ?></p>
+                    <?php echo defined('SITE_TAGLINE') ? SITE_TAGLINE : 'WaaS Marketplace'; ?>
+                </p>
                 <p class="text-[#545095] dark:text-white/60 text-sm max-w-xs mb-6 leading-relaxed">
                     Modern websites and enterprise-grade software delivered as a service. No dev costs, no maintenance
                     headaches.
@@ -80,7 +81,7 @@
             class="mt-16 pt-8 border-t border-[#e8e8f3] dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
             <p class="text-sm text-[#545095] dark:text-white/60">©
                 <?php echo date('Y'); ?>
-                <?php echo SITE_NAME; ?>. All rights reserved.
+                SiteOnSub. All rights reserved.
             </p>
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-accent-green animate-pulse"></span>

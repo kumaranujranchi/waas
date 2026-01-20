@@ -96,7 +96,7 @@ $isLoggedIn = isLoggedIn();
                 </div>
                 <a href="<?php echo baseUrl('index.php'); ?>">
                     <h2 class="text-[#0f0e1b] dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">
-                        <?php echo SITE_NAME; ?>
+                        SiteOnSub
                     </h2>
                 </a>
             </div>

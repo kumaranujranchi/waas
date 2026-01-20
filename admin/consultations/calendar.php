@@ -3,9 +3,11 @@
  * Admin - Consultation Calendar (Slot Management)
  */
 
-// Load dependencies FIRST (before any output)
-require_once __DIR__ . '/../../models/Consultation.php';
+// Load dependencies in correct order
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../models/Consultation.php';
 
 // Start session if needed
 if (session_status() === PHP_SESSION_NONE) {

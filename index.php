@@ -356,6 +356,171 @@ if ($searchQuery) {
     </div>
 
     <!-- Consultation Banner -->
+    <!-- WaaS Comparison Section -->
+    <section class="py-20 bg-gray-50 dark:bg-black/20">
+        <div class="max-w-[1200px] mx-auto px-6">
+            <!-- Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-5xl font-black text-[#0f0e1b] dark:text-white mb-6">
+                    Why Website as a Service Makes More Sense Today
+                </h2>
+                <p class="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Building a website the traditional way often means high upfront cost, long timelines, and ongoing
+                    maintenance headaches.
+                    <strong>Website as a Service (WaaS)</strong> changes this by offering modern, fully managed websites
+                    on
+                    a simple subscription model.
+                </p>
+            </div>
+
+            <!-- Comparison Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <!-- Traditional -->
+                <div class="bg-gray-100 dark:bg-white/5 rounded-3xl p-8 md:p-12 border border-transparent">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="size-12 rounded-xl bg-gray-200 dark:bg-white/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-gray-500 text-2xl">history</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-700 dark:text-gray-300">Traditional Web Development</h3>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
+                            <span class="text-gray-600 dark:text-gray-400">High upfront development cost</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
+                            <span class="text-gray-600 dark:text-gray-400">One-time project delivery (static)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
+                            <span class="text-gray-600 dark:text-gray-400">Separate hosting & maintanence fees</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
+                            <span class="text-gray-600 dark:text-gray-400">You manage updates & security</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-500 mt-1">close</span>
+                            <span class="text-gray-600 dark:text-gray-400">Weeks or months to launch</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- WaaS (Highlighted) -->
+                <div
+                    class="bg-white dark:bg-[#1a1c2e] rounded-3xl p-8 md:p-12 border-2 border-primary shadow-xl relative overflow-hidden group">
+                    <div
+                        class="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-4 py-2 rounded-bl-2xl">
+                        Recommended
+                    </div>
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary text-2xl">rocket_launch</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#0f0e1b] dark:text-white">Website as a Service</h3>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
+                            <span class="text-[#0f0e1b] dark:text-white font-medium">Zero upfront development
+                                cost</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
+                            <span class="text-[#0f0e1b] dark:text-white font-medium">Simple monthly/yearly
+                                subscription</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
+                            <span class="text-[#0f0e1b] dark:text-white font-medium">Hosting & maintenance
+                                included</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
+                            <span class="text-[#0f0e1b] dark:text-white font-medium">Regular updates & support</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-green-500 mt-1">check_circle</span>
+                            <span class="text-[#0f0e1b] dark:text-white font-medium">Faster go-live (Days, not
+                                weeks)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Comparison Table (Hidden on mobile) -->
+            <div
+                class="hidden md:block bg-white dark:bg-[#1a1c2e] rounded-3xl border border-gray-100 dark:border-white/5 overflow-hidden shadow-sm mb-16">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/5">
+                            <th class="py-6 px-8 text-left text-sm font-bold text-gray-500 uppercase tracking-widest">
+                                Feature
+                            </th>
+                            <th class="py-6 px-8 text-left text-sm font-bold text-gray-500 uppercase tracking-widest">
+                                Traditional Development</th>
+                            <th class="py-6 px-8 text-left text-sm font-bold text-primary uppercase tracking-widest">
+                                Website
+                                as a Service</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-white/5">
+                        <tr>
+                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Upfront Cost</td>
+                            <td class="py-6 px-8 text-red-500 font-medium">High</td>
+                            <td class="py-6 px-8 text-green-500 font-bold">Zero</td>
+                        </tr>
+                        <tr>
+                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Maintenance</td>
+                            <td class="py-6 px-8 text-gray-500">Extra Fees</td>
+                            <td class="py-6 px-8 text-green-500 font-bold">Included</td>
+                        </tr>
+                        <tr>
+                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Hosting</td>
+                            <td class="py-6 px-8 text-gray-500">Separate Bill</td>
+                            <td class="py-6 px-8 text-green-500 font-bold">Included</td>
+                        </tr>
+                        <tr>
+                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Updates</td>
+                            <td class="py-6 px-8 text-gray-500">Manual / Paid</td>
+                            <td class="py-6 px-8 text-green-500 font-bold">Fully Managed</td>
+                        </tr>
+                        <tr>
+                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Time to Launch</td>
+                            <td class="py-6 px-8 text-gray-500">Weeks / Months</td>
+                            <td class="py-6 px-8 text-green-500 font-bold">Days</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Key Takeaway & CTA -->
+            <div class="text-center">
+                <p class="text-2xl md:text-3xl font-bold text-[#0f0e1b] dark:text-white mb-10 max-w-4xl mx-auto">
+                    "Website as a Service is not cheaper websites — <span class="text-primary">it’s a smarter way to own
+                        one.</span>"
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#solutions"
+                        class="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-xl font-bold text-lg shadow-xl shadow-primary/25 hover:-translate-y-1 transition-transform">
+                        View Our Plans
+                    </a>
+                    <a href="<?php echo baseUrl('consultation.php'); ?>"
+                        class="w-full sm:w-auto px-8 py-4 bg-white dark:bg-white/10 text-[#0f0e1b] dark:text-white border border-gray-200 dark:border-white/10 rounded-xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-white/20 transition-colors">
+                        Book Free Consultation
+                    </a>
+                </div>
+                <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
+                    Not sure which option is right for you? <a href="<?php echo baseUrl('consultation.php'); ?>"
+                        class="text-primary hover:underline">Talk to us.</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consultation Banner -->
     <div class="max-w-[1200px] mx-auto px-6 py-20">
         <div class="bg-primary rounded-3xl p-8 md:p-16 relative overflow-hidden flex flex-col items-center text-center">
             <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>

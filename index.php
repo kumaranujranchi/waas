@@ -535,6 +535,156 @@ if ($searchQuery) {
             </a>
         </div>
     </div>
+    <!-- Key Benefits Section -->
+    <section class="py-20 border-t border-gray-100 dark:border-white/5">
+        <div class="max-w-[1200px] mx-auto px-6">
+            <!-- Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-5xl font-black text-[#0f0e1b] dark:text-white mb-6">
+                    A smarter, faster, and stress-free way to build and run your website.
+                </h2>
+                <p class="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Traditional website development is expensive, slow, and difficult to maintain.
+                    <strong>Website as a Service (WaaS)</strong> removes these challenges by giving you a fully managed,
+                    high-quality website on a simple subscription model. With WaaS, you focus on your business—we take
+                    care of everything else.
+                </p>
+            </div>
+
+            <!-- Benefits Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+                <!-- Benefit 1 -->
+                <div
+                    class="bg-white dark:bg-white/5 p-8 rounded-3xl border border-gray-100 dark:border-white/5 hover:border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div
+                        class="size-12 rounded-2xl bg-green-500/10 text-green-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">savings</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-3">Zero Upfront Cost</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        No need to spend lakhs on development. Start with a low monthly, 6-month, or yearly plan.
+                    </p>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div
+                    class="bg-white dark:bg-white/5 p-8 rounded-3xl border border-gray-100 dark:border-white/5 hover:border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div
+                        class="size-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">rocket_launch</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-3">Faster Go-Live</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Launch your website in days instead of weeks or months.
+                    </p>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div
+                    class="bg-white dark:bg-white/5 p-8 rounded-3xl border border-gray-100 dark:border-white/5 hover:border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div
+                        class="size-12 rounded-2xl bg-purple-500/10 text-purple-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">engineering</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-3">Fully Managed</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Hosting, maintenance, updates, security, and backups are all included.
+                    </p>
+                </div>
+
+                <!-- Benefit 4 -->
+                <div
+                    class="bg-white dark:bg-white/5 p-8 rounded-3xl border border-gray-100 dark:border-white/5 hover:border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div
+                        class="size-12 rounded-2xl bg-orange-500/10 text-orange-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">trending_up</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-3">Easy to Scale</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Upgrade features, pages, or plans as your business grows—without rebuilding.
+                    </p>
+                </div>
+
+                <!-- Benefit 5 -->
+                <div
+                    class="bg-white dark:bg-white/5 p-8 rounded-3xl border border-gray-100 dark:border-white/5 hover:border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div
+                        class="size-12 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">security</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-3">Secure & Reliable</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Regular security updates and monitoring keep your website safe and stable.
+                    </p>
+                </div>
+
+                <!-- Benefit 6 -->
+                <div
+                    class="bg-white dark:bg-white/5 p-8 rounded-3xl border border-gray-100 dark:border-white/5 hover:border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div
+                        class="size-12 rounded-2xl bg-cyan-500/10 text-cyan-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">sync</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-3">Always Up-to-Date</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Your website stays modern with continuous improvements and optimizations.
+                    </p>
+                </div>
+
+                <!-- Benefit 7 -->
+                <div
+                    class="bg-white dark:bg-white/5 p-8 rounded-3xl border border-gray-100 dark:border-white/5 hover:border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div
+                        class="size-12 rounded-2xl bg-pink-500/10 text-pink-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">support_agent</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-3">Ongoing Support</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Get expert support whenever you need it, not just at project delivery.
+                    </p>
+                </div>
+
+                <!-- Benefit 8 -->
+                <div
+                    class="bg-white dark:bg-white/5 p-8 rounded-3xl border border-gray-100 dark:border-white/5 hover:border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div
+                        class="size-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-3xl">payments</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-3">Predictable Pricing</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Simple, transparent pricing with no hidden charges or surprise costs.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Closing & CTA -->
+            <div class="text-center bg-gray-50 dark:bg-white/5 rounded-[3rem] p-10 md:p-16">
+                <h3 class="text-2xl md:text-3xl font-black text-[#0f0e1b] dark:text-white mb-6">
+                    Why WaaS Makes More Sense Today
+                </h3>
+                <p class="text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-3xl mx-auto mb-10">
+                    With WaaS, you don’t “buy” a website—you subscribe to a continuously managed digital solution.
+                    It’s a modern approach designed for businesses that want flexibility, reliability, and growth
+                    without technical headaches.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#solutions"
+                        class="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-xl font-bold text-lg shadow-xl shadow-primary/25 hover:-translate-y-1 transition-transform">
+                        Explore Our Plans
+                    </a>
+                    <a href="<?php echo baseUrl('consultation.php'); ?>"
+                        class="w-full sm:w-auto px-8 py-4 bg-white dark:bg-white/10 text-[#0f0e1b] dark:text-white border border-gray-200 dark:border-white/10 rounded-xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-white/20 transition-colors">
+                        Book a Free Consultation
+                    </a>
+                </div>
+                <p class="mt-8 text-sm font-bold text-[#0f0e1b] dark:text-white">
+                    Let’s build and grow your website the smarter way. 🚀
+                </p>
+            </div>
+        </div>
+    </section>
 </main>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

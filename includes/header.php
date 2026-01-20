@@ -27,6 +27,19 @@ $isLoggedIn = isLoggedIn();
         <?php echo $pageTitle ?? 'SiteOnSub | WaaS Marketplace'; ?>
     </title>
     <link rel="icon" type="image/png" href="<?php echo baseUrl('assets/images/favicon.png'); ?>">
+
+    <!-- Social Media Meta Tags -->
+    <meta property="og:title" content="<?php echo $pageTitle ?? 'SiteOnSub | WaaS Marketplace'; ?>" />
+    <meta property="og:description" content="Launch your dream business with our premium, ready-to-use solutions." />
+    <meta property="og:image" content="<?php echo baseUrl('assets/images/favicon.png'); ?>" />
+    <meta property="og:url"
+        content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="<?php echo $pageTitle ?? 'SiteOnSub | WaaS Marketplace'; ?>" />
+    <meta name="twitter:description" content="Launch your dream business with our premium, ready-to-use solutions." />
+    <meta name="twitter:image" content="<?php echo baseUrl('assets/images/favicon.png'); ?>" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet" />

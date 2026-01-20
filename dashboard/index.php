@@ -3,7 +3,7 @@
  * User Dashboard
  */
 
-$pageTitle = 'Dashboard | WaaS Marketplace';
+$pageTitle = 'Dashboard | ' . SITE_NAME;
 include __DIR__ . '/../includes/header.php';
 
 // Require login

@@ -4,7 +4,7 @@
  */
 
 // Include header
-$pageTitle = 'Login | WaaS Marketplace';
+$pageTitle = 'Login | ' . SITE_NAME;
 include __DIR__ . '/../includes/header.php';
 
 // Include models

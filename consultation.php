@@ -3,7 +3,7 @@
  * Consultation Booking Page
  */
 
-$pageTitle = 'Book a Consultation | WaaS Marketplace';
+$pageTitle = 'Book a Consultation | ' . SITE_NAME;
 include __DIR__ . '/includes/header.php';
 
 require_once __DIR__ . '/models/Consultation.php';

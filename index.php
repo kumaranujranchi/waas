@@ -3,7 +3,7 @@
  * Homepage - Dynamic Product Listing
  */
 
-$pageTitle = 'WaaS Marketplace | Premium Websites & Software';
+$pageTitle = SITE_NAME . ' | ' . SITE_TAGLINE;
 
 // Include header
 include __DIR__ . '/includes/header.php';

@@ -3,7 +3,7 @@
  * Checkout Page - Simplified
  */
 
-$pageTitle = 'Checkout | WaaS Marketplace';
+$pageTitle = 'Checkout | ' . SITE_NAME;
 include __DIR__ . '/includes/header.php';
 
 // Require login

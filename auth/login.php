@@ -62,6 +62,22 @@ include __DIR__ . '/../includes/header.php';
         </div>
 
         <div class="bg-white dark:bg-[#1c1b2e] rounded-2xl shadow-xl p-8 border border-slate-100 dark:border-white/5">
+            <!-- Google Login -->
+            <a href="<?php echo baseUrl('auth/google_login.php'); ?>"
+                class="flex items-center justify-center w-full py-4 mb-6 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-all gap-3 group">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="Google">
+                <span class="font-bold text-slate-700 dark:text-white">Continue with Google</span>
+            </a>
+
+            <div class="relative mb-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-slate-200 dark:border-white/10"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-4 bg-white dark:bg-[#1c1b2e] text-slate-500">Or sign in with email</span>
+                </div>
+            </div>
+
             <form method="POST" action="" class="space-y-6">
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Email Address</label>

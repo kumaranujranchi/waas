@@ -181,4 +181,64 @@ class User
     {
         return $this->db->delete('users', 'id = ?', [$id]);
     }
+
+    /**
+     * Find or create user from Google Login
+     */
+    public function findOrCreateByGoogle($userInfo)
+    {
+        $googleId = $userInfo->id;
+        $email = $userInfo->email;
+        $name = $userInfo->name;
+        $picture = $userInfo->picture;
+
+        // 1. Check if user exists by google_id
+        $sql = "SELECT * FROM users WHERE google_id = ?";
+        $user = $this->db->fetchOne($sql, [$googleId]);
+
+        if ($user) {
+            return ['success' => true, 'user' => $user];
+        }
+
+        // 2. Check if user exists by email (Link account)
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $user = $this->db->fetchOne($sql, [$email]);
+
+        if ($user) {
+            // Update with google_id and avatar if missing
+            $updateData = ['google_id' => $googleId];
+            if (empty($user['avatar'])) {
+                $updateData['avatar'] = $picture;
+            }
+
+            $this->db->update('users', $updateData, 'id = ?', [$user['id']]);
+
+            // Refresh user data
+            $user = $this->db->fetchOne("SELECT * FROM users WHERE id = ?", [$user['id']]);
+            return ['success' => true, 'user' => $user];
+        }
+
+        // 3. Create new user
+        // Generate random password
+        $password = bin2hex(random_bytes(8));
+
+        $userData = [
+            'full_name' => $name,
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'role' => 'customer',
+            'google_id' => $googleId,
+            'avatar' => $picture,
+            'status' => 'active'
+        ];
+
+        $userId = $this->db->insert('users', $userData);
+
+        if ($userId) {
+            $user = $this->db->fetchOne("SELECT * FROM users WHERE id = ?", [$userId]);
+            return ['success' => true, 'user' => $user];
+        }
+
+        return ['success' => false, 'message' => 'Registration failed'];
+    }
 }

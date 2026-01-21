@@ -69,10 +69,12 @@
             <div>
                 <h4 class="text-[#0f0e1b] dark:text-white font-bold mb-6">Legal</h4>
                 <ul class="flex flex-col gap-4 text-sm text-[#545095] dark:text-white/60">
-                    <li><a class="hover:text-primary" href="#">Privacy Policy</a></li>
+                    <li><a class="hover:text-primary" href="<?php echo baseUrl('privacy-policy.php'); ?>">Privacy
+                            Policy</a></li>
                     <li><a class="hover:text-primary" href="<?php echo baseUrl('terms.php'); ?>">Terms & Conditions</a>
                     </li>
-                    <li><a class="hover:text-primary" href="#">Cookie Policy</a></li>
+                    <li><a class="hover:text-primary" href="<?php echo baseUrl('cookie-policy.php'); ?>">Cookie
+                            Policy</a></li>
                 </ul>
             </div>
         </div>

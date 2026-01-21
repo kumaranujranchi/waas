@@ -908,7 +908,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                     Why WaaS Makes More Sense Today
                 </h3>
                 <p class="text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-3xl mx-auto mb-10">
-                    With WaaS, you don’t “buy” a website—you subscribe to a continuously managed digital solution.
+                    With WaaS, you don’t “buy” a website, you subscribe to a continuously managed digital solution.
                     It’s a modern approach designed for businesses that want flexibility, reliability, and growth
                     without technical headaches.
                 </p>

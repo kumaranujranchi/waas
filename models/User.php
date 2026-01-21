@@ -87,7 +87,7 @@ class User
      */
     public function getUserById($id)
     {
-        $sql = "SELECT id, email, full_name, phone, role, status, created_at 
+        $sql = "SELECT id, email, full_name, phone, role, status, created_at, google_id, avatar 
                 FROM users WHERE id = ?";
         return $this->db->fetchOne($sql, [$id]);
     }
@@ -97,7 +97,7 @@ class User
      */
     public function getUserByEmail($email)
     {
-        $sql = "SELECT id, email, full_name, phone, role, status, created_at 
+        $sql = "SELECT id, email, full_name, phone, role, status, created_at, google_id, avatar 
                 FROM users WHERE email = ?";
         return $this->db->fetchOne($sql, [$email]);
     }

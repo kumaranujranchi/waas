@@ -80,10 +80,28 @@
         </div>
         <div
             class="mt-16 pt-8 border-t border-[#e8e8f3] dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p class="text-sm text-[#545095] dark:text-white/60">©
-                <?php echo date('Y'); ?>
-                SiteOnSub. All rights reserved.
-            </p>
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <p class="text-sm text-[#545095] dark:text-white/60">©
+                    <?php echo date('Y'); ?>
+                    SiteOnSub. All rights reserved.
+                </p>
+                <!-- Secure Payment Icons -->
+                <div class="flex items-center gap-3 opacity-70 grayscale hover:grayscale-0 transition-all">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349221.png" alt="Visa" class="h-6 w-auto"
+                        title="Visa">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349228.png" alt="Mastercard" class="h-6 w-auto"
+                        title="Mastercard">
+                    <img src="https://cdn-icons-png.flaticon.com/512/349/349220.png" alt="Amex" class="h-6 w-auto"
+                        title="American Express">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196566.png" alt="PayPal" class="h-6 w-auto"
+                        title="PayPal">
+                    <div
+                        class="flex items-center gap-1 border border-slate-200 dark:border-white/10 rounded px-1.5 py-0.5 bg-white">
+                        <span class="material-symbols-outlined text-[16px] text-green-600">lock</span>
+                        <span class="text-[10px] font-bold text-slate-600">SSL SECURE</span>
+                    </div>
+                </div>
+            </div>
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-accent-green animate-pulse"></span>
                 <span class="text-xs font-medium text-[#545095] dark:text-white/60">

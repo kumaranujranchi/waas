@@ -123,8 +123,10 @@ include __DIR__ . '/../includes/header.php';
                     <input type="checkbox" required
                         class="mt-1 rounded border-gray-300 text-primary focus:ring-primary" />
                     <span class="text-sm text-slate-600 dark:text-slate-400">
-                        I agree to the <a href="#" class="text-primary hover:underline">Terms of Service</a> and
-                        <a href="#" class="text-primary hover:underline">Privacy Policy</a>
+                        I agree to the <a href="<?php echo baseUrl('terms.php'); ?>"
+                            class="text-primary hover:underline">Terms of Service</a> and
+                        <a href="<?php echo baseUrl('privacy-policy.php'); ?>"
+                            class="text-primary hover:underline">Privacy Policy</a>
                     </span>
                 </div>
 

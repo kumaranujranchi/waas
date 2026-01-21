@@ -22,16 +22,9 @@ include __DIR__ . '/includes/header.php';
         </div>
 
         <!-- Content -->
-        <div class="prose prose-lg dark:prose-invert max-w-none relative">
-            <!-- Peeking Character -->
-            <div class="flex justify-center -mb-1 relative z-0">
-                <img src="<?php echo baseUrl('assets/images/peeking_header.png'); ?>" 
-                     alt="Cookie Policy" 
-                     class="w-48 md:w-64 object-cover mask-image-gradient">
-            </div>
-
+        <div class="prose prose-lg dark:prose-invert max-w-none">
             <div
-                class="bg-white dark:bg-[#1c1b2e] rounded-2xl p-8 md:p-12 border border-gray-200 dark:border-white/10 shadow-sm relative z-10">
+                class="bg-white dark:bg-[#1c1b2e] rounded-2xl p-8 md:p-12 border border-gray-200 dark:border-white/10 shadow-sm">
                 <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
                     This Cookie Policy explains what Cookies are and how We use them. You should read this policy so You
                     can understand what type of cookies We use, or the information We collect using Cookies and how that

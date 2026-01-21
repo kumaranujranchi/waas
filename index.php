@@ -361,95 +361,105 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
     <!-- Consultation Banner -->
     <!-- WaaS Comparison Section -->
-    <section class="py-20 bg-gray-50 dark:bg-black/20">
-        <div class="max-w-[1200px] mx-auto px-6">
+    <!-- WaaS Comparison Section -->
+    <section class="py-24 relative overflow-hidden bg-gray-50/50 dark:bg-[#0f0e1b]">
+        <!-- Background Pattern (Dots) -->
+        <div
+            class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#ffffff05_1px,transparent_1px)] opacity-70 pointer-events-none">
+        </div>
+
+        <!-- Animated Blobs -->
+        <div
+            class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] animate-pulse pointer-events-none">
+        </div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse pointer-events-none"
+            style="animation-delay: 2s;"></div>
+
+        <div class="max-w-[1200px] mx-auto px-6 relative z-10 transition-all duration-1000">
             <!-- Header -->
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl md:text-5xl font-black text-[#0f0e1b] dark:text-white mb-6">
-                    Why Website as a Service Makes More Sense Today
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal opacity-0 translate-y-8 transition-all duration-700">
+                <span
+                    class="inline-block py-1 px-3 rounded-full bg-primary/10 text-primary font-bold text-xs uppercase tracking-widest mb-4 border border-primary/20">Comparison</span>
+                <h2 class="text-3xl md:text-5xl font-black text-[#0f0e1b] dark:text-white mb-6 leading-tight">
+                    Why Website as a Service<br><span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">Makes More
+                        Sense Today</span>
                 </h2>
                 <p class="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
-                    Building a website the traditional way often means high upfront cost, long timelines, and ongoing
-                    maintenance headaches.
-                    <strong>Website as a Service (WaaS)</strong> changes this by offering modern, fully managed websites
-                    on
-                    a simple subscription model.
+                    Building a website the traditional way is often slow, expensive, and stressful.
+                    <strong>WaaS</strong> is the modern alternative designed for speed, affordability, and peace of
+                    mind.
                 </p>
             </div>
 
             <!-- Comparison Cards with WOW Factor -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 relative">
-                <!-- Animated Background Gradient -->
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-primary/5 via-purple-500/5 to-pink-500/5 rounded-3xl blur-3xl -z-10 animate-pulse">
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 max-w-5xl mx-auto">
 
                 <!-- Traditional (Left Card) -->
                 <div
-                    class="group relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-white/5 dark:to-white/10 rounded-3xl p-8 md:p-10 border border-gray-200 dark:border-white/10 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
-                    <!-- Subtle Pattern Overlay -->
-                    <div class="absolute inset-0 opacity-5"
-                        style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+                    class="reveal opacity-0 -translate-x-8 transition-all duration-1000 delay-200 group relative bg-white dark:bg-[#151725] rounded-[2.5rem] p-8 md:p-12 border border-dashed border-gray-300 dark:border-white/10 overflow-hidden hover:border-gray-400 dark:hover:border-white/20 transition-colors">
+                    <!-- Graph Paper Pattern -->
+                    <div class="absolute inset-0 opacity-[0.03] animate-pan"
+                        style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 20px 20px;">
                     </div>
 
+                    <!-- Content -->
                     <div class="relative z-10">
-                        <div class="flex items-center gap-4 mb-8">
+                        <div class="flex flex-col items-center text-center mb-10">
                             <div
-                                class="size-14 rounded-2xl bg-gradient-to-br from-gray-300 to-gray-400 dark:from-white/20 dark:to-white/10 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
+                                class="size-20 rounded-2xl bg-gray-100 dark:bg-white/5 flex items-center justify-center mb-6 shadow-inner">
                                 <span
-                                    class="material-symbols-outlined text-gray-600 dark:text-gray-300 text-3xl">history</span>
+                                    class="material-symbols-outlined text-gray-400 dark:text-gray-500 text-4xl">history</span>
                             </div>
-                            <div>
-                                <h3 class="text-2xl font-black text-gray-700 dark:text-gray-200">Traditional Web</h3>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Old School Approach</p>
-                            </div>
+                            <h3 class="text-2xl font-black text-gray-600 dark:text-gray-300 mb-1">Traditional Web</h3>
+                            <p class="text-xs font-bold uppercase tracking-widest text-gray-400">The Hard Way</p>
                         </div>
 
-                        <ul class="space-y-4">
-                            <li class="flex items-start gap-3 group/item">
+                        <ul class="space-y-5">
+                            <li
+                                class="flex items-center gap-4 group/item opacity-60 hover:opacity-100 transition-opacity">
                                 <div
-                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
-                                    <span
-                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                    class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-700 dark:text-gray-300 font-medium">High upfront development
-                                    cost</span>
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">High Upfront
+                                    Cost</span>
                             </li>
-                            <li class="flex items-start gap-3 group/item">
+                            <li
+                                class="flex items-center gap-4 group/item opacity-60 hover:opacity-100 transition-opacity">
                                 <div
-                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
-                                    <span
-                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                    class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-700 dark:text-gray-300 font-medium">One-time project delivery
-                                    (static)</span>
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">Static One-Time
+                                    Delivery</span>
                             </li>
-                            <li class="flex items-start gap-3 group/item">
+                            <li
+                                class="flex items-center gap-4 group/item opacity-60 hover:opacity-100 transition-opacity">
                                 <div
-                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
-                                    <span
-                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                    class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-700 dark:text-gray-300 font-medium">Separate hosting &
-                                    maintenance fees</span>
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">Paid
+                                    Maintenance</span>
                             </li>
-                            <li class="flex items-start gap-3 group/item">
+                            <li
+                                class="flex items-center gap-4 group/item opacity-60 hover:opacity-100 transition-opacity">
                                 <div
-                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
-                                    <span
-                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                    class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-700 dark:text-gray-300 font-medium">You manage updates &
-                                    security</span>
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">Updates are
+                                    Expensive</span>
                             </li>
-                            <li class="flex items-start gap-3 group/item">
+                            <li
+                                class="flex items-center gap-4 group/item opacity-60 hover:opacity-100 transition-opacity">
                                 <div
-                                    class="mt-1 size-6 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform">
-                                    <span
-                                        class="material-symbols-outlined text-red-600 dark:text-red-400 text-sm">close</span>
+                                    class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-700 dark:text-gray-300 font-medium">Weeks or months to
-                                    launch</span>
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">Weeks to
+                                    Launch</span>
                             </li>
                         </ul>
                     </div>
@@ -457,196 +467,193 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                 <!-- WaaS (Right Card - Premium) -->
                 <div
-                    class="group relative bg-gradient-to-br from-white via-blue-50/50 to-purple-50/50 dark:from-[#1a1c2e] dark:via-[#1e2140] dark:to-[#1a1c2e] rounded-3xl p-8 md:p-10 border-2 border-primary shadow-2xl shadow-primary/20 hover:scale-[1.02] hover:shadow-3xl hover:shadow-primary/30 transition-all duration-500 overflow-hidden">
-                    <!-- Animated Gradient Background -->
+                    class="reveal opacity-0 translate-x-8 transition-all duration-1000 delay-400 group relative bg-[#0f0e1b] rounded-[2.5rem] p-1 px-[3px] py-[3px] overflow-hidden shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-2 transition-all duration-500">
+                    <!-- Animated Border Gradient -->
                     <div
-                        class="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 opacity-50 group-hover:opacity-100 transition-opacity duration-500">
+                        class="absolute inset-0 bg-gradient-to-br from-primary via-purple-500 to-pink-500 animate-spin-slow opacity-100">
                     </div>
 
-                    <!-- Floating Particles Effect -->
-                    <div class="absolute top-10 right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl animate-pulse">
-                    </div>
                     <div
-                        class="absolute bottom-10 left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000">
-                    </div>
-
-                    <!-- Recommended Badge -->
-                    <div
-                        class="absolute top-0 right-0 bg-gradient-to-r from-primary to-purple-600 text-white text-xs font-black px-6 py-2.5 rounded-bl-2xl shadow-lg flex items-center gap-2 animate-bounce">
-                        <span class="material-symbols-outlined text-sm">star</span>
-                        RECOMMENDED
-                    </div>
-
-                    <div class="relative z-10">
-                        <div class="flex items-center gap-4 mb-8">
-                            <div
-                                class="size-14 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-xl shadow-primary/50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                                <span class="material-symbols-outlined text-white text-3xl">rocket_launch</span>
-                            </div>
-                            <div>
-                                <h3
-                                    class="text-2xl font-black bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                                    Website as a Service</h3>
-                                <p class="text-xs text-primary font-bold">The Future is Here</p>
-                            </div>
+                        class="relative bg-white dark:bg-[#1a1c2e] rounded-[2.3rem] p-8 md:p-12 h-full overflow-hidden">
+                        <!-- Glass Shine Effect -->
+                        <div
+                            class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-gradient-to-br from-white/40 to-transparent dark:from-white/10 rounded-full blur-3xl pointer-events-none">
                         </div>
 
-                        <ul class="space-y-4">
-                            <li class="flex items-start gap-3 group/item">
+                        <!-- Recommended Badge -->
+                        <div class="absolute top-6 right-6">
+                            <span
+                                class="flex items-center gap-1 bg-gradient-to-r from-primary to-purple-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full shadow-lg animate-pulse">
+                                <span class="material-symbols-outlined text-xs">star</span> RECOMMENDED
+                            </span>
+                        </div>
+
+                        <div class="relative z-10">
+                            <div class="flex flex-col items-center text-center mb-10">
                                 <div
-                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
-                                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                                    class="size-24 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center mb-6 shadow-xl shadow-primary/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                                    <span class="material-symbols-outlined text-white text-5xl">rocket_launch</span>
                                 </div>
-                                <span class="text-[#0f0e1b] dark:text-white font-bold">Zero upfront development
-                                    cost</span>
-                            </li>
-                            <li class="flex items-start gap-3 group/item">
-                                <div
-                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
-                                    <span class="material-symbols-outlined text-white text-sm">check</span>
-                                </div>
-                                <span class="text-[#0f0e1b] dark:text-white font-bold">Simple monthly/yearly
-                                    subscription</span>
-                            </li>
-                            <li class="flex items-start gap-3 group/item">
-                                <div
-                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
-                                    <span class="material-symbols-outlined text-white text-sm">check</span>
-                                </div>
-                                <span class="text-[#0f0e1b] dark:text-white font-bold">Hosting & maintenance
-                                    included</span>
-                            </li>
-                            <li class="flex items-start gap-3 group/item">
-                                <div
-                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
-                                    <span class="material-symbols-outlined text-white text-sm">check</span>
-                                </div>
-                                <span class="text-[#0f0e1b] dark:text-white font-bold">Regular updates & support</span>
-                            </li>
-                            <li class="flex items-start gap-3 group/item">
-                                <div
-                                    class="mt-1 size-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/50 group-hover/item:scale-110 transition-transform">
-                                    <span class="material-symbols-outlined text-white text-sm">check</span>
-                                </div>
-                                <span class="text-[#0f0e1b] dark:text-white font-bold">Faster go-live (Days, not
-                                    weeks)</span>
-                            </li>
-                        </ul>
+                                <h3 class="text-3xl font-black text-[#0f0e1b] dark:text-white mb-1">Website as a Service
+                                </h3>
+                                <p class="text-xs font-bold uppercase tracking-widest text-primary">The Future is Here
+                                </p>
+                            </div>
+
+                            <ul class="space-y-4">
+                                <li
+                                    class="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-default">
+                                    <div
+                                        class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
+                                        <span class="material-symbols-outlined text-lg">check</span>
+                                    </div>
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Zero Upfront
+                                        Cost</span>
+                                </li>
+                                <li
+                                    class="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-default">
+                                    <div
+                                        class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
+                                        <span class="material-symbols-outlined text-lg">check</span>
+                                    </div>
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Simple
+                                        Subscription</span>
+                                </li>
+                                <li
+                                    class="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-default">
+                                    <div
+                                        class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
+                                        <span class="material-symbols-outlined text-lg">check</span>
+                                    </div>
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Hosting
+                                        Included</span>
+                                </li>
+                                <li
+                                    class="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-default">
+                                    <div
+                                        class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
+                                        <span class="material-symbols-outlined text-lg">check</span>
+                                    </div>
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Free Updates &
+                                        Support</span>
+                                </li>
+                                <li
+                                    class="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-default">
+                                    <div
+                                        class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
+                                        <span class="material-symbols-outlined text-lg">check</span>
+                                    </div>
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Launch in Days</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Premium Comparison Table -->
             <div
-                class="hidden md:block bg-gradient-to-br from-white to-gray-50 dark:from-[#1a1c2e] dark:to-[#151729] rounded-3xl border border-gray-100 dark:border-white/10 overflow-hidden shadow-xl mb-16 hover:shadow-2xl transition-shadow duration-500">
+                class="reveal opacity-0 translate-y-12 transition-all duration-1000 delay-500 hidden md:block max-w-5xl mx-auto rounded-[2rem] border border-gray-200 dark:border-white/10 overflow-hidden shadow-2xl bg-white dark:bg-[#1a1c2e]">
                 <table class="w-full">
                     <thead>
-                        <tr
-                            class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-white/10 dark:to-white/5 border-b-2 border-primary/20">
-                            <th
-                                class="py-6 px-8 text-left text-sm font-black text-gray-600 dark:text-gray-300 uppercase tracking-widest">
-                                Feature
-                            </th>
-                            <th
-                                class="py-6 px-8 text-left text-sm font-black text-gray-600 dark:text-gray-300 uppercase tracking-widest">
-                                Traditional Development
-                            </th>
-                            <th
-                                class="py-6 px-8 text-left text-sm font-black bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent uppercase tracking-widest">
-                                Website as a Service
-                            </th>
+                        <tr class="bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/5">
+                            <th class="py-6 px-8 text-left text-xs font-black text-gray-400 uppercase tracking-widest">
+                                Feature</th>
+                            <th class="py-6 px-8 text-left text-xs font-black text-gray-400 uppercase tracking-widest">
+                                Traditional</th>
+                            <th class="py-6 px-8 text-left text-xs font-black text-primary uppercase tracking-widest">
+                                Website as a Service</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-white/5">
-                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Upfront Cost</td>
-                            <td class="py-6 px-8">
-                                <span
-                                    class="inline-flex items-center gap-2 px-3 py-1 bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-full font-bold text-sm">
-                                    <span class="material-symbols-outlined text-xs">trending_up</span>
-                                    High
-                                </span>
+                        <tr class="group hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                            <td class="py-5 px-8 font-bold text-[#0f0e1b] dark:text-white">Upfront Cost</td>
+                            <td class="py-5 px-8"><span
+                                    class="px-3 py-1 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 text-xs font-bold">Expensive</span>
                             </td>
-                            <td class="py-6 px-8">
-                                <span
-                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
-                                    <span class="material-symbols-outlined text-xs">check_circle</span>
-                                    Zero
-                                </span>
+                            <td class="py-5 px-8"><span
+                                    class="px-3 py-1 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold">Zero
+                                    (Included)</span></td>
+                        </tr>
+                        <tr class="group hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                            <td class="py-5 px-8 font-bold text-[#0f0e1b] dark:text-white">Maintenance</td>
+                            <td class="py-5 px-8 text-gray-500 text-sm">₹5,000+ / year</td>
+                            <td class="py-5 px-8"><span
+                                    class="px-3 py-1 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold">Free
+                                    Forever</span></td>
+                        </tr>
+                        <tr class="group hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                            <td class="py-5 px-8 font-bold text-[#0f0e1b] dark:text-white">Hosting</td>
+                            <td class="py-5 px-8 text-gray-500 text-sm">₹3,000+ / year</td>
+                            <td class="py-5 px-8"><span
+                                    class="px-3 py-1 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold">Included</span>
                             </td>
                         </tr>
-                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Maintenance</td>
-                            <td class="py-6 px-8 text-gray-600 dark:text-gray-400 font-medium">Extra Fees</td>
-                            <td class="py-6 px-8">
-                                <span
-                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
-                                    <span class="material-symbols-outlined text-xs">check_circle</span>
-                                    Included
-                                </span>
+                        <tr class="group hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                            <td class="py-5 px-8 font-bold text-[#0f0e1b] dark:text-white">Updates</td>
+                            <td class="py-5 px-8 text-gray-500 text-sm">Paid per request</td>
+                            <td class="py-5 px-8"><span
+                                    class="px-3 py-1 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold">Unlimited</span>
                             </td>
                         </tr>
-                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Hosting</td>
-                            <td class="py-6 px-8 text-gray-600 dark:text-gray-400 font-medium">Separate Bill</td>
-                            <td class="py-6 px-8">
-                                <span
-                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
-                                    <span class="material-symbols-outlined text-xs">check_circle</span>
-                                    Included
-                                </span>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Updates</td>
-                            <td class="py-6 px-8 text-gray-600 dark:text-gray-400 font-medium">Manual / Paid</td>
-                            <td class="py-6 px-8">
-                                <span
-                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
-                                    <span class="material-symbols-outlined text-xs">check_circle</span>
-                                    Fully Managed
-                                </span>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                            <td class="py-6 px-8 font-bold text-[#0f0e1b] dark:text-white">Time to Launch</td>
-                            <td class="py-6 px-8 text-gray-600 dark:text-gray-400 font-medium">Weeks / Months</td>
-                            <td class="py-6 px-8">
-                                <span
-                                    class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-full font-black text-sm shadow-lg">
-                                    <span class="material-symbols-outlined text-xs">bolt</span>
-                                    Days
-                                </span>
-                            </td>
+                        <tr class="group hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                            <td class="py-5 px-8 font-bold text-[#0f0e1b] dark:text-white">Launch Time</td>
+                            <td class="py-5 px-8 text-gray-500 text-sm">4-8 Weeks</td>
+                            <td class="py-5 px-8"><span
+                                    class="px-3 py-1 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-bold">~
+                                    7 Days</span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <!-- Key Takeaway & CTA -->
-            <div class="text-center">
-                <p class="text-2xl md:text-3xl font-bold text-[#0f0e1b] dark:text-white mb-10 max-w-4xl mx-auto">
-                    "Website as a Service is not cheaper websites, <span class="text-primary">it’s a smarter way to own
-                        one.</span>"
+            <div class="text-center mt-20 reveal opacity-0 translate-y-8 transition-all duration-700 delay-300">
+                <p
+                    class="text-2xl md:text-3xl font-black text-[#0f0e1b] dark:text-white mb-10 max-w-4xl mx-auto leading-normal">
+                    "Websites shouldn't be a burned... they should be a <span
+                        class="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">growth
+                        engine.</span>"
                 </p>
 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <a href="#solutions"
-                        class="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-xl font-bold text-lg shadow-xl shadow-primary/25 hover:-translate-y-1 transition-transform">
-                        View Our Plans
+                        class="group relative overflow-hidden w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-xl font-bold text-lg shadow-xl shadow-primary/30 transition-all hover:scale-105">
+                        <span class="relative z-10">See Pricing Plans</span>
+                        <div
+                            class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                        </div>
                     </a>
                     <a href="<?php echo baseUrl('consultation.php'); ?>"
                         class="w-full sm:w-auto px-8 py-4 bg-white dark:bg-white/10 text-[#0f0e1b] dark:text-white border border-gray-200 dark:border-white/10 rounded-xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-white/20 transition-colors">
-                        Book Free Consultation
+                        Book Strategy Call
                     </a>
                 </div>
-                <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                    Not sure which option is right for you? <a href="<?php echo baseUrl('consultation.php'); ?>"
-                        class="text-primary hover:underline">Talk to us.</a>
-                </p>
             </div>
         </div>
     </section>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('opacity-0', 'translate-y-8', '-translate-x-8', 'translate-x-8', 'translate-y-12');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => observer.observe(el));
+        });
+    </script>
 
     <!-- More Solutions Section (for products 9+) -->
     <?php if (!empty($moreSolutionsProducts) && !$searchQuery && !$selectedCategory): ?>

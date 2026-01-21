@@ -79,7 +79,7 @@ class User
     {
         $sql = "SELECT id FROM users WHERE email = ?";
         $result = $this->db->fetchOne($sql, [$email]);
-        return $result !== null;
+        return $result !== false && $result !== null;
     }
 
     /**

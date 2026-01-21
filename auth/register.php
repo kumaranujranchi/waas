@@ -83,21 +83,21 @@ include __DIR__ . '/../includes/header.php';
             <form method="POST" action="" class="space-y-6">
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Name</label>
-                    <input type="text" name="full_name" required value="<?php echo $_POST['full_name'] ?? ''; ?>"
+                    <input type="text" name="full_name" required value="<?php echo e($_POST['full_name'] ?? ''); ?>"
                         class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                         placeholder="John Doe" />
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Email Address</label>
-                    <input type="email" name="email" required value="<?php echo $_POST['email'] ?? ''; ?>"
+                    <input type="email" name="email" required value="<?php echo e($_POST['email'] ?? ''); ?>"
                         class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                         placeholder="you@example.com" />
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone (Optional)</label>
-                    <input type="tel" name="phone" value="<?php echo $_POST['phone'] ?? ''; ?>"
+                    <input type="tel" name="phone" value="<?php echo e($_POST['phone'] ?? ''); ?>"
                         class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                         placeholder="+1 (555) 000-0000" />
                 </div>

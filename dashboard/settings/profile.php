@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Update Profile Data
         $updateData = [
             'full_name' => $fullName,
-            'phone' => $phone
+            'phone' => !empty($_POST['phone_full']) ? sanitizeInput($_POST['phone_full']) : $phone
         ];
 
         // If password is set, update it
@@ -138,41 +138,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="space-y-2">
                             <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone Number</label>
-                            <input type="tel" name="phone" value="<?php echo e($user['phone'] ?? ''); ?>"
-                                class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                placeholder="+1 (555) 000-0000" />
+                            <input type="tel" id="phone" name="phone" value="<?php echo e($user['phone'] ?? ''); ?>"
+                                class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
+                            <input type="hidden" name="phone_full" id="phone_full">
                         </div>
+                        <script>
+                            const phoneInput = document.querySelector("#phone");
+                            const phoneFullInput = document.querySelector("#phone_full");
+                            const iti = window.intlTelInput(phoneInput, {
+                                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                                preferredCountries: ['us', 'in', 'gb'],
+                                separateDialCode: true,
+                                initialCountry: "auto",
+                                geoIpLookup: function (callback) {
+                                    fetch('https://ipinfo.io/json?token=7ed42340277884')
+                                        .then(function (resp) { return resp.json(); })
+                                        .then(function (data) { callback(data.country); })
+                                        .catch(function () { callback('us'); });
+                                },
+                            });
+                            document.querySelector('form').addEventListener('submit', function () {
+                                phoneFullInput.value = iti.getNumber();
+                            });
+                        </script>
                     </div>
 
                     <!-- Password Change (Only show if password exists or allow setting one) -->
                     <!-- Password Change (Only show if NOT linked to Google) -->
                     <?php if (empty($user['google_id'])): ?>
-                    <div class="pt-6 border-t border-gray-100 dark:border-white/5">
-                        <h3 class="text-lg font-bold text-[#0f0e1b] dark:text-white mb-4">Change Password</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">New Password</label>
-                                <input type="password" name="new_password" autocomplete="new-password"
-                                    class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                    placeholder="Leave blank to keep current" />
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Confirm New Password</label>
-                                <input type="password" name="confirm_password" autocomplete="new-password"
-                                    class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                                    placeholder="Confirm new password" />
+                        <div class="pt-6 border-t border-gray-100 dark:border-white/5">
+                            <h3 class="text-lg font-bold text-[#0f0e1b] dark:text-white mb-4">Change Password</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">New
+                                        Password</label>
+                                    <input type="password" name="new_password" autocomplete="new-password"
+                                        class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                        placeholder="Leave blank to keep current" />
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Confirm New
+                                        Password</label>
+                                    <input type="password" name="confirm_password" autocomplete="new-password"
+                                        class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                        placeholder="Confirm new password" />
+                                </div>
                             </div>
                         </div>
-                    </div>
                     <?php else: ?>
-                    <div class="pt-6 border-t border-gray-100 dark:border-white/5">
-                        <div class="bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/20 rounded-lg p-4 flex items-center gap-3">
-                            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">info</span>
-                            <p class="text-sm text-blue-800 dark:text-blue-300">
-                                Since you logged in with Google, you don't need a password. Your account is secured by Google.
-                            </p>
+                        <div class="pt-6 border-t border-gray-100 dark:border-white/5">
+                            <div
+                                class="bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/20 rounded-lg p-4 flex items-center gap-3">
+                                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">info</span>
+                                <p class="text-sm text-blue-800 dark:text-blue-300">
+                                    Since you logged in with Google, you don't need a password. Your account is secured by
+                                    Google.
+                                </p>
+                            </div>
                         </div>
-                    </div>
                     <?php endif; ?>
 
                     <div class="pt-6 border-t border-gray-100 dark:border-white/5 flex justify-end">

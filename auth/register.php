@@ -25,7 +25,8 @@ if (isLoggedIn()) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fullName = sanitizeInput($_POST['full_name'] ?? '');
     $email = sanitizeInput($_POST['email'] ?? '');
-    $phone = sanitizeInput($_POST['phone'] ?? '');
+    // Prefer full international number if available
+    $phone = sanitizeInput(!empty($_POST['phone_full']) ? $_POST['phone_full'] : ($_POST['phone'] ?? ''));
     $password = $_POST['password'] ?? '';
     $confirmPassword = $_POST['confirm_password'] ?? '';
 
@@ -112,11 +113,33 @@ include __DIR__ . '/../includes/header.php';
                 </div>
 
                 <div class="space-y-2">
-                    <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone (Optional)</label>
-                    <input type="tel" name="phone" value="<?php echo e($_POST['phone'] ?? ''); ?>"
-                        class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="+1 (555) 000-0000" />
+                    <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone</label>
+                    <input type="tel" id="phone" name="phone" value="<?php echo e($_POST['phone'] ?? ''); ?>"
+                        class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
+                    <!-- Hidden input to store full number with country code -->
+                    <input type="hidden" name="phone_full" id="phone_full">
                 </div>
+                <script>
+                    const phoneInput = document.querySelector("#phone");
+                    const phoneFullInput = document.querySelector("#phone_full");
+                    const iti = window.intlTelInput(phoneInput, {
+                        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                        preferredCountries: ['us', 'in', 'gb'],
+                        separateDialCode: true,
+                        initialCountry: "auto",
+                        geoIpLookup: function (callback) {
+                            fetch('https://ipinfo.io/json?token=7ed42340277884') // Free IP Info
+                                .then(function (resp) { return resp.json(); })
+                                .then(function (data) { callback(data.country); })
+                                .catch(function () { callback('us'); });
+                        },
+                    });
+
+                    // Update hidden input on submit
+                    document.querySelector('form').addEventListener('submit', function () {
+                        phoneFullInput.value = iti.getNumber();
+                    });
+                </script>
 
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Password</label>

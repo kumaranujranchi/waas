@@ -21,8 +21,12 @@ class User
     public function register($data)
     {
         // Check if email already exists
-        if ($this->emailExists($data['email'])) {
-            return ['success' => false, 'message' => 'Email already registered'];
+        $existingUser = $this->getUserByEmail($data['email']);
+        if ($existingUser) {
+            if (!empty($existingUser['google_id'])) {
+                return ['success' => false, 'message' => 'Account exists! Please use "Sign up with Google" to login.'];
+            }
+            return ['success' => false, 'message' => 'Email already registered. Please login instead.'];
         }
 
         // Hash password

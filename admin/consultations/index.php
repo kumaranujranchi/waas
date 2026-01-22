@@ -3,13 +3,22 @@
  * Admin - Consultation List
  */
 
-$pageTitle = 'Consultation Requests';
-include __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/functions.php';
 require_once __DIR__ . '/../../models/Consultation.php';
+
+// Start session if needed
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check admin access
+requireAdmin();
 
 $consultationModel = new Consultation();
 
-// Handle Status Updates
+// Handle Status Updates (BEFORE any output/header)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'update_status' && isset($_POST['id'], $_POST['status'])) {
         $consultationModel->updateBookingStatus($_POST['id'], $_POST['status']);
@@ -25,7 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 }
 
 // Get Bookings
-$bookings = $consultationModel->getAllBookings(); // You might want to implement pagination later
+$bookings = $consultationModel->getAllBookings();
+
+// NOW include header (after all redirects are done)
+$pageTitle = 'Consultation Requests';
+include __DIR__ . '/../includes/header.php';
 
 function getStatusBadge($status)
 {

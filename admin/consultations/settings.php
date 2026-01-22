@@ -3,13 +3,22 @@
  * Admin - Consultation Availability Settings
  */
 
-$pageTitle = 'Availability Settings';
-include __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/functions.php';
 require_once __DIR__ . '/../../models/Consultation.php';
+
+// Start session if needed
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check admin access
+requireAdmin();
 
 $consultationModel = new Consultation();
 
-// Handle form submissions
+// Handle form submissions (BEFORE any output/header)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 1. Update Weekly Schedule
     if (isset($_POST['update_schedule'])) {
@@ -47,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Get Data for Display
 $availability = $consultationModel->getAvailabilitySettings();
 // Index by day for easier access
 $schedule = [];
@@ -56,6 +66,10 @@ foreach ($availability as $day) {
 
 $blockedDates = $consultationModel->getBlockedDates();
 $weekDays = ['mon' => 'Monday', 'tue' => 'Tuesday', 'wed' => 'Wednesday', 'thu' => 'Thursday', 'fri' => 'Friday', 'sat' => 'Saturday', 'sun' => 'Sunday'];
+
+// NOW include header (after all redirects are done)
+$pageTitle = 'Availability Settings';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="p-8 max-w-7xl mx-auto">

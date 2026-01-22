@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Update user profile
         $userModel = new User();
-        if ($userModel->updateProfile($userId, $fullName, $phone)) {
+        if ($userModel->updateProfile($userId, ['full_name' => $fullName, 'phone' => $phone])) {
             $success = 'Profile updated successfully!';
             // Refresh user data (session)
             $_SESSION['user_full_name'] = $fullName;

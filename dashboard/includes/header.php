@@ -21,6 +21,7 @@ require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../includes/functions.php';
 
 $currentUser = getCurrentUser();
+$currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
 <html class="light" lang="en">
@@ -39,138 +40,129 @@ $currentUser = getCurrentUser();
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
 
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --accent-green: #10b981;
-            --background-light: #f8f7ff;
-            --background-dark: #0f0e1b;
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#5048e5",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121121",
+                        "accent-green": "#10b981",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
         }
-
-        * {
-            color-scheme: light dark;
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
         body {
             font-family: 'Inter', sans-serif;
+            position: relative;
+        }
+
+        /* Premium Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(80, 72, 229, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+            background-color: #f6f6f8;
+        }
+
+        body.dark::before {
+            background:
+                radial-gradient(circle at 20% 50%, rgba(80, 72, 229, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            background-color: #121121;
+        }
+
+        /* Subtle Grid Pattern */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(80, 72, 229, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(80, 72, 229, 0.05) 1px, transparent 1px);
+            background-size: 100px 100px;
+            opacity: 1;
+        }
+
+        body.dark::after {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            opacity: 1;
         }
     </style>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark">
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-sm fixed h-screen overflow-y-auto">
-            <div class="p-6">
-                <!-- Logo -->
-                <a href="<?php echo baseUrl('index.php'); ?>" class="flex items-center gap-3 mb-8">
-                    <img src="<?php echo baseUrl('assets/images/logo.png'); ?>" alt="SiteOnSub Logo" class="h-8 w-auto">
-                    <span class="font-bold text-lg text-[#0f0e1b] dark:text-white">SiteOnSub</span>
-                </a>
+<body class="bg-background-light dark:bg-background-dark text-[#0f0e1b] dark:text-white font-display">
 
-                <!-- User Info -->
-                <div class="bg-gradient-to-br from-primary/10 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-4 mb-8">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-solid border-[#e8e8f3] dark:border-white/10">
+        <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="<?php echo baseUrl('index.php'); ?>">
+                    <img src="<?php echo baseUrl('assets/images/logo.png'); ?>" alt="SiteOnSub Logo" class="h-10 w-auto">
+                </a>
+            </div>
+            <nav class="hidden md:flex items-center gap-6">
+                <a class="<?php echo $currentPage === 'index.php' ? 'text-primary' : 'text-[#0f0e1b] dark:text-white/80'; ?> text-sm font-medium hover:text-primary transition-colors"
+                    href="<?php echo baseUrl('dashboard/index.php'); ?>">Dashboard</a>
+                <a class="<?php echo $currentPage === 'subscriptions.php' ? 'text-primary' : 'text-[#0f0e1b] dark:text-white/80'; ?> text-sm font-medium hover:text-primary transition-colors"
+                    href="<?php echo baseUrl('dashboard/subscriptions.php'); ?>">Subscriptions</a>
+                <a class="<?php echo $currentPage === 'orders.php' ? 'text-primary' : 'text-[#0f0e1b] dark:text-white/80'; ?> text-sm font-medium hover:text-primary transition-colors"
+                    href="<?php echo baseUrl('dashboard/orders.php'); ?>">Orders</a>
+                <a class="<?php echo $currentPage === 'billing.php' ? 'text-primary' : 'text-[#0f0e1b] dark:text-white/80'; ?> text-sm font-medium hover:text-primary transition-colors"
+                    href="<?php echo baseUrl('dashboard/billing.php'); ?>">Billing</a>
+                <a class="<?php echo $currentPage === 'profile.php' || $currentPage === 'account.php' ? 'text-primary' : 'text-[#0f0e1b] dark:text-white/80'; ?> text-sm font-medium hover:text-primary transition-colors"
+                    href="<?php echo baseUrl('dashboard/settings/profile.php'); ?>">Settings</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <?php if (!empty($currentUser['avatar'])): ?>
+                        <img src="<?php echo e($currentUser['avatar']); ?>" class="w-8 h-8 rounded-full border border-gray-200 dark:border-white/10">
+                    <?php else: ?>
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold">
                             <?php echo strtoupper(substr($currentUser['full_name'], 0, 1)); ?>
                         </div>
-                        <div class="flex-1">
-                            <p class="text-sm font-bold text-[#0f0e1b] dark:text-white">
-                                <?php echo e(explode(' ', $currentUser['full_name'])[0]); ?>
-                            </p>
-                            <p class="text-xs text-gray-600 dark:text-gray-400"><?php echo e($currentUser['email']); ?></p>
-                        </div>
-                    </div>
+                    <?php endif; ?>
+                    <span class="hidden sm:block text-sm font-medium"><?php echo e(explode(' ', $currentUser['full_name'])[0]); ?></span>
                 </div>
-
-                <!-- Navigation Menu -->
-                <nav class="space-y-2">
-                    <a href="<?php echo baseUrl('dashboard/index.php'); ?>"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all <?php echo basename($_SERVER['PHP_SELF']) === 'index.php' ? 'bg-primary text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'; ?>">
-                        <span class="material-symbols-outlined">dashboard</span>
-                        <span class="font-medium">Dashboard</span>
-                    </a>
-
-                    <a href="<?php echo baseUrl('dashboard/subscriptions.php'); ?>"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all <?php echo basename($_SERVER['PHP_SELF']) === 'subscriptions.php' ? 'bg-primary text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'; ?>">
-                        <span class="material-symbols-outlined">subscriptions</span>
-                        <span class="font-medium">Subscriptions</span>
-                    </a>
-
-                    <a href="<?php echo baseUrl('dashboard/orders.php'); ?>"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all <?php echo basename($_SERVER['PHP_SELF']) === 'orders.php' ? 'bg-primary text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'; ?>">
-                        <span class="material-symbols-outlined">shopping_bag</span>
-                        <span class="font-medium">Orders</span>
-                    </a>
-
-                    <a href="<?php echo baseUrl('dashboard/billing.php'); ?>"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all <?php echo basename($_SERVER['PHP_SELF']) === 'billing.php' ? 'bg-primary text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'; ?>">
-                        <span class="material-symbols-outlined">payments</span>
-                        <span class="font-medium">Billing</span>
-                    </a>
-
-                    <a href="<?php echo baseUrl('dashboard/settings/profile.php'); ?>"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all <?php echo basename($_SERVER['PHP_SELF']) === 'profile.php' ? 'bg-primary text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'; ?>">
-                        <span class="material-symbols-outlined">person</span>
-                        <span class="font-medium">Profile</span>
-                    </a>
-
-                    <a href="<?php echo baseUrl('dashboard/settings/account.php'); ?>"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all <?php echo basename($_SERVER['PHP_SELF']) === 'account.php' ? 'bg-primary text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'; ?>">
-                        <span class="material-symbols-outlined">settings</span>
-                        <span class="font-medium">Settings</span>
-                    </a>
-                </nav>
-
-                <!-- Divider -->
-                <hr class="my-6 border-gray-200 dark:border-gray-800">
-
-                <!-- Logout Button -->
                 <a href="<?php echo baseUrl('auth/logout.php'); ?>"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all w-full">
-                    <span class="material-symbols-outlined">logout</span>
-                    <span class="font-medium">Logout</span>
+                    class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-accent-green text-white text-sm font-bold shadow-sm hover:opacity-90 transition-all">
+                    <span>Logout</span>
                 </a>
             </div>
-        </aside>
+        </div>
+    </header>
 
-        <!-- Main Content -->
-        <main class="flex-1 ml-64 min-h-screen">
-            <!-- Top Bar -->
-            <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
-                <div class="px-8 py-4 flex items-center justify-between">
-                    <h1 class="text-2xl font-bold text-[#0f0e1b] dark:text-white">
-                        <?php echo $pageTitle ?? 'Dashboard'; ?>
-                    </h1>
-                    <div class="flex items-center gap-4">
-                        <!-- Dark Mode Toggle -->
-                        <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-                            <span class="material-symbols-outlined">dark_mode</span>
-                        </button>
-                        <!-- Profile Dropdown -->
-                        <div class="relative group">
-                            <button class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
-                                <span class="material-symbols-outlined">account_circle</span>
-                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300"><?php echo e(explode(' ', $currentUser['full_name'])[0]); ?></span>
-                            </button>
-                            <!-- Dropdown Menu -->
-                            <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 hidden group-hover:block">
-                                <a href="<?php echo baseUrl('dashboard/settings/profile.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 first:rounded-t-lg">
-                                    Edit Profile
-                                </a>
-                                <a href="<?php echo baseUrl('dashboard/settings/account.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    Account Settings
-                                </a>
-                                <hr class="border-gray-200 dark:border-gray-700 my-1">
-                                <a href="<?php echo baseUrl('auth/logout.php'); ?>" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 last:rounded-b-lg">
-                                    Logout
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Page Content -->
-            <div class="p-8">
+    <!-- Main Content -->
+    <main class="min-h-screen"

@@ -17,7 +17,7 @@ $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fullName = trim($_POST['full_name'] ?? '');
-    $phone = trim($_POST['phone'] ?? '');
+    $phone = trim(!empty($_POST['phone_full']) ? $_POST['phone_full'] : ($_POST['phone'] ?? ''));
 
     if (empty($fullName)) {
         $error = 'Full name is required';
@@ -147,9 +147,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             class="block text-xs font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">
                             Phone Number
                         </label>
-                        <input type="tel" name="phone" value="<?php echo e($user['phone'] ?? ''); ?>"
+                        <input type="tel" id="phone" name="phone" value="<?php echo e($user['phone'] ?? ''); ?>"
                             class="w-full px-4 py-3.5 border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#0f0e1b] dark:text-white font-bold focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                             placeholder="+1 (555) 000-0000">
+                        <input type="hidden" name="phone_full" id="phone_full">
                     </div>
                 </div>
 

@@ -264,7 +264,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                 class="flex md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
                 <?php foreach ($featuredSectionProducts as $product): ?>
                     <a href="<?php echo baseUrl('product-detail.php?slug=' . $product['slug']); ?>"
-                        class="min-w-[88vw] sm:min-w-[380px] md:min-w-0 snap-center group relative bg-white dark:bg-[#1a1c2e] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500">
+                        class="card-reveal min-w-[88vw] sm:min-w-[380px] md:min-w-0 snap-center group relative bg-white dark:bg-[#1a1c2e] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500">
 
                         <!-- Image Container -->
                         <div class="aspect-[4/3] w-full bg-[#f0f2f9] dark:bg-white/5 relative overflow-hidden">
@@ -637,6 +637,22 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
     <!-- Scroll Animation Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Staggered Reveal for Cards
+            gsap.from(".card-reveal", {
+                scrollTrigger: {
+                    trigger: "#solutions",
+                    start: "top 80%",
+                },
+                y: 60,
+                opacity: 0,
+                duration: 1.2,
+                stagger: 0.15,
+                ease: "power4.out"
+            });
+
+            // Standard Intersection Observer for backward compatibility
             const observerOptions = {
                 threshold: 0.1,
                 rootMargin: '0px 0px -50px 0px'
@@ -676,7 +692,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                     class="flex md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
                     <?php foreach ($moreSolutionsProducts as $product): ?>
                         <a href="<?php echo baseUrl('product-detail.php?slug=' . $product['slug']); ?>"
-                            class="min-w-[88vw] sm:min-w-[380px] md:min-w-0 snap-center group relative bg-white dark:bg-[#1a1c2e] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500">
+                            class="card-reveal min-w-[88vw] sm:min-w-[380px] md:min-w-0 snap-center group relative bg-white dark:bg-[#1a1c2e] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500">
 
                             <!-- Image Container -->
                             <div class="aspect-[4/3] w-full bg-[#f0f2f9] dark:bg-white/5 relative overflow-hidden">

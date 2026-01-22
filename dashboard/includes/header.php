@@ -126,11 +126,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <body class="bg-background-light dark:bg-background-dark text-[#0f0e1b] dark:text-white font-display">
 
     <!-- Navigation -->
-    <header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-solid border-[#e8e8f3] dark:border-white/10">
+    <header
+        class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-solid border-[#e8e8f3] dark:border-white/10">
         <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="<?php echo baseUrl('index.php'); ?>">
-                    <img src="<?php echo baseUrl('assets/images/logo.png'); ?>" alt="SiteOnSub Logo" class="h-10 w-auto">
+                    <img src="<?php echo baseUrl('assets/images/logo.png'); ?>" alt="SiteOnSub Logo"
+                        class="h-10 w-auto">
                 </a>
             </div>
             <nav class="hidden md:flex items-center gap-6">
@@ -148,13 +150,16 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-3">
                     <?php if (!empty($currentUser['avatar'])): ?>
-                        <img src="<?php echo e($currentUser['avatar']); ?>" class="w-8 h-8 rounded-full border border-gray-200 dark:border-white/10">
+                        <img src="<?php echo e($currentUser['avatar']); ?>"
+                            class="w-8 h-8 rounded-full border border-gray-200 dark:border-white/10">
                     <?php else: ?>
-                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold">
+                        <div
+                            class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold">
                             <?php echo strtoupper(substr($currentUser['full_name'], 0, 1)); ?>
                         </div>
                     <?php endif; ?>
-                    <span class="hidden sm:block text-sm font-medium"><?php echo e(explode(' ', $currentUser['full_name'])[0]); ?></span>
+                    <span
+                        class="hidden sm:block text-sm font-medium"><?php echo e(explode(' ', $currentUser['full_name'])[0]); ?></span>
                 </div>
                 <a href="<?php echo baseUrl('auth/logout.php'); ?>"
                     class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-accent-green text-white text-sm font-bold shadow-sm hover:opacity-90 transition-all">
@@ -165,4 +170,5 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     </header>
 
     <!-- Main Content -->
-    <main class="min-h-screen"
+    <main class="min-h-screen pt-8 pb-12">
+        <div class="max-w-[1200px] mx-auto px-6">

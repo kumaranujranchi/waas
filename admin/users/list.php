@@ -129,7 +129,8 @@ $users = $userModel->getAllUsers();
                                         <?php echo date('M d, Y', strtotime($user['created_at'])); ?>
                                     </div>
                                     <p class="text-[10px] font-black text-gray-400 mt-0.5">
-                                        <?php echo time_elapsed_string($user['created_at']); ?></p>
+                                        <?php echo timeAgo($user['created_at']); ?>
+                                    </p>
                                 </td>
                                 <td class="px-8 py-6 text-right">
                                     <a href="<?php echo baseUrl('admin/users/view.php?id=' . $user['id']); ?>"

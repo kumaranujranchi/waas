@@ -637,38 +637,45 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
     <!-- Scroll Animation Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            gsap.registerPlugin(ScrollTrigger);
+            // Wait for header to initialize GSAP/ScrollTrigger sync
+            setTimeout(() => {
+                // Card Reveal Animation
+                const cards = document.querySelectorAll(".card-reveal");
+                if (cards.length > 0) {
+                    // Hide via JS so they are visible if JS fails
+                    gsap.set(cards, { opacity: 0, y: 40 });
 
-            // Staggered Reveal for Cards
-            gsap.from(".card-reveal", {
-                scrollTrigger: {
-                    trigger: "#solutions",
-                    start: "top 80%",
-                },
-                y: 60,
-                opacity: 0,
-                duration: 1.2,
-                stagger: 0.15,
-                ease: "power4.out"
-            });
+                    gsap.to(cards, {
+                        scrollTrigger: {
+                            trigger: "#solutions",
+                            start: "top 80%",
+                        },
+                        y: 0,
+                        opacity: 1,
+                        duration: 1,
+                        stagger: 0.1,
+                        ease: "power3.out"
+                    });
+                }
 
-            // Standard Intersection Observer for backward compatibility
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.remove('opacity-0', 'translate-y-8', '-translate-x-8', 'translate-x-8', 'translate-y-12');
-                        observer.unobserve(entry.target);
-                    }
+                // Standard Reveal (for sections)
+                const revealElements = document.querySelectorAll('.reveal');
+                revealElements.forEach(el => {
+                    gsap.fromTo(el,
+                        { opacity: 0, y: 40 },
+                        {
+                            scrollTrigger: {
+                                trigger: el,
+                                start: "top 85%",
+                            },
+                            opacity: 1,
+                            y: 0,
+                            duration: 1,
+                            ease: "power2.out"
+                        }
+                    );
                 });
-            }, observerOptions);
-
-            const revealElements = document.querySelectorAll('.reveal');
-            revealElements.forEach(el => observer.observe(el));
+            }, 100);
         });
     </script>
 

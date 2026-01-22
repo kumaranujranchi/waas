@@ -74,15 +74,19 @@ $isLoggedIn = isLoggedIn();
             }
         }
 
-        /* Hide nav for GSAP pop-in */
-        nav a,
-        .flex.items-center.gap-4 {
-            opacity: 0;
-        }
+        /* Smooth scroll optimization */
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
     </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Register ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+
             // Initialize Lenis
             const lenis = new Lenis({
                 duration: 1.2,
@@ -90,21 +94,28 @@ $isLoggedIn = isLoggedIn();
                 smoothWheel: true
             });
 
-            function raf(time) {
-                lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
-            requestAnimationFrame(raf);
+            // Sync ScrollTrigger with Lenis
+            lenis.on('scroll', ScrollTrigger.update);
 
-            // Menu Pop-in
-            gsap.to(['nav a', '.flex.items-center.gap-4 > *'], {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                stagger: 0.1,
-                ease: 'power4.out',
-                startAt: { y: 20 }
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000);
             });
+
+            gsap.ticker.lagSmoothing(0);
+
+            // Menu Pop-in (Safe way: hide via JS first so it's always visible if JS fails)
+            const menuElements = document.querySelectorAll('nav a, .flex.items-center.gap-4 > *');
+            if (menuElements.length > 0) {
+                gsap.set(menuElements, { opacity: 0, y: 20 });
+                gsap.to(menuElements, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power4.out',
+                    delay: 0.2
+                });
+            }
         });
     </script>
     <script id="tailwind-config">

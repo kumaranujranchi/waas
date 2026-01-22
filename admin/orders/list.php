@@ -15,118 +15,117 @@ $orders = $orderModel->getAllOrders();
 
 <div class="p-8">
     <!-- Header -->
-    <div class="flex justify-between items-center mb-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
         <div>
-            <h1 class="text-3xl font-black text-[#0f0e1b] dark:text-white mb-1">Manage Orders</h1>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                <?php echo count($orders); ?> Total Orders
+            <h1 class="text-4xl font-black text-[#0f0e1b] dark:text-white mb-2">Manage Orders</h1>
+            <p class="text-sm font-bold text-gray-400 uppercase tracking-[0.2em]">
+                <?php echo count($orders); ?> Total Transactions
             </p>
+        </div>
+        <div class="flex items-center gap-3">
+            <div
+                class="px-4 py-2 bg-white dark:bg-white/5 border-2 border-gray-300 dark:border-white/10 rounded-xl flex items-center gap-2">
+                <span class="size-2 rounded-full bg-accent-green animate-pulse"></span>
+                <span class="text-xs font-black uppercase tracking-widest text-[#0f0e1b] dark:text-white">Live
+                    System</span>
+            </div>
         </div>
     </div>
 
     <?php if (empty($orders)): ?>
         <div
-            class="text-center py-24 bg-white dark:bg-white/5 border border-dashed border-gray-200 dark:border-white/10 rounded-2xl">
-            <span class="material-symbols-outlined text-7xl text-gray-200 mb-4">shopping_cart</span>
+            class="text-center py-24 bg-white dark:bg-white/5 border-2 border-dashed border-gray-300 dark:border-white/10 rounded-3xl">
+            <span
+                class="material-symbols-outlined text-8xl text-gray-200 dark:text-gray-800 mb-6">shopping_cart_checkout</span>
             <p class="text-gray-400 font-black uppercase tracking-widest mb-2">No orders found</p>
             <p class="text-sm text-gray-500">Orders will appear here once customers make purchases</p>
         </div>
     <?php else: ?>
         <!-- Orders Table -->
         <div
-            class="bg-white dark:bg-white/5 rounded-2xl border-2 border-gray-300 dark:border-white/10 shadow-sm overflow-hidden">
+            class="bg-white dark:bg-white/5 rounded-3xl border-2 border-gray-300 dark:border-white/10 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-gray-50/50 dark:bg-white/5 border-b border-gray-100 dark:border-white/5">
-                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Order #
+                        <tr class="bg-gray-50/50 dark:bg-white/5 border-b-2 border-gray-300 dark:border-white/10">
+                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Order ID
                             </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Customer
-                            </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Product
-                            </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Amount</th>
-                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Payment
+                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Customer
+                                Details</th>
+                            <th
+                                class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">
+                                Amount</th>
+                            <th
+                                class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">
                                 Status</th>
-                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Order
-                                Status</th>
-                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Date</th>
-                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">
+                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Timestamp
+                            </th>
+                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">
                                 Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-white/5">
                         <?php foreach ($orders as $order): ?>
-                            <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                                <td class="px-6 py-4">
-                                    <span class="text-sm font-bold text-primary">
-                                        <?php echo e($order['order_number']); ?>
-                                    </span>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-all group">
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-black text-primary group-hover:underline">
+                                            #<?php echo e(substr($order['order_number'], -8)); ?>
+                                        </span>
+                                    </div>
+                                    <p class="text-[10px] font-bold text-gray-400 mt-1"><?php echo e($order['order_number']); ?>
+                                    </p>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-4">
                                         <div
-                                            class="size-8 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center text-xs font-black">
+                                            class="size-10 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 dark:from-white/10 dark:to-white/5 flex items-center justify-center text-primary dark:text-white text-sm font-black shadow-inner">
                                             <?php echo strtoupper(substr($order['billing_name'], 0, 1)); ?>
                                         </div>
                                         <div>
-                                            <div class="text-sm font-bold">
+                                            <div class="text-sm font-black text-[#0f0e1b] dark:text-white">
                                                 <?php echo e($order['billing_name']); ?>
                                             </div>
-                                            <div class="text-xs text-gray-400">
+                                            <div class="text-[11px] font-bold text-gray-400 mt-0.5">
                                                 <?php echo e($order['billing_email']); ?>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-sm font-medium">
-                                        <?php echo e($order['product_name'] ?? 'N/A'); ?>
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-sm font-black">
+                                <td class="px-8 py-6 text-center">
+                                    <span class="text-base font-black text-[#0f0e1b] dark:text-white">
                                         <?php echo formatPrice($order['final_amount']); ?>
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-8 py-6 text-center">
                                     <?php
-                                    $paymentStatusColors = [
-                                        'completed' => 'bg-green-100 text-green-700',
-                                        'pending' => 'bg-yellow-100 text-yellow-700',
-                                        'failed' => 'bg-red-100 text-red-700',
-                                        'refunded' => 'bg-gray-100 text-gray-700'
+                                    $statusConfig = [
+                                        'completed' => ['color' => 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400', 'dot' => 'bg-green-500'],
+                                        'pending' => ['color' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400', 'dot' => 'bg-yellow-500'],
+                                        'failed' => ['color' => 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400', 'dot' => 'bg-red-500'],
+                                        'refunded' => ['color' => 'bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-400', 'dot' => 'bg-gray-400']
                                     ];
-                                    $statusColor = $paymentStatusColors[$order['payment_status']] ?? 'bg-gray-100 text-gray-700';
+                                    $current = $statusConfig[$order['payment_status']] ?? $statusConfig['pending'];
                                     ?>
                                     <span
-                                        class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest <?php echo $statusColor; ?>">
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest <?php echo $current['color']; ?>">
+                                        <span class="size-1.5 rounded-full <?php echo $current['dot']; ?>"></span>
                                         <?php echo $order['payment_status']; ?>
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <?php
-                                    $orderStatusColors = [
-                                        'pending' => 'bg-blue-100 text-blue-700',
-                                        'processing' => 'bg-purple-100 text-purple-700',
-                                        'completed' => 'bg-green-100 text-green-700',
-                                        'cancelled' => 'bg-red-100 text-red-700'
-                                    ];
-                                    $orderColor = $orderStatusColors[$order['order_status']] ?? 'bg-gray-100 text-gray-700';
-                                    ?>
-                                    <span
-                                        class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest <?php echo $orderColor; ?>">
-                                        <?php echo $order['order_status']; ?>
-                                    </span>
+                                <td class="px-8 py-6">
+                                    <div class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase">
+                                        <?php echo date('M d, Y', strtotime($order['created_at'])); ?>
+                                    </div>
+                                    <div class="text-[10px] font-black text-gray-400 mt-0.5 italic">
+                                        <?php echo date('H:i A', strtotime($order['created_at'])); ?>
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4 text-xs font-bold text-gray-400">
-                                    <?php echo date('M d, Y', strtotime($order['created_at'])); ?>
-                                </td>
-                                <td class="px-6 py-4 text-right">
+                                <td class="px-8 py-6 text-right">
                                     <a href="<?php echo baseUrl('admin/orders/view.php?id=' . $order['id']); ?>"
-                                        class="inline-flex items-center gap-1 px-3 py-2 bg-gray-50 dark:bg-white/5 border-2 border-gray-300 dark:border-white/10 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all">
+                                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-white/5 border-2 border-gray-300 dark:border-white/10 rounded-xl text-xs font-black uppercase tracking-widest text-gray-600 dark:text-gray-100 hover:bg-primary hover:text-white hover:border-primary hover:scale-[1.05] active:scale-95 transition-all duration-300 shadow-sm leading-none">
                                         <span class="material-symbols-outlined text-sm">visibility</span>
-                                        View
+                                        Details
                                     </a>
                                 </td>
                             </tr>

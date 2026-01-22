@@ -75,11 +75,26 @@ $isLoggedIn = isLoggedIn();
         }
 
         /* Smooth scroll optimization */
-        html.lenis, html.lenis body { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto !important; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
-        .lenis.lenis-scrolling iframe { pointer-events: none; }
+        html.lenis,
+        html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
     </style>
 
     <script>
@@ -206,17 +221,30 @@ $isLoggedIn = isLoggedIn();
     <!-- Flash Messages -->
     <?php if (hasFlashMessage()):
         $flash = getFlashMessage();
-        $bgColor = $flash['type'] === 'success' ? 'bg-green-100 text-green-800' :
-            ($flash['type'] === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800');
+        $bgColor = $flash['type'] === 'success' ? 'bg-green-100 text-green-800 border-green-200' :
+            ($flash['type'] === 'error' ? 'bg-red-100 text-red-800 border-red-200' : 'bg-blue-100 text-blue-800 border-blue-200');
         ?>
-        <div class="fixed top-4 right-4 z-50 <?php echo $bgColor; ?> px-6 py-4 rounded-lg shadow-lg max-w-md">
-            <p class="font-medium">
-                <?php echo e($flash['message']); ?>
-            </p>
+        <div
+            class="fixed top-20 right-4 z-[9999] <?php echo $bgColor; ?> px-6 py-4 rounded-xl shadow-2xl border max-w-[calc(100vw-2rem)] sm:max-w-md animate-in fade-in slide-in-from-top-4 duration-300">
+            <div class="flex items-center gap-3">
+                <?php if ($flash['type'] === 'success'): ?>
+                    <span class="material-symbols-outlined text-green-600">check_circle</span>
+                <?php elseif ($flash['type'] === 'error'): ?>
+                    <span class="material-symbols-outlined text-red-600">error</span>
+                <?php endif; ?>
+                <p class="font-bold text-sm">
+                    <?php echo e($flash['message']); ?>
+                </p>
+            </div>
         </div>
         <script>
             setTimeout(() => {
-                document.querySelector('.fixed.top-4').remove();
+                const msg = document.querySelector('.fixed.top-20');
+                if (msg) {
+                    msg.classList.add('opacity-0', 'translate-y-[-1rem]');
+                    msg.style.transition = 'all 0.5s ease';
+                    setTimeout(() => msg.remove(), 500);
+                }
             }, 5000);
         </script>
     <?php endif; ?>

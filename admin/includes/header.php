@@ -46,6 +46,7 @@ $currentUser = getCurrentUser();
             },
         }
     </script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -54,20 +55,27 @@ $currentUser = getCurrentUser();
         body {
             font-family: 'Inter', sans-serif;
         }
+
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 </head>
 
-<body class="bg-[#f8f9fa] dark:bg-background-dark text-[#0f0e1b] dark:text-white">
+<body class="bg-[#f8f9fa] dark:bg-background-dark text-[#0f0e1b] dark:text-white" x-data="{ sidebarOpen: false }">
 
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside
-            class="w-64 bg-white dark:bg-[#1c1b2e] border-r border-gray-200 dark:border-white/5 flex flex-col sticky top-0 h-screen">
-            <div class="p-6 flex items-center gap-3 border-b border-gray-100 dark:border-white/5">
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
+            class="w-64 bg-white dark:bg-[#1c1b2e] border-r border-gray-200 dark:border-white/5 flex flex-col fixed md:sticky top-0 h-screen transition-transform duration-300 z-50">
+            <div class="p-6 flex items-center justify-between border-b border-gray-100 dark:border-white/5">
                 <a href="<?php echo baseUrl('admin/index.php'); ?>">
                     <img src="<?php echo baseUrl('assets/images/logo.png'); ?>" alt="SiteOnSub Logo"
                         class="h-10 w-auto">
                 </a>
+                <button @click="sidebarOpen = false" class="md:hidden text-gray-500">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
             </div>
 
             <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -115,6 +123,12 @@ $currentUser = getCurrentUser();
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Settings</p>
                 </div>
 
+                <a href="<?php echo baseUrl('admin/settings.php'); ?>"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo strpos($_SERVER['PHP_SELF'], 'admin/settings.php') !== false ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5'; ?>">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span class="font-bold text-sm">Profile Settings</span>
+                </a>
+
                 <a href="<?php echo baseUrl('index.php'); ?>" target="_blank"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
                     <span class="material-symbols-outlined">visibility</span>
@@ -137,29 +151,82 @@ $currentUser = getCurrentUser();
             </div>
         </aside>
 
+        <!-- Overlay for mobile sidebar -->
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/50 z-40 md:hidden" x-cloak>
+        </div>
+
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col min-w-0">
             <!-- Top Header -->
             <header
                 class="h-16 bg-white dark:bg-[#1c1b2e] border-b border-gray-200 dark:border-white/5 px-8 flex items-center justify-between sticky top-0 z-40">
                 <div class="flex items-center gap-4">
-                    <button
-                        class="md:hidden size-10 flex items-center justify-center rounded-lg border border-gray-200">
+                    <button @click="sidebarOpen = true"
+                        class="md:hidden size-10 flex items-center justify-center rounded-lg border border-gray-200 dark:border-white/10 text-gray-500">
                         <span class="material-symbols-outlined">menu</span>
                     </button>
-                    <h2 class="text-lg font-bold text-gray-800 dark:text-white">
-                        <?php echo $pageTitle; ?>
+                    <h2 class="text-lg font-bold text-gray-800 dark:text-white truncate">
+                        <?php echo $pageTitle ?? 'Dashboard'; ?>
                     </h2>
                 </div>
 
                 <div class="flex items-center gap-4">
                     <button
-                        class="size-10 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-500">
+                        class="size-10 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors">
                         <span class="material-symbols-outlined">notifications</span>
                     </button>
-                    <div
-                        class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                        <?php echo strtoupper(substr($currentUser['full_name'], 0, 1)); ?>
+                    <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                        <button @click="open = !open"
+                            class="flex items-center gap-3 p-1.5 rounded-full hover:bg-gray-50 dark:hover:bg-white/5 transition-all outline-none">
+                            <div
+                                class="size-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border-2 border-white dark:border-[#1c1b2e] shadow-sm">
+                                <?php if (!empty($currentUser['avatar'])): ?>
+                                    <img src="<?php echo e($currentUser['avatar']); ?>"
+                                        class="w-full h-full rounded-full object-cover">
+                                <?php else: ?>
+                                    <?php echo strtoupper(substr($currentUser['full_name'], 0, 1)); ?>
+                                <?php endif; ?>
+                            </div>
+                            <span class="hidden sm:block text-sm font-bold text-gray-700 dark:text-gray-200">
+                                <?php echo e(explode(' ', $currentUser['full_name'])[0]); ?>
+                            </span>
+                            <span class="material-symbols-outlined text-gray-400 text-sm transition-transform"
+                                :class="open ? 'rotate-180' : ''">expand_more</span>
+                        </button>
+
+                        <!-- Profile Dropdown -->
+                        <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute right-0 mt-2 w-56 bg-white dark:bg-[#1c1b2e] rounded-2xl shadow-xl border border-gray-100 dark:border-white/10 py-2 z-50"
+                            x-cloak>
+                            <div class="px-4 py-3 border-b border-gray-100 dark:border-white/5 mb-2">
+                                <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-0.5">
+                                    Administrator</p>
+                                <p class="text-sm font-bold text-gray-800 dark:text-white truncate">
+                                    <?php echo e($currentUser['full_name']); ?></p>
+                            </div>
+
+                            <a href="<?php echo baseUrl('admin/settings.php'); ?>"
+                                class="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-primary/10 hover:text-primary transition-all">
+                                <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+                                Edit Profile
+                            </a>
+                            <a href="<?php echo baseUrl('admin/settings.php#security'); ?>"
+                                class="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-primary/10 hover:text-primary transition-all">
+                                <span class="material-symbols-outlined text-[20px]">lock_reset</span>
+                                Change Password
+                            </a>
+
+                            <div class="h-px bg-gray-100 dark:bg-white/5 my-2"></div>
+
+                            <a href="<?php echo baseUrl('auth/logout.php'); ?>"
+                                class="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all">
+                                <span class="material-symbols-outlined text-[20px]">logout</span>
+                                Logout
+                            </a>
+                        </div>
                     </div>
                 </div>
             </header>

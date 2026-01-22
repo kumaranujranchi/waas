@@ -54,6 +54,10 @@ $isLoggedIn = isLoggedIn();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
+    <!-- Lenis for Smooth Scrolling -->
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.13/dist/lenis.css">
+
     <style>
         .iti {
             width: 100%;
@@ -79,6 +83,20 @@ $isLoggedIn = isLoggedIn();
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lenis
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smoothWheel: true
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            // Menu Pop-in
             gsap.to(['nav a', '.flex.items-center.gap-4 > *'], {
                 opacity: 1,
                 y: 0,

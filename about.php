@@ -21,7 +21,7 @@ include __DIR__ . '/includes/header.php';
             </h1>
             <p class="text-xl text-[#545095] dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
                 Welcome to <span class="font-bold text-primary">siteonsub.com</span>, a product of <span
-                    class="font-bold">Synergy Brand Architect</span>—where we are redefining how businesses build,
+                    class="font-bold">Synergy Brand Architect</span>-where we are redefining how businesses build,
                 manage, and grow their digital presence.
             </p>
         </div>
@@ -41,7 +41,7 @@ include __DIR__ . '/includes/header.php';
                     </p>
                     <p>
                         Our mission is simple: make high-quality websites and business software accessible through a
-                        flexible, subscription-based model—without the burden of heavy upfront costs or technical
+                        flexible, subscription-based model-without the burden of heavy upfront costs or technical
                         headaches.
                     </p>
                 </div>

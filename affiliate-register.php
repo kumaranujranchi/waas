@@ -118,7 +118,7 @@ require_once __DIR__ . '/includes/header.php';
                     <div class="text-center py-6 border-t border-gray-100 dark:border-white/10">
                         <p class="text-gray-600 dark:text-gray-300 mb-4">You need an account to join the Affiliate Program.
                         </p>
-                        <a href="<?php echo baseUrl('auth/login.php?redirect=affiliate-register.php'); ?>"
+                        <a href="<?php echo baseUrl('affiliate/login.php'); ?>"
                             class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold transition-all shadow-lg shadow-primary/25">
                             Login to Join
                         </a>

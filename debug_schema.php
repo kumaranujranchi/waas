@@ -101,3 +101,19 @@ if (!$foundLog) {
     echo "<p>Current PHP error_log path: " . htmlspecialchars(ini_get('error_log')) . "</p>";
 }
 
+echo "<hr>";
+echo "<h2>Deployment Check</h2>";
+$editFile = __DIR__ . '/admin/products/edit.php';
+if (file_exists($editFile)) {
+    $content = file_get_contents($editFile);
+    if (strpos($content, 'UNIVERSAL DEBUG MODE') !== false) {
+        echo "<h3 style='color:green'>✅ Code Verified: 'edit.php' HAS the debug code.</h3>";
+        echo "<p>If you don't see the debug screen, try clearing your browser cache or CDN cache.</p>";
+    } else {
+        echo "<h3 style='color:red'>❌ Code Mismatch: 'edit.php' is OLD.</h3>";
+        echo "<p>The file on the server does NOT have the latest changes. <b>Please Deploy Again.</b></p>";
+    }
+} else {
+    echo "<p style='color:red'>Could not find admin/products/edit.php</p>";
+}
+

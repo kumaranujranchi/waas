@@ -1,42 +1,40 @@
 <?php
-// Include functions and config first (No Output)
+// Include functions and config first
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
 
-// Start session if needed (functions.php usually does this, but safely check)
+// Start session if needed
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Require Login (Check BEFORE any output)
-if (!isset($_SESSION['user_id'])) {
-    redirect(baseUrl('auth/login.php?redirect=affiliate-register.php'));
-}
+// Logic: Check if logged in.
+$isLoggedIn = isset($_SESSION['user_id']);
+$userId = $isLoggedIn ? $_SESSION['user_id'] : null;
 
-// Now include logic
-require_once __DIR__ . '/models/Affiliate.php';
-$affiliateModel = new Affiliate();
-$userId = $_SESSION['user_id'];
-
-// Check if already affiliate
-$existing = $affiliateModel->getAffiliateByUserId($userId);
-if ($existing) {
-    redirect(baseUrl('affiliate/dashboard.php'));
-}
-
-// Handle Registration
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['accept_terms'])) {
-        $affiliateModel->createAffiliate($userId);
-        setFlashMessage('success', 'Welcome to the Affiliate Program!');
+// If logged in, check if already an affiliate
+if ($isLoggedIn) {
+    require_once __DIR__ . '/models/Affiliate.php';
+    $affiliateModel = new Affiliate();
+    $existing = $affiliateModel->getAffiliateByUserId($userId);
+    if ($existing) {
         redirect(baseUrl('affiliate/dashboard.php'));
-    } else {
-        $error = "You must accept the terms and conditions.";
+    }
+
+    // Handle Registration (Only if logged in)
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['accept_terms'])) {
+            $affiliateModel->createAffiliate($userId);
+            setFlashMessage('success', 'Welcome to the Affiliate Program!');
+            redirect(baseUrl('affiliate/dashboard.php'));
+        } else {
+            $error = "You must accept the terms and conditions.";
+        }
     }
 }
 
-// Include Header (HTML Output starts here)
+// Include Header
 $pageTitle = 'Become an Affiliate';
 require_once __DIR__ . '/includes/header.php';
 ?>
@@ -53,7 +51,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
 
             <div class="p-8">
-                <!-- Benefits -->
+                <!-- Benefits (Visible to everyone) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div class="flex gap-4">
                         <div
@@ -84,35 +82,53 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                 <?php endif; ?>
 
-                <!-- Form -->
-                <form method="POST" class="space-y-6">
-                    <div
-                        class="bg-gray-50 dark:bg-white/5 p-4 rounded-lg border border-gray-200 dark:border-white/10 text-sm text-gray-600 dark:text-gray-300 h-40 overflow-y-auto">
-                        <p class="font-bold mb-2">Terms and Conditions:</p>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>You must be 18 years or older to join.</li>
-                            <li>Commissions are paid out once the balance reaches $50.</li>
-                            <li>Self-referrals are strictly prohibited.</li>
-                            <li>We reserve the right to ban accounts for suspicious activity.</li>
-                            <li>Commissions are held for 30 days to account for refunds.</li>
-                        </ul>
+                <!-- Conditional Display -->
+                <?php if ($isLoggedIn): ?>
+                    <!-- Registration Form for Logged In Users -->
+                    <form method="POST" class="space-y-6">
+                        <div
+                            class="bg-gray-50 dark:bg-white/5 p-4 rounded-lg border border-gray-200 dark:border-white/10 text-sm text-gray-600 dark:text-gray-300 h-40 overflow-y-auto">
+                            <p class="font-bold mb-2">Terms and Conditions:</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>You must be 18 years or older to join.</li>
+                                <li>Commissions are paid out once the balance reaches $50.</li>
+                                <li>Self-referrals are strictly prohibited.</li>
+                                <li>We reserve the right to ban accounts for suspicious activity.</li>
+                                <li>Commissions are held for 30 days to account for refunds.</li>
+                            </ul>
+                        </div>
+
+                        <label class="flex items-start gap-3 cursor-pointer group">
+                            <input type="checkbox" name="accept_terms" required
+                                class="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary transition-all">
+                            <span
+                                class="text-gray-600 dark:text-gray-300 group-hover:text-[#0f0e1b] dark:group-hover:text-white transition-colors">
+                                I have read an agree to the <strong>Affiliate Terms & Conditions</strong>.
+                            </span>
+                        </label>
+
+                        <button type="submit"
+                            class="w-full py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg shadow-primary/25 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                            <span>Activate Affiliate Account</span>
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </button>
+                    </form>
+                <?php else: ?>
+                    <!-- Login Prompt for Guests -->
+                    <div class="text-center py-6 border-t border-gray-100 dark:border-white/10">
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">You need an account to join the Affiliate Program.
+                        </p>
+                        <a href="<?php echo baseUrl('auth/login.php?redirect=affiliate-register.php'); ?>"
+                            class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold transition-all shadow-lg shadow-primary/25">
+                            Login to Join
+                        </a>
+                        <p class="mt-4 text-sm text-gray-500">
+                            Don't have an account? <a href="<?php echo baseUrl('auth/register.php'); ?>"
+                                class="text-primary font-bold hover:underline">Sign up</a>
+                        </p>
                     </div>
+                <?php endif; ?>
 
-                    <label class="flex items-start gap-3 cursor-pointer group">
-                        <input type="checkbox" name="accept_terms" required
-                            class="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary transition-all">
-                        <span
-                            class="text-gray-600 dark:text-gray-300 group-hover:text-[#0f0e1b] dark:group-hover:text-white transition-colors">
-                            I have read an agree to the <strong>Affiliate Terms & Conditions</strong>.
-                        </span>
-                    </label>
-
-                    <button type="submit"
-                        class="w-full py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg shadow-primary/25 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2">
-                        <span>Activate Affiliate Account</span>
-                        <span class="material-symbols-outlined">arrow_forward</span>
-                    </button>
-                </form>
             </div>
         </div>
     </div>

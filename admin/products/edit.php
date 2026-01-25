@@ -41,12 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'category_id' => $_POST['category_id'] ?? null,
         'name' => sanitizeInput($_POST['name'] ?? ''),
         'slug' => generateSlug($_POST['name'] ?? ''),
-        'short_description' => sanitizeInput($_POST['short_description'] ?? ''),
-        'full_description' => $_POST['full_description'] ?? '',
-        'badge' => sanitizeInput($_POST['badge'] ?? ''),
-        'is_featured' => isset($_POST['is_featured']) ? 1 : 0,
-        'status' => $_POST['status'] ?? 'active'
     ];
+
+    // DEBUG: Log raw POST data for FAQs
+    error_log("--- FAQ DEBUG START ---");
+    error_log("Raw POST faq_question: " . print_r($_POST['faq_question'] ?? 'NOT SET', true));
+    error_log("Raw POST faq_answer: " . print_r($_POST['faq_answer'] ?? 'NOT SET', true));
+    error_log("--- FAQ DEBUG END ---");
 
     // Handle Image
     $image_url = $_POST['existing_image_url'] ?? '';
@@ -124,9 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (isset($_POST['faq_question']) && is_array($_POST['faq_question'])) {
                     // Filter out empty questions
                     $questions = array_values(array_filter($_POST['faq_question'], function ($q) {
-                        return !empty(trim($q)); }));
+                        return !empty(trim($q));
+                    }));
                     $answers = array_values(array_filter($_POST['faq_answer'], function ($a) {
-                        return !empty(trim($a)); }));
+                        return !empty(trim($a));
+                    }));
 
                     // Iterate based on the count of questions to avoid index mismatch
                     $totalFaqs = count($questions);

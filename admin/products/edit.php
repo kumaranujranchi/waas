@@ -121,9 +121,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update product
             $updated = $productModel->updateProduct($productId, $data);
 
-            // VISIBLE DEBUGGING (Universal)
+            // VISIBLE DEBUGGING (Universal v2)
             echo "<div style='background:white; color:black; padding:20px; font-family:monospace; z-index:99999; position:fixed; top:0; left:0; width:100%; height:100%; overflow:auto;'>";
-            echo "<h1>UNIVERSAL DEBUG MODE</h1>";
+            echo "<h1>UNIVERSAL DEBUG MODE v2 (Cache Buster)</h1>";
             echo "<h3>1. Product ID</h3>";
             echo "<pre>ID: " . $productId . " (Type: " . gettype($productId) . ")</pre>";
 
@@ -135,15 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<h3>3. Data Payload</h3>";
             echo "<pre>" . print_r($data, true) . "</pre>";
 
-            echo "<h2>If Update Result is '0' or 'false':</h2>";
-            echo "<ul>
-                    <li>0 means: Database found the record but NO data changed (it was already identical).</li>
-                    <li>false means: Database query failed (should have shown SQL Error).</li>
-                  </ul>";
+            echo "<h3>4. POST Data</h3>";
+            echo "<pre>" . print_r($_POST, true) . "</pre>";
 
-            die("STOPPED FOR DEBUGGING");
+            die("STOPPED FOR DEBUGGING v2");
 
-            if ($updated) {
+            // Treat 0 changes as success too
+            if ($updated !== false) {
                 // Delete existing pricing plans and FAQs
                 $db->query("DELETE FROM pricing_plans WHERE product_id = ?", [$productId]);
                 $db->query("DELETE FROM product_faqs WHERE product_id = ?", [$productId]); // Clean up legacy
@@ -170,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Add new FAQs
                 // FAQs handled via bundled JSON above
-
+                /*
                 // VISIBLE DEBUGGING - REMOVE AFTER FIX
                 echo "<div style='background:white; padding:20px; font-family:monospace; z-index:9999; position:relative;'>";
                 echo "<h1>VISIBLE DEBUG MODE</h1>";
@@ -189,11 +187,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<h2 style='color:green'>COMMIT SUCCESSFUL</h2>";
                 echo "<p>Please take a screenshot of this page and send it to the developer.</p>";
                 die(); // STOP HERE
+                */
 
-                /*
+                $db->commit();
                 setFlashMessage('success', 'Product updated successfully!');
                 redirect(baseUrl('admin/products/list.php'));
-                */
+
             } else {
                 $db->rollback();
                 setFlashMessage('error', 'Failed to update product');

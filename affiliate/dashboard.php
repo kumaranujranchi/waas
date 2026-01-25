@@ -126,6 +126,32 @@ $referralLink = baseUrl("?ref=" . $affiliate['referral_code']);
                         </a>
                     </div>
                 </div>
+                <!-- Link Generator (Source Tracking) -->
+                <div class="bg-white dark:bg-white/5 rounded-2xl p-6 border border-gray-200 dark:border-white/10 mt-6">
+                    <h3 class="font-bold text-[#0f0e1b] dark:text-white mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">campaign</span>
+                        Campaign Tracking
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Traffic Source</label>
+                            <select id="source-select" onchange="updateLink()"
+                                class="w-full mt-1 px-4 py-2 rounded-lg border-gray-200 dark:border-white/10 dark:bg-white/5 text-sm">
+                                <option value="">Default (No Source)</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="twitter">Twitter</option>
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="email">Email Campaign</option>
+                                <option value="custom">Custom...</option>
+                            </select>
+                            <input type="text" id="custom-source" placeholder="Enter custom source..."
+                                onkeyup="updateLink()"
+                                class="w-full mt-2 px-4 py-2 rounded-lg border-gray-200 dark:border-white/10 dark:bg-white/5 text-sm hidden">
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Right Column: Recent Referrals -->
@@ -143,6 +169,7 @@ $referralLink = baseUrl("?ref=" . $affiliate['referral_code']);
                                     class="border-b border-gray-100 dark:border-white/5 text-xs uppercase text-gray-400">
                                     <th class="py-3 px-2">User</th>
                                     <th class="py-3 px-2">Date</th>
+                                    <th class="py-3 px-2">Source</th>
                                     <th class="py-3 px-2">Status</th>
                                     <th class="py-3 px-2 text-right">Commission</th>
                                 </tr>
@@ -150,7 +177,7 @@ $referralLink = baseUrl("?ref=" . $affiliate['referral_code']);
                             <tbody>
                                 <?php if (empty($referrals)): ?>
                                     <tr>
-                                        <td colspan="4" class="py-12 text-center text-gray-500">
+                                        <td colspan="5" class="py-12 text-center text-gray-500">
                                             <span
                                                 class="material-symbols-outlined text-4xl mb-2 opacity-50">person_off</span>
                                             <p>No referrals yet. Share your link to get started!</p>
@@ -167,6 +194,16 @@ $referralLink = baseUrl("?ref=" . $affiliate['referral_code']);
                                             </td>
                                             <td class="py-4 px-2 text-sm text-gray-500">
                                                 <?php echo date('M j, Y', strtotime($ref['created_at'])); ?>
+                                            </td>
+                                            <td class="py-4 px-2">
+                                                <?php if (!empty($ref['source'])): ?>
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                                                        <?php echo e($ref['source']); ?>
+                                                    </span>
+                                                <?php else: ?>
+                                                    <span class="text-xs text-gray-400">-</span>
+                                                <?php endif; ?>
                                             </td>
                                             <td class="py-4 px-2">
                                                 <?php
@@ -199,10 +236,40 @@ $referralLink = baseUrl("?ref=" . $affiliate['referral_code']);
 </div>
 
 <script>
+    const baseUrl = "<?php echo $referralLink; ?>";
+
+    function updateLink() {
+        const sourceSelect = document.getElementById('source-select');
+        const customInput = document.getElementById('custom-source');
+        let source = sourceSelect.value;
+
+        if (source === 'custom') {
+            customInput.classList.remove('hidden');
+            source = customInput.value.trim();
+        } else {
+            customInput.classList.add('hidden');
+        }
+
+        const linkElement = document.getElementById('ref-link');
+        let newLink = baseUrl;
+
+        if (source) {
+            // Encode source safely
+            newLink += '&source=' + encodeURIComponent(source);
+        }
+
+        linkElement.innerText = newLink;
+    }
+
     function copyLink() {
         const link = document.getElementById('ref-link').innerText;
         navigator.clipboard.writeText(link).then(() => {
-            alert('Link copied to clipboard!');
+            const originalText = document.querySelector('button[onclick="copyLink()"] span:last-child').innerText;
+            const btn = document.querySelector('button[onclick="copyLink()"]');
+            btn.innerHTML = '<span class="material-symbols-outlined">check</span> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> ' + originalText;
+            }, 2000);
         });
     }
 </script>

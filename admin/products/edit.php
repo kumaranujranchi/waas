@@ -41,6 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'category_id' => $_POST['category_id'] ?? null,
         'name' => sanitizeInput($_POST['name'] ?? ''),
         'slug' => generateSlug($_POST['name'] ?? ''),
+        'short_description' => sanitizeInput($_POST['short_description'] ?? ''),
+        'full_description' => $_POST['full_description'] ?? '',
+        'badge' => sanitizeInput($_POST['badge'] ?? ''),
+        'is_featured' => isset($_POST['is_featured']) ? 1 : 0,
+        'status' => $_POST['status'] ?? 'active'
     ];
 
     // DEBUG: Log raw POST data for FAQs

@@ -398,7 +398,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                 <!-- Traditional (Left Card) -->
                 <div
-                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 -translate-x-8 transition-all duration-1000 delay-200 group relative bg-white dark:bg-[#151725] rounded-3xl md:rounded-[2.5rem] p-6 md:p-12 border border-dashed border-gray-300 dark:border-white/10 overflow-hidden hover:border-gray-400 dark:hover:border-white/20 transition-colors">
+                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 -translate-x-8 transition-all duration-1000 group relative bg-white dark:bg-[#151725] rounded-3xl md:rounded-[2.5rem] p-6 md:p-12 border border-dashed border-gray-300 dark:border-white/10 overflow-hidden hover:border-gray-400 dark:hover:border-white/20 transition-colors">
                     <!-- Graph Paper Pattern -->
                     <div class="absolute inset-0 opacity-[0.03] animate-pan"
                         style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 20px 20px;">
@@ -472,7 +472,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                 <!-- WaaS (Right Card - Premium) -->
                 <div
-                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 translate-x-8 transition-all duration-1000 delay-400 group relative bg-[#0f0e1b] rounded-3xl md:rounded-[2.5rem] p-1 px-[3px] py-[3px] overflow-hidden shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-2 transition-all duration-500">
+                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 translate-x-8 transition-all duration-1000 group relative bg-[#0f0e1b] rounded-3xl md:rounded-[2.5rem] p-1 px-[3px] py-[3px] overflow-hidden shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-2 transition-all duration-500">
                     <!-- Animated Border Gradient -->
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-primary via-purple-500 to-pink-500 animate-spin-slow opacity-100">
@@ -562,7 +562,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
             <!-- Premium Comparison Table -->
             <div
-                class="reveal opacity-0 translate-y-12 transition-all duration-1000 delay-500 hidden md:block max-w-5xl mx-auto rounded-[2rem] border border-gray-200 dark:border-white/10 overflow-hidden shadow-2xl bg-white dark:bg-[#1a1c2e]">
+                class="reveal opacity-0 translate-y-12 transition-all duration-1000 hidden md:block max-w-5xl mx-auto rounded-[2rem] border border-gray-200 dark:border-white/10 overflow-hidden shadow-2xl bg-white dark:bg-[#1a1c2e]">
                 <table class="w-full">
                     <thead>
                         <tr class="bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/5">
@@ -674,11 +674,11 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                         {
                             scrollTrigger: {
                                 trigger: el,
-                                start: "top 85%",
+                                start: "top 95%",
                             },
                             opacity: 1,
                             y: 0,
-                            duration: 1,
+                            duration: 0.8,
                             ease: "power2.out"
                         }
                     );

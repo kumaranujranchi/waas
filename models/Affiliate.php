@@ -120,4 +120,71 @@ class Affiliate
     {
         return $this->db->update('affiliates', ['status' => $status], 'id = ?', [$id]);
     }
+    /**
+     * Process Commission for an Order
+     * Called when order status becomes 'completed'
+     */
+    public function processCommission($orderId)
+    {
+        // 1. Get Order
+        $sql = "SELECT user_id, final_amount FROM orders WHERE id = ?";
+        $order = $this->db->fetchOne($sql, [$orderId]);
+        if (!$order)
+            return false;
+
+        // 2. Get User and Referrer
+        $sql = "SELECT referred_by FROM users WHERE id = ?";
+        $user = $this->db->fetchOne($sql, [$order['user_id']]);
+
+        // If user has a referrer
+        if ($user && !empty($user['referred_by'])) {
+            $affiliateId = $user['referred_by'];
+
+            // 3. Get Affiliate Details (Rate)
+            $sql = "SELECT * FROM affiliates WHERE id = ?";
+            $affiliate = $this->db->fetchOne($sql, [$affiliateId]);
+
+            if ($affiliate && $affiliate['status'] === 'active') {
+                $rate = floatval($affiliate['commission_rate']) / 100;
+                $commission = floatval($order['final_amount']) * $rate;
+
+                if ($commission > 0) {
+                    // 4. Update Affiliate Balance
+                    $this->db->update(
+                        'affiliates',
+                        ['balance' => floatval($affiliate['balance']) + $commission],
+                        'id = ?',
+                        [$affiliateId]
+                    );
+
+                    // 5. Update Referral Status/Amount (Cumulative)
+                    // We check if a referral record exists explicitly just in case
+                    $sql = "UPDATE referrals 
+                            SET commission_amount = commission_amount + ?, status = 'paid' 
+                            WHERE affiliate_id = ? AND user_id = ?";
+
+                    // We use direct query for arithmetic update
+                    // Since Database class helpers might not support `column = column + ?` easily,
+                    // we can use getPDO() if available, or just fetch -> update.
+                    // Let's use fetch -> update to be safe with the helper wrapper.
+
+                    $refSql = "SELECT * FROM referrals WHERE affiliate_id = ? AND user_id = ?";
+                    $referral = $this->db->fetchOne($refSql, [$affiliateId, $order['user_id']]);
+
+                    if ($referral) {
+                        $newAmount = floatval($referral['commission_amount']) + $commission;
+                        $this->db->update(
+                            'referrals',
+                            ['commission_amount' => $newAmount, 'status' => 'paid'],
+                            'id = ?',
+                            [$referral['id']]
+                        );
+                    }
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

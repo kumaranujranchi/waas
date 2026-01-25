@@ -291,6 +291,21 @@ if (isset($_GET['ref']) && !empty($_GET['ref'])) {
                         </a>
                     <?php else: ?>
                         <div class="flex items-center gap-4">
+                            <?php
+                            // Check if user is affiliate
+                            require_once __DIR__ . '/../models/Affiliate.php';
+                            $affiliateModelHeader = new Affiliate();
+                            $isAffiliateHeader = $affiliateModelHeader->isAffiliate($_SESSION['user_id']);
+                            ?>
+
+                            <?php if ($isAffiliateHeader): ?>
+                                <a href="<?php echo baseUrl('affiliate/dashboard.php'); ?>"
+                                    class="hidden sm:flex items-center gap-1 text-sm font-bold text-primary px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
+                                    <span class="material-symbols-outlined text-[18px]">campaign</span>
+                                    Affiliate
+                                </a>
+                            <?php endif; ?>
+
                             <a href="<?php echo baseUrl('dashboard/index.php'); ?>"
                                 class="hidden sm:block text-sm font-medium text-[#0f0e1b] dark:text-white/80 hover:text-primary">
                                 Dashboard

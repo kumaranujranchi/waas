@@ -97,7 +97,16 @@ class Order
      */
     public function updateOrderStatus($id, $status)
     {
-        return $this->db->update('orders', ['payment_status' => $status], 'id = ?', [$id]);
+        $updated = $this->db->update('orders', ['payment_status' => $status], 'id = ?', [$id]);
+
+        // Trigger Commission if Completed
+        if ($updated && $status === 'completed') {
+            require_once __DIR__ . '/Affiliate.php';
+            $affiliateModel = new Affiliate();
+            $affiliateModel->processCommission($id);
+        }
+
+        return $updated;
     }
 
     /**
@@ -110,7 +119,16 @@ class Order
             'payment_status' => $status
         ];
 
-        return $this->db->update('orders', $data, 'id = ?', [$orderId]);
+        $updated = $this->db->update('orders', $data, 'id = ?', [$orderId]);
+
+        // Trigger Commission if Completed
+        if ($updated && $status === 'completed') {
+            require_once __DIR__ . '/Affiliate.php';
+            $affiliateModel = new Affiliate();
+            $affiliateModel->processCommission($orderId);
+        }
+
+        return $updated;
     }
 
     /**

@@ -33,7 +33,11 @@ if (!$product) {
 
 $categories = $categoryModel->getAllCategories();
 $pricingPlans = $productModel->getProductPricingPlans($productId);
-$faqs = $productModel->getProductFAQs($productId);
+// $faqs = $productModel->getProductFAQs($productId); // DEPRECATED
+$faqs = !empty($product['faqs']) ? json_decode($product['faqs'], true) : [];
+if (!is_array($faqs)) {
+    $faqs = [];
+}
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

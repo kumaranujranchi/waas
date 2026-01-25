@@ -97,7 +97,11 @@ if (!$product) {
 // Get product features and pricing plans
 $features = $productModel->getProductFeatures($product['id']);
 $pricingPlans = $productModel->getProductPricingPlans($product['id']);
-$faqs = $productModel->getProductFAQs($product['id']);
+// Decode FAQs from JSON column (New Method)
+$faqs = !empty($product['faqs']) ? json_decode($product['faqs'], true) : [];
+if (!is_array($faqs)) {
+    $faqs = [];
+}
 ?>
 
 <main class="flex-1 max-w-[1200px] mx-auto w-full px-6 py-12">

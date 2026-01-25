@@ -30,6 +30,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'status' => 'active'
     ];
 
+    // Bundle FAQs into JSON
+    $faqs = [];
+    if (isset($_POST['faq_question']) && is_array($_POST['faq_question'])) {
+        foreach ($_POST['faq_question'] as $index => $question) {
+            $answer = $_POST['faq_answer'][$index] ?? '';
+            if (trim($question) !== '' && trim($answer) !== '') {
+                $faqs[] = [
+                    'question' => sanitizeInput($question),
+                    'answer' => sanitizeInput($answer)
+                ];
+            }
+        }
+    }
+    $data['faqs'] = $faqs; // Passed to createProduct which encodes it
+
     $image_url = '';
 
     // Handle File Upload
@@ -99,33 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
 
-                // Handle FAQs
-                if (isset($_POST['faq_question']) && is_array($_POST['faq_question'])) {
-                    // Filter out empty questions
-                    $questions = array_values(array_filter($_POST['faq_question'], function ($q) {
-                        return !empty(trim($q)); }));
-                    $answers = array_values(array_filter($_POST['faq_answer'], function ($a) {
-                        return !empty(trim($a)); }));
-
-                    // Iterate based on the count of questions to avoid index mismatch
-                    $totalFaqs = count($questions);
-
-                    for ($i = 0; $i < $totalFaqs; $i++) {
-                        $question = $questions[$i];
-                        $answer = $answers[$i] ?? ''; // Safely get corresponding answer
-
-                        if (!empty($question) && !empty($answer)) {
-                            $productModel->createFAQ([
-                                'product_id' => $productId,
-                                'question' => sanitizeInput($question),
-                                'answer' => sanitizeInput($answer),
-                                'display_order' => $i
-                            ]);
-                        }
-                    }
-                }
-
-
+                // FAQs are now handled via bundled JSON in createProduct
+                
                 $db->commit();
                 setFlashMessage('success', 'Product created successfully with pricing and FAQs!');
                 redirect(baseUrl('admin/products/list.php'));

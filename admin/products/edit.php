@@ -48,6 +48,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'status' => $_POST['status'] ?? 'active'
     ];
 
+    // Bundle FAQs into JSON
+    $faqs = [];
+    if (isset($_POST['faq_question']) && is_array($_POST['faq_question'])) {
+        foreach ($_POST['faq_question'] as $index => $question) {
+            $answer = $_POST['faq_answer'][$index] ?? '';
+            if (trim($question) !== '' && trim($answer) !== '') {
+                $faqs[] = [
+                    'question' => sanitizeInput($question),
+                    'answer' => sanitizeInput($answer)
+                ];
+            }
+        }
+    }
+    $data['faqs'] = $faqs; // Passed to updateProduct which encodes it
+
     // DEBUG: Log raw POST data for FAQs
     error_log("--- FAQ DEBUG START ---");
     error_log("Raw POST faq_question: " . print_r($_POST['faq_question'] ?? 'NOT SET', true));

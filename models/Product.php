@@ -132,8 +132,14 @@ class Product
     /**
      * Get product FAQs
      */
+    /**
+     * Get product FAQs
+     * @deprecated Use $product['faqs'] (JSON) instead
+     */
     public function getProductFAQs($productId)
     {
+        // Fallback to legacy table if needed, or return empty
+        // ideally we switch entirely to JSON
         $sql = "SELECT * FROM product_faqs 
                 WHERE product_id = ? 
                 ORDER BY display_order ASC";
@@ -167,8 +173,15 @@ class Product
     /**
      * Create new product (Admin)
      */
+    /**
+     * Create new product (Admin)
+     */
     public function createProduct($data)
     {
+        // Ensure faqs is initialized if not present
+        if (!isset($data['faqs'])) {
+            $data['faqs'] = json_encode([]);
+        }
         return $this->db->insert('products', $data);
     }
 
@@ -177,6 +190,10 @@ class Product
      */
     public function updateProduct($id, $data)
     {
+        // Ensure faqs is not null if passed
+        if (array_key_exists('faqs', $data) && is_array($data['faqs'])) {
+            $data['faqs'] = json_encode($data['faqs']);
+        }
         return $this->db->update('products', $data, 'id = ?', [$id]);
     }
 

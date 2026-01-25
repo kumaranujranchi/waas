@@ -413,7 +413,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                 <!-- Traditional (Left Card) -->
                 <div
-                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 -translate-x-8 transition-all duration-1000 group relative bg-white/90 dark:bg-[#151725]/90 rounded-3xl p-6 md:p-10 border border-dashed border-gray-300 dark:border-white/10 overflow-hidden hover:border-gray-400 dark:hover:border-white/20 transition-colors md:scale-95">
+                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 transition-all duration-1000 group relative bg-white/90 dark:bg-[#151725]/90 rounded-3xl p-6 md:p-10 border border-dashed border-gray-300 dark:border-white/10 overflow-hidden hover:border-gray-400 dark:hover:border-white/20 transition-colors md:scale-95">
                     <!-- Graph Paper Pattern -->
                     <div class="absolute inset-0 opacity-[0.03] animate-pan"
                         style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 20px 20px;">
@@ -474,7 +474,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                 <!-- WaaS (Right Card - Premium) -->
                 <div
-                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 translate-x-8 transition-all duration-1000 delay-200 group relative bg-[#0f0e1b] rounded-3xl md:rounded-[2.5rem] p-[2px] overflow-visible shadow-2xl shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-2 transition-all duration-500 z-10 md:scale-105">
+                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 transition-all duration-1000 delay-200 group relative bg-[#0f0e1b] rounded-3xl md:rounded-[2.5rem] p-[2px] overflow-visible shadow-2xl shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-2 transition-all duration-500 z-10 md:scale-105">
 
                     <!-- Floating Recommended Badge -->
                     <div

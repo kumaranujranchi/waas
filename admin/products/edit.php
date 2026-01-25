@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $data['faqs'] = $faqs;
 
-    // DEBUG LOGGING
+    // DEBUG LOGGING (Background only)
     error_log("--- UPDATE PRODUCT DEBUG ---");
     error_log("Product ID: " . $productId);
     error_log("FAQs Data to Bundle: " . print_r($faqs, true));
@@ -121,26 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update product
             $updated = $productModel->updateProduct($productId, $data);
 
-            // VISIBLE DEBUGGING (Universal v2)
-            echo "<div style='background:white; color:black; padding:20px; font-family:monospace; z-index:99999; position:fixed; top:0; left:0; width:100%; height:100%; overflow:auto;'>";
-            echo "<h1>UNIVERSAL DEBUG MODE v2 (Cache Buster)</h1>";
-            echo "<h3>1. Product ID</h3>";
-            echo "<pre>ID: " . $productId . " (Type: " . gettype($productId) . ")</pre>";
-
-            echo "<h3>2. Update Result</h3>";
-            echo "<pre>";
-            var_dump($updated);
-            echo "</pre>";
-
-            echo "<h3>3. Data Payload</h3>";
-            echo "<pre>" . print_r($data, true) . "</pre>";
-
-            echo "<h3>4. POST Data</h3>";
-            echo "<pre>" . print_r($_POST, true) . "</pre>";
-
-            die("STOPPED FOR DEBUGGING v2");
-
-            // Treat 0 changes as success too
+            // Treat 0 changes as success too (Fixed Logic)
             if ($updated !== false) {
                 // Delete existing pricing plans and FAQs
                 $db->query("DELETE FROM pricing_plans WHERE product_id = ?", [$productId]);
@@ -166,33 +147,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
-                // Add new FAQs
-                // FAQs handled via bundled JSON above
-                /*
-                // VISIBLE DEBUGGING - REMOVE AFTER FIX
-                echo "<div style='background:white; padding:20px; font-family:monospace; z-index:9999; position:relative;'>";
-                echo "<h1>VISIBLE DEBUG MODE</h1>";
-                echo "<h3>1. Input Data (POST)</h3>";
-                echo "<pre>" . print_r($_POST['faq_question'] ?? 'No Questions', true) . "</pre>";
-
-                echo "<h3>2. Processed FAQs (JSON Source)</h3>";
-                echo "<pre>" . print_r($faqs, true) . "</pre>";
-
-                echo "<h3>3. Data Sent to Model (as Array)</h3>";
-                echo "<pre>" . print_r($data['faqs'], true) . "</pre>";
-
-                $db->commit();
-
-                echo "<h3>4. Save Status</h3>";
-                echo "<h2 style='color:green'>COMMIT SUCCESSFUL</h2>";
-                echo "<p>Please take a screenshot of this page and send it to the developer.</p>";
-                die(); // STOP HERE
-                */
-
+                // Add new FAQs (no secondary validation needed as they are in JSON blob now)
+                
                 $db->commit();
                 setFlashMessage('success', 'Product updated successfully!');
                 redirect(baseUrl('admin/products/list.php'));
-
+                
             } else {
                 $db->rollback();
                 setFlashMessage('error', 'Failed to update product');

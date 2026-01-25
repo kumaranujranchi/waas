@@ -65,7 +65,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
         /* Hide nav for GSAP pop-in */
         nav a,
-        .flex.items-center.gap-4 {
+        .flex.items-center.gap-4>* {
             opacity: 0;
         }
     </style>

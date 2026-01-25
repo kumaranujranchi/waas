@@ -48,13 +48,13 @@ UPDATE products SET image_url = 'https://via.placeholder.com/400x300/8b5cf6/ffff
 
 ### Step 5: Login
 
-- URL: https://honestchoicereview.com/auth/login.php
+- URL: https://siteonsub.com/auth/login.php
 - Email: admin@waas.com
 - Password: Anuj@2025
 
 ### Step 6: Access Admin Panel
 
-- URL: https://honestchoicereview.com/admin/
+- URL: https://siteonsub.com/admin/
 
 ---
 

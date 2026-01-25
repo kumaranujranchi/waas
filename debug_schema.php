@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
-// require_once __DIR__ . '/classes/Database.php'; // Likely distinct or redundant
+require_once __DIR__ . '/classes/Database.php';
 
 $db = Database::getInstance();
 $conn = $db->getConnection();

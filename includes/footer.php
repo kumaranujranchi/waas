@@ -63,6 +63,8 @@
                     <li><a class="hover:text-primary" href="<?php echo baseUrl('about.php'); ?>">About Us</a></li>
                     <li><a class="hover:text-primary" href="<?php echo baseUrl('/#solutions'); ?>">Pricing</a></li>
                     <li><a class="hover:text-primary" href="#">Partners</a></li>
+                    <li><a class="hover:text-primary" href="<?php echo baseUrl('affiliate-register.php'); ?>">Affiliate
+                            Program</a></li>
                     <li><a class="hover:text-primary" href="<?php echo baseUrl('consultation.php'); ?>">Contact</a></li>
                 </ul>
             </div>

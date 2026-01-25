@@ -99,7 +99,9 @@ class Affiliate
                 WHERE r.affiliate_id = ?
                 ORDER BY r.created_at DESC LIMIT ?";
         return $this->db->fetchAll($sql, [$affiliateId, $limit]);
-        /**
+    }
+
+    /**
      * Get ALL Affiliates (Admin)
      */
     public function getAllAffiliates()
@@ -118,5 +120,4 @@ class Affiliate
     {
         return $this->db->update('affiliates', ['status' => $status], 'id = ?', [$id]);
     }
-}
 }

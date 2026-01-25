@@ -47,13 +47,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $userModel = new User();
+
+        // Check for Affiliate Referral
+        $referredBy = null;
+        if (isset($_SESSION['affiliate_ref']) || isset($_COOKIE['affiliate_ref'])) {
+            $refCode = $_SESSION['affiliate_ref'] ?? $_COOKIE['affiliate_ref'];
+            require_once __DIR__ . '/../models/Affiliate.php';
+            $affiliateModel = new Affiliate();
+            $affiliate = $affiliateModel->getAffiliateByCode($refCode);
+
+            if ($affiliate) {
+                $referredBy = $affiliate['id'];
+            }
+        }
+
         $result = $userModel->register([
             'full_name' => $fullName,
             'email' => $email,
             'phone' => $phone,
             'password' => $password,
-            'role' => 'customer'
+            'role' => 'customer',
+            'referred_by' => $referredBy
         ]);
+
+        if ($result['success'] && $referredBy) {
+            // Track referral in referrals table
+            $affiliateModel->trackReferral($referredBy, $result['user_id']);
+        }
 
         if ($result['success']) {
             // Auto-login after registration

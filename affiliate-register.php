@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $affiliateModel = new Affiliate();
 $userId = $_SESSION['user_id'];
-$user = $userModel->getUserById($userId); // Assuming global $userModel from header
+// $user lookup removed as it was unused and caused crash
 
 // Check if already affiliate
 $existing = $affiliateModel->getAffiliateByUserId($userId);

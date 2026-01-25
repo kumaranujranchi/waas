@@ -1,27 +1,39 @@
 <?php
-require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../models/Affiliate.php';
 
-// Require Login
+// Start session if needed
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// 1. Require Login (redirect if not logged in)
 if (!isset($_SESSION['user_id'])) {
-    redirect(baseUrl('auth/login.php?redirect=affiliate/dashboard.php'));
+    redirect(baseUrl('affiliate/login.php'));
 }
 
 $userId = $_SESSION['user_id'];
 $affiliateModel = new Affiliate();
 $affiliate = $affiliateModel->getAffiliateByUserId($userId);
 
-// If not an affiliate, redirect to register
+// 2. Check Affiliate Status
 if (!$affiliate) {
+    // Not an affiliate yet -> Redirect to registration
     redirect(baseUrl('affiliate-register.php'));
 }
 
-// Get Stats
+// 3. Fetch Data (Only if affiliate exists)
 $stats = $affiliateModel->getStats($affiliate['id']);
 $referrals = $affiliateModel->getReferrals($affiliate['id']);
 
 // Generate Link
 $referralLink = baseUrl("?ref=" . $affiliate['referral_code']);
+
+// 4. Output HTML (Header included LAST)
+$pageTitle = 'Affiliate Dashboard';
+require_once __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="min-h-screen bg-gray-50 dark:bg-[#0f0e1b] py-12">

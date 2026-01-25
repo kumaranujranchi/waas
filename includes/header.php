@@ -16,6 +16,16 @@ require_once __DIR__ . '/../includes/functions.php';
 
 $currentUser = getCurrentUser();
 $isLoggedIn = isLoggedIn();
+
+// Tracking Logic (Affiliate)
+if (isset($_GET['ref']) && !empty($_GET['ref'])) {
+    $refCode = sanitizeInput($_GET['ref']);
+    // Store in session (lasts until browser close)
+    $_SESSION['affiliate_ref'] = $refCode;
+
+    // Store in cookie (lasts 30 days)
+    setcookie('affiliate_ref', $refCode, time() + (86400 * 30), "/");
+}
 ?>
 <!DOCTYPE html>
 <html class="light" lang="en">

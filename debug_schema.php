@@ -66,8 +66,6 @@ try {
         echo "</tr>";
     }
     echo "</table>";
-    }
-    echo "</table>";
 } catch (Exception $e) {
     echo "<p>Error fetching products.</p>";
 }
@@ -87,11 +85,11 @@ foreach ($logFiles as $file) {
     if (!empty($file) && file_exists($file) && is_readable($file)) {
         echo "<h3>Log File: $file</h3>";
         $foundLog = true;
-        
+
         $lines = file($file);
         $tail = array_slice($lines, -50);
         $content = implode("", $tail);
-        
+
         echo "<pre style='background:#111; color:#0f0; padding:10px; overflow:auto;'>";
         echo htmlspecialchars($content);
         echo "</pre>";

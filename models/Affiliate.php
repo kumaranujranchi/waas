@@ -64,12 +64,13 @@ class Affiliate
     /**
      * Track a referral (When a new user registers)
      */
-    public function trackReferral($affiliateId, $newUserId)
+    public function trackReferral($affiliateId, $newUserId, $source = null)
     {
         $data = [
             'affiliate_id' => $affiliateId,
             'user_id' => $newUserId,
-            'status' => 'pending'
+            'status' => 'pending',
+            'source' => $source
         ];
         return $this->db->insert('referrals', $data);
     }

@@ -270,6 +270,9 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                         <div class="aspect-[4/3] w-full bg-[#f0f2f9] dark:bg-white/5 relative overflow-hidden">
                             <?php
                             $imageUrl = $product['image_url'];
+                            // Fix for old query/domain
+                            $imageUrl = str_replace(['https://honestchoicereview.com', 'http://honestchoicereview.com'], SITE_URL, $imageUrl);
+
                             if (!empty($imageUrl)) {
                                 if (!filter_var($imageUrl, FILTER_VALIDATE_URL)) {
                                     $imageUrl = baseUrl($imageUrl);
@@ -713,6 +716,9 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                             <div class="aspect-[4/3] w-full bg-[#f0f2f9] dark:bg-white/5 relative overflow-hidden">
                                 <?php
                                 $imageUrl = $product['image_url'];
+                                // Fix for old query/domain
+                                $imageUrl = str_replace(['https://honestchoicereview.com', 'http://honestchoicereview.com'], SITE_URL, $imageUrl);
+
                                 if (!empty($imageUrl)) {
                                     if (!filter_var($imageUrl, FILTER_VALIDATE_URL)) {
                                         $imageUrl = baseUrl($imageUrl);

@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['faq_question']) && is_array($_POST['faq_question'])) {
         foreach ($_POST['faq_question'] as $index => $question) {
             $answer = $_POST['faq_answer'][$index] ?? '';
+            // Allow 0 as valid input (e.g. "0 days"), but check for empty string
             if (trim($question) !== '' && trim($answer) !== '') {
                 $faqs[] = [
                     'question' => sanitizeInput($question),
@@ -65,13 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-    $data['faqs'] = $faqs; // Passed to updateProduct which encodes it
+    $data['faqs'] = $faqs; 
 
-    // DEBUG: Log raw POST data for FAQs
-    error_log("--- FAQ DEBUG START ---");
-    error_log("Raw POST faq_question: " . print_r($_POST['faq_question'] ?? 'NOT SET', true));
-    error_log("Raw POST faq_answer: " . print_r($_POST['faq_answer'] ?? 'NOT SET', true));
-    error_log("--- FAQ DEBUG END ---");
+    // DEBUG LOGGING
+    error_log("--- UPDATE PRODUCT DEBUG ---");
+    error_log("Product ID: " . $productId);
+    error_log("FAQs Data to Bundle: " . print_r($faqs, true));
+    error_log("Full Data Array Keys: " . print_r(array_keys($data), true));
 
     // Handle Image
     $image_url = $_POST['existing_image_url'] ?? '';

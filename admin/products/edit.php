@@ -141,24 +141,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
-                // Add new FAQs
-                // Add new FAQs
-                if (isset($_POST['faq_question']) && is_array($_POST['faq_question'])) {
-                    $displayOrder = 0;
-                    foreach ($_POST['faq_question'] as $index => $question) {
-                        $answer = $_POST['faq_answer'][$index] ?? '';
-
-                        if (trim($question) !== '' && trim($answer) !== '') {
-                            $productModel->createFAQ([
-                                'product_id' => $productId,
-                                'question' => sanitizeInput($question),
-                                'answer' => sanitizeInput($answer),
-                                'display_order' => $displayOrder++
-                            ]);
-                        }
-                    }
-                }
-
+                // FAQs handled via bundled JSON above
+                
                 $db->commit();
                 setFlashMessage('success', 'Product updated successfully!');
                 redirect(baseUrl('admin/products/list.php'));

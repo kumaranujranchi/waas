@@ -11,24 +11,29 @@ error_reporting(E_ALL);
 $db = Database::getInstance();
 $products = $db->fetchAll("SELECT id, name, image_url FROM products LIMIT 5");
 
-echo "<h1>Debug Image URLs</h1>";
-echo "<p>SITE_URL: " . SITE_URL . "</p>";
 echo "<table border='1' cellpadding='5'>";
-echo "<tr><th>ID</th><th>Name</th><th>Raw Image URL</th><th>Fixed URL (Preview)</th></tr>";
+echo "<tr><th>ID</th><th>Name</th><th>Stored Path</th><th>Clean Path</th><th>File Exists on Disk?</th><th>Generated URL</th></tr>";
 
 foreach ($products as $product) {
-    $rawUrl = $product['image_url'];
-    $fixedUrl = str_replace(['https://honestchoicereview.com', 'http://honestchoicereview.com'], SITE_URL, $rawUrl);
+    $rawPath = $product['image_url'];
 
-    if (!filter_var($fixedUrl, FILTER_VALIDATE_URL)) {
-        $fixedUrl = baseUrl($fixedUrl);
-    }
+    // Remove domain if present to get relative path
+    $cleanPath = str_replace([SITE_URL, 'https://honestchoicereview.com', 'http://honestchoicereview.com'], '', $rawPath);
+    $cleanPath = ltrim($cleanPath, '/');
+
+    // Check file existence
+    $filePath = __DIR__ . '/' . $cleanPath;
+    $fileExists = file_exists($filePath) ? "<b style='color:green'>YES</b>" : "<b style='color:red'>NO (" . realpath(dirname($filePath)) . "/" . basename($filePath) . ")</b>";
+
+    $fullUrl = baseUrl($cleanPath);
 
     echo "<tr>";
     echo "<td>" . $product['id'] . "</td>";
-    echo "<td>" . $product['name'] . "</td>";
-    echo "<td>" . htmlspecialchars($rawUrl) . "</td>";
-    echo "<td>" . htmlspecialchars($fixedUrl) . "<br><a href='$fixedUrl' target='_blank'>Link</a></td>";
+    echo "<td>" . htmlspecialchars($product['name']) . "</td>";
+    echo "<td>" . htmlspecialchars($rawPath) . "</td>";
+    echo "<td>" . htmlspecialchars($cleanPath) . "</td>";
+    echo "<td>" . $fileExists . "</td>";
+    echo "<td><a href='$fullUrl' target='_blank'>Link</a></td>";
     echo "</tr>";
 }
 echo "</table>";

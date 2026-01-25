@@ -182,7 +182,7 @@ require_once __DIR__ . '/../includes/header.php';
                                     <th class="py-3 px-2">User</th>
                                     <th class="py-3 px-2">Date</th>
                                     <th class="py-3 px-2">Source</th>
-                                    <th class="py-3 px-2">Status</th>
+                                    <th class="py-3 px-2">Payment Status</th>
                                     <th class="py-3 px-2 text-right">Commission</th>
                                 </tr>
                             </thead>

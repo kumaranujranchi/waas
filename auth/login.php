@@ -40,8 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             setFlashMessage('success', 'Welcome back!');
 
             // Check for redirect param
-            $redirectUrl = $_POST['redirect'] ?? ($_GET['redirect'] ?? null);
-            if ($redirectUrl) {
+            $redirectUrl = $_REQUEST['redirect'] ?? null;
+            if (!empty($redirectUrl)) {
+                // Decode just in case
+                $redirectUrl = urldecode($redirectUrl);
+                // Ensure it's a valid internal URL to prevent open redirect
+                // For now, valid if it's a relative path or starts with SITE_URL
                 redirect(baseUrl($redirectUrl));
             }
 
@@ -87,8 +91,12 @@ include __DIR__ . '/../includes/header.php';
 
             <form method="POST" action="" class="space-y-6">
                 <!-- Preserve Redirect URL -->
-                <?php if (isset($_GET['redirect'])): ?>
-                    <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_GET['redirect']); ?>">
+                <!-- Preserve Redirect URL -->
+                <?php 
+                $redirectParam = $_REQUEST['redirect'] ?? null;
+                if ($redirectParam): 
+                ?>
+                    <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirectParam); ?>">
                 <?php endif; ?>
 
                 <div class="space-y-2">

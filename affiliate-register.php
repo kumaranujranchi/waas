@@ -1,37 +1,44 @@
 <?php
-require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/models/Affiliate.php';
+// Include functions and config first (No Output)
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/includes/functions.php';
 
-// Require Login
-if (!isset($_SESSION['user_id'])) {
-    redirect('login.php?redirect=affiliate-register.php');
+// Start session if needed (functions.php usually does this, but safely check)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
+// Require Login (Check BEFORE any output)
+if (!isset($_SESSION['user_id'])) {
+    redirect(baseUrl('auth/login.php?redirect=affiliate-register.php'));
+}
+
+// Now include logic
+require_once __DIR__ . '/models/Affiliate.php';
 $affiliateModel = new Affiliate();
 $userId = $_SESSION['user_id'];
-// $user lookup removed as it was unused and caused crash
 
 // Check if already affiliate
 $existing = $affiliateModel->getAffiliateByUserId($userId);
 if ($existing) {
-    redirect('affiliate/dashboard.php');
+    redirect(baseUrl('affiliate/dashboard.php'));
 }
 
 // Handle Registration
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['accept_terms'])) {
         $affiliateModel->createAffiliate($userId);
-
-        // Update user session role if needed, or just redirect
-        // Ideally we might want to update users table role to 'affiliate' but user might be 'admin' logic overlap.
-        // For now, standalone 'affiliates' table is enough.
-
         setFlashMessage('success', 'Welcome to the Affiliate Program!');
-        redirect('affiliate/dashboard.php');
+        redirect(baseUrl('affiliate/dashboard.php'));
     } else {
         $error = "You must accept the terms and conditions.";
     }
 }
+
+// Include Header (HTML Output starts here)
+$pageTitle = 'Become an Affiliate';
+require_once __DIR__ . '/includes/header.php';
 ?>
 
 <div class="min-h-screen bg-gray-50 dark:bg-[#0f0e1b] py-20">

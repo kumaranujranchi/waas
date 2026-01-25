@@ -20,11 +20,15 @@ $isLoggedIn = isLoggedIn();
 // Tracking Logic (Affiliate)
 if (isset($_GET['ref']) && !empty($_GET['ref'])) {
     $refCode = sanitizeInput($_GET['ref']);
+    $source = isset($_GET['source']) ? sanitizeInput($_GET['source']) : ''; // Capture source
+
     // Store in session (lasts until browser close)
     $_SESSION['affiliate_ref'] = $refCode;
+    $_SESSION['affiliate_source'] = $source;
 
     // Store in cookie (lasts 30 days)
     setcookie('affiliate_ref', $refCode, time() + (86400 * 30), "/");
+    setcookie('affiliate_source', $source, time() + (86400 * 30), "/");
 }
 ?>
 <!DOCTYPE html>

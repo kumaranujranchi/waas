@@ -55,6 +55,9 @@ class Database
             $stmt->execute($params);
             return $stmt;
         } catch (PDOException $e) {
+            // DEBUG: Force show error
+            die("SQL ERROR (Wait! Read this): " . $e->getMessage());
+
             if (DEBUG_MODE) {
                 die("Query Error: " . $e->getMessage());
             } else {

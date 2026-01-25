@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-    $data['faqs'] = $faqs; 
+    $data['faqs'] = $faqs;
 
     // DEBUG LOGGING
     error_log("--- UPDATE PRODUCT DEBUG ---");
@@ -146,11 +146,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
+                // Add new FAQs
                 // FAQs handled via bundled JSON above
-                
+
+                // VISIBLE DEBUGGING - REMOVE AFTER FIX
+                echo "<div style='background:white; padding:20px; font-family:monospace; z-index:9999; position:relative;'>";
+                echo "<h1>VISIBLE DEBUG MODE</h1>";
+                echo "<h3>1. Input Data (POST)</h3>";
+                echo "<pre>" . print_r($_POST['faq_question'] ?? 'No Questions', true) . "</pre>";
+
+                echo "<h3>2. Processed FAQs (JSON Source)</h3>";
+                echo "<pre>" . print_r($faqs, true) . "</pre>";
+
+                echo "<h3>3. Data Sent to Model</h3>";
+                echo "<pre>" . htmlspecialchars($data['faqs']) . "</pre>";
+
                 $db->commit();
+
+                echo "<h3>4. Save Status</h3>";
+                echo "<h2 style='color:green'>COMMIT SUCCESSFUL</h2>";
+                echo "<p>Please take a screenshot of this page and send it to the developer.</p>";
+                die(); // STOP HERE
+
+                /*
                 setFlashMessage('success', 'Product updated successfully!');
                 redirect(baseUrl('admin/products/list.php'));
+                */
             } else {
                 $db->rollback();
                 setFlashMessage('error', 'Failed to update product');

@@ -29,8 +29,8 @@
 
     <hr>
 
-    <form method="POST">
-        <p>Type something below:</p>
+    <form method="POST" enctype="multipart/form-data">
+        <p>Type something below (Multipart Mode):</p>
         <input type="text" name="items[]" value="Item 1"><br><br>
         <input type="text" name="items[]" value="Item 2"><br><br>
         <input type="text" name="items[]" value="Item 3"><br><br>

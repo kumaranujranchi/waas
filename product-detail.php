@@ -160,6 +160,9 @@ $faqs = $productModel->getProductFAQs($product['id']);
                 <div class="aspect-[4/3] rounded-[2rem] overflow-hidden bg-gray-50 dark:bg-white/5 relative group">
                     <?php
                     $imageUrl = $product['image_url'];
+                    // Fix for old query/domain
+                    $imageUrl = str_replace(['https://honestchoicereview.com', 'http://honestchoicereview.com'], SITE_URL, $imageUrl);
+
                     if (!empty($imageUrl)) {
                         if (!filter_var($imageUrl, FILTER_VALIDATE_URL)) {
                             $imageUrl = baseUrl($imageUrl);

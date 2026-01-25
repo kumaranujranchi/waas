@@ -99,5 +99,24 @@ class Affiliate
                 WHERE r.affiliate_id = ?
                 ORDER BY r.created_at DESC LIMIT ?";
         return $this->db->fetchAll($sql, [$affiliateId, $limit]);
+        /**
+     * Get ALL Affiliates (Admin)
+     */
+    public function getAllAffiliates()
+    {
+        $sql = "SELECT a.*, u.full_name, u.email 
+                FROM affiliates a
+                JOIN users u ON a.user_id = u.id
+                ORDER BY a.created_at DESC";
+        return $this->db->fetchAll($sql);
     }
+
+    /**
+     * Update Affiliate Status (Admin)
+     */
+    public function updateStatus($id, $status)
+    {
+        return $this->db->update('affiliates', ['status' => $status], 'id = ?', [$id]);
+    }
+}
 }

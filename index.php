@@ -421,7 +421,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                     <!-- Content -->
                     <div class="relative z-10">
-                        <div class="flex flex-col items-center text-center mb-10">
+                        <div class="flex flex-col items-center text-center mb-8 md:mb-10">
                             <div
                                 class="size-20 rounded-2xl bg-gray-100 dark:bg-white/5 flex items-center justify-center mb-6 shadow-inner text-gray-400">
                                 <span class="material-symbols-outlined text-4xl">history</span>
@@ -431,7 +431,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                             <p class="text-xs font-bold uppercase tracking-widest text-gray-400">The Hard Way</p>
                         </div>
 
-                        <ul class="space-y-5">
+                        <ul
+                            class="space-y-4 md:space-y-5 flex flex-col items-center md:items-start text-center md:text-left">
                             <li
                                 class="flex items-center gap-4 group/item opacity-60 hover:opacity-100 transition-opacity">
                                 <span
@@ -495,7 +496,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                         </div>
 
                         <div class="relative z-10">
-                            <div class="flex flex-col items-center text-center mb-10">
+                            <div class="flex flex-col items-center text-center mb-8 md:mb-10">
                                 <div
                                     class="size-24 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center mb-6 shadow-xl shadow-primary/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                                     <span class="material-symbols-outlined text-white text-5xl">rocket_launch</span>
@@ -506,7 +507,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                 </p>
                             </div>
 
-                            <ul class="space-y-6">
+                            <ul
+                                class="space-y-4 md:space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
                                 <li class="flex items-center gap-4">
                                     <span
                                         class="material-symbols-outlined text-green-500 text-3xl drop-shadow-sm group-hover:scale-110 transition-transform">check_circle</span>
@@ -546,13 +548,17 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
             <!-- Premium Comparison Table (Desktop) -->
             <div
                 class="reveal opacity-0 translate-y-12 transition-all duration-1000 hidden md:block max-w-5xl mx-auto rounded-[2.5rem] bg-gray-50/50 dark:bg-[#1a1c2e]/50 p-6 md:p-8">
-                
+
                 <table class="w-full border-separate border-spacing-y-4">
                     <thead>
                         <tr>
-                            <th class="py-4 px-6 text-left text-xs font-black text-gray-400 uppercase tracking-widest pl-10">Feature</th>
-                            <th class="py-4 px-6 text-left text-xs font-black text-gray-400 uppercase tracking-widest">Traditional</th>
-                            <th class="py-4 px-6 text-left text-xs font-black text-primary uppercase tracking-widest text-center bg-white dark:bg-[#1a1c2e] rounded-t-2xl shadow-sm border-x border-t border-gray-100 dark:border-white/5 relative z-10 w-1/3">
+                            <th
+                                class="py-4 px-6 text-left text-xs font-black text-gray-400 uppercase tracking-widest pl-10">
+                                Feature</th>
+                            <th class="py-4 px-6 text-left text-xs font-black text-gray-400 uppercase tracking-widest">
+                                Traditional</th>
+                            <th
+                                class="py-4 px-6 text-left text-xs font-black text-primary uppercase tracking-widest text-center bg-white dark:bg-[#1a1c2e] rounded-t-2xl shadow-sm border-x border-t border-gray-100 dark:border-white/5 relative z-10 w-1/3">
                                 <div class="flex items-center justify-center gap-2">
                                     <span class="material-symbols-outlined text-lg">rocket_launch</span>
                                     <span>Website as a Service</span>
@@ -563,15 +569,20 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                     <tbody>
                         <!-- Row 1 -->
                         <tr class="group hover:-translate-y-1 transition-transform duration-300">
-                            <td class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">Upfront Cost</td>
-                            <td class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                            <td
+                                class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                                Upfront Cost</td>
+                            <td
+                                class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
                                 <div class="flex items-center gap-2 text-gray-500">
                                     <span class="material-symbols-outlined text-red-500 text-lg">error</span>
                                     <span>Expensive</span>
                                 </div>
                             </td>
-                            <td class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10 w-1/3">
-                                <div class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
+                            <td
+                                class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10 w-1/3">
+                                <div
+                                    class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
                                     <span class="material-symbols-outlined text-lg">check_circle</span>
                                     <span>Zero (Included)</span>
                                 </div>
@@ -580,15 +591,20 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                         <!-- Row 2 -->
                         <tr class="group hover:-translate-y-1 transition-transform duration-300">
-                            <td class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">Maintenance</td>
-                            <td class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                            <td
+                                class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                                Maintenance</td>
+                            <td
+                                class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
                                 <div class="flex items-center gap-2 text-gray-500">
                                     <span class="material-symbols-outlined text-orange-400 text-lg">warning</span>
                                     <span>₹5,000+ / year</span>
                                 </div>
                             </td>
-                            <td class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10">
-                                <div class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
+                            <td
+                                class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10">
+                                <div
+                                    class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
                                     <span class="material-symbols-outlined text-lg">check_circle</span>
                                     <span>Free Forever</span>
                                 </div>
@@ -597,15 +613,20 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                         <!-- Row 3 -->
                         <tr class="group hover:-translate-y-1 transition-transform duration-300">
-                            <td class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">Hosting</td>
-                            <td class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                            <td
+                                class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                                Hosting</td>
+                            <td
+                                class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
                                 <div class="flex items-center gap-2 text-gray-500">
                                     <span class="material-symbols-outlined text-orange-400 text-lg">warning</span>
                                     <span>₹3,000+ / year</span>
                                 </div>
                             </td>
-                            <td class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10">
-                                <div class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
+                            <td
+                                class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10">
+                                <div
+                                    class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
                                     <span class="material-symbols-outlined text-lg">check_circle</span>
                                     <span>Included</span>
                                 </div>
@@ -614,15 +635,20 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                         <!-- Row 4 -->
                         <tr class="group hover:-translate-y-1 transition-transform duration-300">
-                            <td class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">Updates</td>
-                            <td class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                            <td
+                                class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                                Updates</td>
+                            <td
+                                class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
                                 <div class="flex items-center gap-2 text-gray-500">
                                     <span class="material-symbols-outlined text-red-500 text-lg">cancel</span>
                                     <span>Paid per request</span>
                                 </div>
                             </td>
-                            <td class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10">
-                                <div class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
+                            <td
+                                class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10">
+                                <div
+                                    class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
                                     <span class="material-symbols-outlined text-lg">check_circle</span>
                                     <span>Unlimited</span>
                                 </div>
@@ -631,15 +657,21 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                         <!-- Row 5 -->
                         <tr class="group hover:-translate-y-1 transition-transform duration-300">
-                            <td class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">Launch Time</td>
-                            <td class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                            <td
+                                class="bg-white dark:bg-[#151725] rounded-l-2xl py-6 px-10 font-bold text-[#0f0e1b] dark:text-white shadow-sm border-y border-l border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
+                                Launch Time</td>
+                            <td
+                                class="bg-white dark:bg-[#151725] py-6 px-6 shadow-sm border-y border-gray-100 dark:border-white/5 group-hover:border-primary/20 transition-colors">
                                 <div class="flex items-center gap-2 text-gray-500">
-                                    <span class="material-symbols-outlined text-orange-400 text-lg">hourglass_empty</span>
+                                    <span
+                                        class="material-symbols-outlined text-orange-400 text-lg">hourglass_empty</span>
                                     <span>4-8 Weeks</span>
                                 </div>
                             </td>
-                            <td class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10">
-                                <div class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
+                            <td
+                                class="bg-green-50 dark:bg-green-900/10 rounded-r-2xl py-6 px-6 text-center shadow-lg shadow-green-500/5 border border-green-100 dark:border-green-500/20 relative z-10">
+                                <div
+                                    class="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 font-bold bg-white/50 dark:bg-black/20 py-2 px-4 rounded-xl w-fit mx-auto">
                                     <span class="material-symbols-outlined text-lg">check_circle</span>
                                     <span>~ 7 Days</span>
                                 </div>
@@ -651,12 +683,16 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
             <!-- Mobile Comparison Cards (Accordion Style) -->
             <div class="block md:hidden max-w-sm mx-auto space-y-4">
-                
+
                 <!-- Traditional Card (Collapsed by Default) -->
-                <div class="bg-white dark:bg-[#151725] rounded-2xl border border-dashed border-gray-300 dark:border-white/10 overflow-hidden text-center opacity-80" id="traditionalCard">
-                    <button onclick="document.getElementById('traditionalContent').classList.toggle('hidden'); document.getElementById('traditionalChevron').classList.toggle('rotate-180')" class="w-full p-4 flex items-center justify-between text-left">
+                <div class="bg-white dark:bg-[#151725] rounded-2xl border border-dashed border-gray-300 dark:border-white/10 overflow-hidden text-center opacity-80"
+                    id="traditionalCard">
+                    <button
+                        onclick="document.getElementById('traditionalContent').classList.toggle('hidden'); document.getElementById('traditionalChevron').classList.toggle('rotate-180')"
+                        class="w-full p-4 flex items-center justify-between text-left">
                         <div class="flex items-center gap-3">
-                            <div class="size-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-400">
+                            <div
+                                class="size-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-400">
                                 <span class="material-symbols-outlined">history</span>
                             </div>
                             <div>
@@ -664,10 +700,12 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                 <p class="text-[10px] uppercase font-bold text-gray-400">The Hard Way</p>
                             </div>
                         </div>
-                        <span class="material-symbols-outlined text-gray-400 transition-transform" id="traditionalChevron">expand_more</span>
+                        <span class="material-symbols-outlined text-gray-400 transition-transform"
+                            id="traditionalChevron">expand_more</span>
                     </button>
-                    
-                    <div id="traditionalContent" class="hidden border-t border-dashed border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/5 p-4 text-sm">
+
+                    <div id="traditionalContent"
+                        class="hidden border-t border-dashed border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-white/5 p-4 text-sm">
                         <ul class="space-y-3">
                             <li class="flex items-center justify-between gap-2">
                                 <span class="text-gray-500">Upfront Cost</span>
@@ -692,11 +730,15 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                 <!-- WaaS Card (Expanded Content) -->
                 <div class="bg-[#0f0e1b] rounded-3xl p-1 shadow-xl shadow-primary/20">
-                    <div class="bg-white dark:bg-[#1a1c2e] rounded-[1.4rem] p-5 border border-primary/20 overflow-hidden relative">
-                         <div class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
-                         
-                         <div class="flex items-center gap-3 mb-6 relative z-10">
-                            <div class="size-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white shadow-lg">
+                    <div
+                        class="bg-white dark:bg-[#1a1c2e] rounded-[1.4rem] p-5 border border-primary/20 overflow-hidden relative">
+                        <div
+                            class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-primary/10 rounded-full blur-2xl pointer-events-none">
+                        </div>
+
+                        <div class="flex items-center gap-3 mb-6 relative z-10">
+                            <div
+                                class="size-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white shadow-lg">
                                 <span class="material-symbols-outlined">rocket_launch</span>
                             </div>
                             <div>
@@ -706,21 +748,26 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                         </div>
 
                         <ul class="space-y-3 relative z-10">
-                            <li class="bg-green-50 dark:bg-green-900/10 p-3 rounded-xl flex items-center gap-3 border border-green-100 dark:border-green-500/20">
+                            <li
+                                class="bg-green-50 dark:bg-green-900/10 p-3 rounded-xl flex items-center gap-3 border border-green-100 dark:border-green-500/20">
                                 <span class="material-symbols-outlined text-green-600 text-xl">check_circle</span>
                                 <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase">Upfront Cost</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase">Upfront Cost
+                                    </p>
                                     <p class="font-black text-green-700 dark:text-green-400">Zero (Included)</p>
                                 </div>
                             </li>
-                            <li class="bg-green-50 dark:bg-green-900/10 p-3 rounded-xl flex items-center gap-3 border border-green-100 dark:border-green-500/20">
+                            <li
+                                class="bg-green-50 dark:bg-green-900/10 p-3 rounded-xl flex items-center gap-3 border border-green-100 dark:border-green-500/20">
                                 <span class="material-symbols-outlined text-green-600 text-xl">check_circle</span>
                                 <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase">Maintenance & Hosting</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase">Maintenance
+                                        & Hosting</p>
                                     <p class="font-black text-green-700 dark:text-green-400">Free Forever</p>
                                 </div>
                             </li>
-                            <li class="bg-green-50 dark:bg-green-900/10 p-3 rounded-xl flex items-center gap-3 border border-green-100 dark:border-green-500/20">
+                            <li
+                                class="bg-green-50 dark:bg-green-900/10 p-3 rounded-xl flex items-center gap-3 border border-green-100 dark:border-green-500/20">
                                 <span class="material-symbols-outlined text-green-600 text-xl">check_circle</span>
                                 <div>
                                     <p class="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase">Updates</p>

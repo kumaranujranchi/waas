@@ -3,6 +3,10 @@ require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/classes/Database.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $db = Database::getInstance();
 $products = $db->fetchAll("SELECT id, name, image_url FROM products LIMIT 5");
 

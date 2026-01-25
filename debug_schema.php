@@ -66,6 +66,40 @@ try {
         echo "</tr>";
     }
     echo "</table>";
+    }
+    echo "</table>";
 } catch (Exception $e) {
     echo "<p>Error fetching products.</p>";
 }
+
+echo "<hr>";
+echo "<h2>Server Error Log (Last 50 Lines)</h2>";
+
+$logFiles = [
+    __DIR__ . '/error_log',
+    __DIR__ . '/public_html/error_log',
+    '/var/log/apache2/error.log',
+    ini_get('error_log')
+];
+
+$foundLog = false;
+foreach ($logFiles as $file) {
+    if (!empty($file) && file_exists($file) && is_readable($file)) {
+        echo "<h3>Log File: $file</h3>";
+        $foundLog = true;
+        
+        $lines = file($file);
+        $tail = array_slice($lines, -50);
+        $content = implode("", $tail);
+        
+        echo "<pre style='background:#111; color:#0f0; padding:10px; overflow:auto;'>";
+        echo htmlspecialchars($content);
+        echo "</pre>";
+    }
+}
+
+if (!$foundLog) {
+    echo "<p style='color:red'>No readable error_log file found in standard paths.</p>";
+    echo "<p>Current PHP error_log path: " . htmlspecialchars(ini_get('error_log')) . "</p>";
+}
+

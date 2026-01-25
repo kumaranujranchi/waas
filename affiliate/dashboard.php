@@ -214,7 +214,9 @@ require_once __DIR__ . '/../includes/header.php';
                                                         <?php echo e($ref['source']); ?>
                                                     </span>
                                                 <?php else: ?>
-                                                    <span class="text-xs text-gray-400">-</span>
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-50 text-gray-500 border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:text-gray-400">
+                                                        Direct
+                                                    </span>
                                                 <?php endif; ?>
                                             </td>
                                             <td class="py-4 px-2">

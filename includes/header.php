@@ -20,7 +20,7 @@ $isLoggedIn = isLoggedIn();
 // Tracking Logic (Affiliate)
 if (isset($_GET['ref']) && !empty($_GET['ref'])) {
     $refCode = sanitizeInput($_GET['ref']);
-    $source = isset($_GET['source']) ? sanitizeInput($_GET['source']) : ''; // Capture source
+    $source = isset($_GET['source']) && !empty($_GET['source']) ? sanitizeInput($_GET['source']) : 'Direct'; // Default to Direct
 
     // Store in session (lasts until browser close)
     $_SESSION['affiliate_ref'] = $refCode;

@@ -178,9 +178,11 @@ class Product
      */
     public function createProduct($data)
     {
-        // Ensure faqs is initialized if not present
+        // Ensure faqs is initialized and is JSON
         if (!isset($data['faqs'])) {
             $data['faqs'] = json_encode([]);
+        } elseif (is_array($data['faqs'])) {
+            $data['faqs'] = json_encode($data['faqs']);
         }
         return $this->db->insert('products', $data);
     }

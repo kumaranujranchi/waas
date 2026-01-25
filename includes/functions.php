@@ -155,7 +155,9 @@ function hasFlashMessage()
  */
 function baseUrl($path = '')
 {
-    return SITE_URL . '/' . ltrim($path, '/');
+    // Remove .php extension from path if it exists, preserving query params and fragments
+    $cleanPath = preg_replace('/\.php(\?|#|$)/', '$1', $path);
+    return SITE_URL . '/' . ltrim($cleanPath, '/');
 }
 
 /**

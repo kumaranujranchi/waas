@@ -398,7 +398,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                 <!-- Traditional (Left Card) -->
                 <div
-                    class="reveal opacity-0 -translate-x-8 transition-all duration-1000 delay-200 group relative bg-white dark:bg-[#151725] rounded-[2.5rem] p-8 md:p-12 border border-dashed border-gray-300 dark:border-white/10 overflow-hidden hover:border-gray-400 dark:hover:border-white/20 transition-colors">
+                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 -translate-x-8 transition-all duration-1000 delay-200 group relative bg-white dark:bg-[#151725] rounded-3xl md:rounded-[2.5rem] p-6 md:p-12 border border-dashed border-gray-300 dark:border-white/10 overflow-hidden hover:border-gray-400 dark:hover:border-white/20 transition-colors">
                     <!-- Graph Paper Pattern -->
                     <div class="absolute inset-0 opacity-[0.03] animate-pan"
                         style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 20px 20px;">
@@ -412,7 +412,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                 <span
                                     class="material-symbols-outlined text-gray-400 dark:text-gray-500 text-4xl">history</span>
                             </div>
-                            <h3 class="text-2xl font-black text-gray-600 dark:text-gray-300 mb-1">Traditional Web</h3>
+                            <h3 class="text-xl md:text-2xl font-black text-gray-600 dark:text-gray-300 mb-1">Traditional
+                                Web</h3>
                             <p class="text-xs font-bold uppercase tracking-widest text-gray-400">The Hard Way</p>
                         </div>
 
@@ -423,7 +424,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                     class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
                                     <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">High Upfront
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-base md:text-lg">High
+                                    Upfront
                                     Cost</span>
                             </li>
                             <li
@@ -432,7 +434,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                     class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
                                     <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">Static One-Time
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-base md:text-lg">Static
+                                    One-Time
                                     Delivery</span>
                             </li>
                             <li
@@ -441,7 +444,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                     class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
                                     <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">Paid
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-base md:text-lg">Paid
                                     Maintenance</span>
                             </li>
                             <li
@@ -450,7 +453,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                     class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
                                     <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">Updates are
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-base md:text-lg">Updates
+                                    are
                                     Expensive</span>
                             </li>
                             <li
@@ -459,7 +463,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                     class="size-8 rounded-full bg-red-50 dark:bg-red-900/10 text-red-500 flex items-center justify-center flex-shrink-0">
                                     <span class="material-symbols-outlined text-lg">close</span>
                                 </div>
-                                <span class="text-gray-600 dark:text-gray-400 font-medium text-lg">Weeks to
+                                <span class="text-gray-600 dark:text-gray-400 font-medium text-base md:text-lg">Weeks to
                                     Launch</span>
                             </li>
                         </ul>
@@ -468,14 +472,14 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
 
                 <!-- WaaS (Right Card - Premium) -->
                 <div
-                    class="reveal opacity-0 translate-x-8 transition-all duration-1000 delay-400 group relative bg-[#0f0e1b] rounded-[2.5rem] p-1 px-[3px] py-[3px] overflow-hidden shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-2 transition-all duration-500">
+                    class="reveal w-full max-w-xs mx-auto md:max-w-none md:mx-0 opacity-0 translate-x-8 transition-all duration-1000 delay-400 group relative bg-[#0f0e1b] rounded-3xl md:rounded-[2.5rem] p-1 px-[3px] py-[3px] overflow-hidden shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-2 transition-all duration-500">
                     <!-- Animated Border Gradient -->
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-primary via-purple-500 to-pink-500 animate-spin-slow opacity-100">
                     </div>
 
                     <div
-                        class="relative bg-white dark:bg-[#1a1c2e] rounded-[2.3rem] p-8 md:p-12 h-full overflow-hidden">
+                        class="relative bg-white dark:bg-[#1a1c2e] rounded-2xl md:rounded-[2.3rem] p-6 md:p-12 h-full overflow-hidden">
                         <!-- Glass Shine Effect -->
                         <div
                             class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-gradient-to-br from-white/40 to-transparent dark:from-white/10 rounded-full blur-3xl pointer-events-none">
@@ -495,7 +499,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                     class="size-24 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center mb-6 shadow-xl shadow-primary/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                                     <span class="material-symbols-outlined text-white text-5xl">rocket_launch</span>
                                 </div>
-                                <h3 class="text-3xl font-black text-[#0f0e1b] dark:text-white mb-1">Website as a Service
+                                <h3 class="text-2xl md:text-3xl font-black text-[#0f0e1b] dark:text-white mb-1">Website
+                                    as a Service
                                 </h3>
                                 <p class="text-xs font-bold uppercase tracking-widest text-primary">The Future is Here
                                 </p>
@@ -508,7 +513,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                         class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
                                         <span class="material-symbols-outlined text-lg">check</span>
                                     </div>
-                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Zero Upfront
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-base md:text-lg">Zero
+                                        Upfront
                                         Cost</span>
                                 </li>
                                 <li
@@ -517,7 +523,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                         class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
                                         <span class="material-symbols-outlined text-lg">check</span>
                                     </div>
-                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Simple
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-base md:text-lg">Simple
                                         Subscription</span>
                                 </li>
                                 <li
@@ -526,7 +532,7 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                         class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
                                         <span class="material-symbols-outlined text-lg">check</span>
                                     </div>
-                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Hosting
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-base md:text-lg">Hosting
                                         Included</span>
                                 </li>
                                 <li
@@ -535,7 +541,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                         class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
                                         <span class="material-symbols-outlined text-lg">check</span>
                                     </div>
-                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Free Updates &
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-base md:text-lg">Free
+                                        Updates &
                                         Support</span>
                                 </li>
                                 <li
@@ -544,7 +551,8 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                                         class="size-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-green-500/30">
                                         <span class="material-symbols-outlined text-lg">check</span>
                                     </div>
-                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-lg">Launch in Days</span>
+                                    <span class="text-[#0f0e1b] dark:text-white font-bold text-base md:text-lg">Launch
+                                        in Days</span>
                                 </li>
                             </ul>
                         </div>

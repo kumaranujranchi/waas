@@ -38,6 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result['success']) {
             setFlashMessage('success', 'Welcome back!');
+
+            // Check for redirect param
+            $redirectUrl = $_POST['redirect'] ?? ($_GET['redirect'] ?? null);
+            if ($redirectUrl) {
+                redirect(baseUrl($redirectUrl));
+            }
+
             if (isAdmin()) {
                 redirect(baseUrl('admin/index.php'));
             } else {
@@ -79,6 +86,11 @@ include __DIR__ . '/../includes/header.php';
             </div>
 
             <form method="POST" action="" class="space-y-6">
+                <!-- Preserve Redirect URL -->
+                <?php if (isset($_GET['redirect'])): ?>
+                    <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_GET['redirect']); ?>">
+                <?php endif; ?>
+
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Email Address</label>
                     <input type="email" name="email" required

@@ -61,8 +61,7 @@
                 <h4 class="text-[#0f0e1b] dark:text-white font-bold mb-6">Company</h4>
                 <ul class="flex flex-col gap-4 text-sm text-[#545095] dark:text-white/60">
                     <li><a class="hover:text-primary" href="<?php echo baseUrl('about.php'); ?>">About Us</a></li>
-                    <li><a class="hover:text-primary" href="<?php echo baseUrl('index.php#solutions'); ?>">Pricing</a>
-                    </li>
+                    <li><a class="hover:text-primary" href="<?php echo baseUrl('/#solutions'); ?>">Pricing</a></li>
                     <li><a class="hover:text-primary" href="#">Partners</a></li>
                     <li><a class="hover:text-primary" href="<?php echo baseUrl('consultation.php'); ?>">Contact</a></li>
                 </ul>

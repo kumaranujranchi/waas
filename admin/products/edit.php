@@ -158,8 +158,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<h3>2. Processed FAQs (JSON Source)</h3>";
                 echo "<pre>" . print_r($faqs, true) . "</pre>";
 
-                echo "<h3>3. Data Sent to Model</h3>";
-                echo "<pre>" . htmlspecialchars($data['faqs']) . "</pre>";
+                echo "<h3>3. Data Sent to Model (as Array)</h3>";
+                echo "<pre>" . print_r($data['faqs'], true) . "</pre>";
 
                 $db->commit();
 

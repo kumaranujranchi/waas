@@ -33,6 +33,7 @@ $referralLink = baseUrl("?ref=" . $affiliate['referral_code']);
 
 // 4. Output HTML (Header included LAST)
 $pageTitle = 'Affiliate Dashboard';
+$isAffiliatePortal = true; // Flag to hide standard menus
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
@@ -214,7 +215,8 @@ require_once __DIR__ . '/../includes/header.php';
                                                         <?php echo e($ref['source']); ?>
                                                     </span>
                                                 <?php else: ?>
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-50 text-gray-500 border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:text-gray-400">
+                                                    <span
+                                                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-50 text-gray-500 border border-gray-200 dark:bg-white/5 dark:border-white/10 dark:text-gray-400">
                                                         Direct
                                                     </span>
                                                 <?php endif; ?>

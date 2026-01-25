@@ -121,15 +121,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 // Add new FAQs
-                if (!empty($_POST['faq_question'])) {
-                    foreach ($_POST['faq_question'] as $index => $question) {
-                        $answer = $_POST['faq_answer'][$index] ?? '';
+                if (isset($_POST['faq_question']) && is_array($_POST['faq_question'])) {
+                    // Filter out empty questions
+                    $questions = array_values(array_filter($_POST['faq_question'], function ($q) {
+                        return !empty(trim($q)); }));
+                    $answers = array_values(array_filter($_POST['faq_answer'], function ($a) {
+                        return !empty(trim($a)); }));
+
+                    // Iterate based on the count of questions to avoid index mismatch
+                    $totalFaqs = count($questions);
+
+                    for ($i = 0; $i < $totalFaqs; $i++) {
+                        $question = $questions[$i];
+                        $answer = $answers[$i] ?? ''; // Safely get corresponding answer
+
                         if (!empty($question) && !empty($answer)) {
                             $productModel->createFAQ([
                                 'product_id' => $productId,
                                 'question' => sanitizeInput($question),
                                 'answer' => sanitizeInput($answer),
-                                'display_order' => $index
+                                'display_order' => $i
                             ]);
                         }
                     }

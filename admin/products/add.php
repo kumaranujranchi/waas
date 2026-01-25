@@ -100,32 +100,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
                 // Handle FAQs
-                if (!empty($_POST['faq_question'])) {
-                    // Debug: Log what we received
-                    error_log("FAQ Questions received: " . print_r($_POST['faq_question'], true));
-                    error_log("FAQ Answers received: " . print_r($_POST['faq_answer'], true));
+                if (isset($_POST['faq_question']) && is_array($_POST['faq_question'])) {
+                    // Filter out empty questions
+                    $questions = array_values(array_filter($_POST['faq_question'], function ($q) {
+                        return !empty(trim($q)); }));
+                    $answers = array_values(array_filter($_POST['faq_answer'], function ($a) {
+                        return !empty(trim($a)); }));
 
-                    foreach ($_POST['faq_question'] as $index => $question) {
-                        $answer = $_POST['faq_answer'][$index] ?? '';
+                    // Iterate based on the count of questions to avoid index mismatch
+                    $totalFaqs = count($questions);
 
-                        // Debug: Log each FAQ before processing
-                        error_log("Processing FAQ #$index - Q: $question | A: $answer");
+                    for ($i = 0; $i < $totalFaqs; $i++) {
+                        $question = $questions[$i];
+                        $answer = $answers[$i] ?? ''; // Safely get corresponding answer
 
                         if (!empty($question) && !empty($answer)) {
-                            $faqData = [
+                            $productModel->createFAQ([
                                 'product_id' => $productId,
                                 'question' => sanitizeInput($question),
                                 'answer' => sanitizeInput($answer),
-                                'display_order' => $index
-                            ];
-
-                            // Debug: Log sanitized data
-                            error_log("Sanitized FAQ #$index: " . print_r($faqData, true));
-
-                            $faqId = $productModel->createFAQ($faqData);
-                            error_log("FAQ #$index created with ID: $faqId");
-                        } else {
-                            error_log("FAQ #$index skipped - empty question or answer");
+                                'display_order' => $i
+                            ]);
                         }
                     }
                 }

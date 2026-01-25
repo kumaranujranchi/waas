@@ -72,7 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result['success'] && $referredBy) {
             // Track referral in referrals table
-            $affiliateModel->trackReferral($referredBy, $result['user_id']);
+            $source = $_SESSION['affiliate_source'] ?? ($_COOKIE['affiliate_source'] ?? null);
+            $affiliateModel->trackReferral($referredBy, $result['user_id'], $source);
         }
 
         if ($result['success']) {

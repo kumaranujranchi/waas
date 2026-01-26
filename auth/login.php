@@ -80,7 +80,7 @@ include __DIR__ . '/../includes/header.php';
 
         <div class="bg-white dark:bg-[#1c1b2e] rounded-2xl shadow-xl p-8 border border-slate-100 dark:border-white/5">
             <!-- Google Login -->
-            <a href="<?php echo baseUrl('auth/google_login.php'); ?>"
+            <a href="<?php echo baseUrl('auth/google_login.php' . ($redirectParam ? '?redirect=' . urlencode($redirectParam) : '')); ?>"
                 class="flex items-center justify-center w-full py-4 mb-6 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-50 dark:hover:bg-white/10 transition-all gap-3 group">
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="Google">
                 <span class="font-bold text-slate-700 dark:text-white">Continue with Google</span>
@@ -136,7 +136,7 @@ include __DIR__ . '/../includes/header.php';
             <div class="mt-6 text-center">
                 <p class="text-sm text-slate-600 dark:text-slate-400">
                     Don't have an account?
-                    <a href="<?php echo baseUrl('auth/register.php'); ?>"
+                    <a href="<?php echo baseUrl('auth/register.php' . ($redirectParam ? '?redirect=' . urlencode($redirectParam) : '')); ?>"
                         class="font-bold text-primary hover:underline">Sign up</a>
                 </p>
             </div>

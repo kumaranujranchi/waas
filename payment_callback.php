@@ -8,7 +8,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/config/config.php';
+if (!defined('CURRENCY_SYMBOL')) {
+    require_once __DIR__ . '/config/config.php';
+}
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/models/Order.php';
 require_once __DIR__ . '/models/Product.php';

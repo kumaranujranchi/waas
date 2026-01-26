@@ -192,4 +192,16 @@ class Order
 
         return $this->db->fetchAll($sql, [$limit]);
     }
+    /**
+     * Get order by transaction ID (mapped to payment_id column)
+     */
+    public function getOrderByTransactionId($transactionId)
+    {
+        $sql = "SELECT o.*, u.full_name as user_name, u.email as user_email 
+                FROM orders o 
+                LEFT JOIN users u ON o.user_id = u.id 
+                WHERE o.payment_id = ?";
+
+        return $this->db->fetchOne($sql, [$transactionId]);
+    }
 }

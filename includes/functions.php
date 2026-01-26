@@ -263,21 +263,42 @@ function verifyCsrfToken($token)
 }
 
 /**
- * Pagination helper
+ * Create Razorpay Subscription
  */
-function paginate($totalItems, $currentPage = 1, $itemsPerPage = ITEMS_PER_PAGE)
+function createRazorpaySubscription($planId, $totalCount = 120, $startAt = null)
 {
-    $totalPages = ceil($totalItems / $itemsPerPage);
-    $currentPage = max(1, min($currentPage, $totalPages));
-    $offset = ($currentPage - 1) * $itemsPerPage;
+    $apiKey = defined('RAZORPAY_KEY_ID') ? RAZORPAY_KEY_ID : '';
+    $apiSecret = defined('RAZORPAY_KEY_SECRET') ? RAZORPAY_KEY_SECRET : '';
 
-    return [
-        'total_items' => $totalItems,
-        'total_pages' => $totalPages,
-        'current_page' => $currentPage,
-        'items_per_page' => $itemsPerPage,
-        'offset' => $offset,
-        'has_prev' => $currentPage > 1,
-        'has_next' => $currentPage < $totalPages
+    if (empty($apiKey) || empty($apiSecret)) {
+        return ['error' => 'Razorpay keys not configured'];
+    }
+
+    $data = [
+        'plan_id' => $planId,
+        'total_count' => $totalCount, // Number of billing cycles
+        'quantity' => 1,
+        'customer_notify' => 1,
     ];
+
+    if ($startAt) {
+        $data['start_at'] = $startAt;
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://api.razorpay.com/v1/subscriptions');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_USERPWD, $apiKey . ':' . $apiSecret);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+    $result = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return ['error' => curl_error($ch)];
+    }
+    curl_close($ch);
+
+    return json_decode($result, true);
 }
+

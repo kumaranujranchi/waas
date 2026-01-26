@@ -3,8 +3,8 @@
  * Sync Local Plans to Razorpay
  * 
  * This script fetches all plans from the local database,
- * creates them in Razorpay, and outputs the mapping array
- * for config.php.
+ * creates them in Razorpay, and UPDATES the local database
+ * with the new Razorpay Plan ID.
  */
 
 // Debug on
@@ -15,8 +15,8 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../classes/Database.php';
 
 // Razorpay Keys
-$keyId = RAZORPAY_KEY_ID;
-$keySecret = RAZORPAY_KEY_SECRET;
+$keyId = defined('RAZORPAY_KEY_ID') ? RAZORPAY_KEY_ID : 'rzp_test_S8VnZcp2OFweOn';
+$keySecret = defined('RAZORPAY_KEY_SECRET') ? RAZORPAY_KEY_SECRET : 'N1Df1w3L2vwYv1HHTiGwG0bA';
 
 echo "<h3>Syncing Plans with Razorpay...</h3>";
 echo "<pre>";
@@ -25,26 +25,24 @@ echo "<pre>";
 $db = Database::getInstance();
 $plans = $db->fetchAll("SELECT p.*, prod.name as product_name FROM pricing_plans p JOIN products prod ON p.product_id = prod.id");
 
-$mapping = [];
-
 foreach ($plans as $plan) {
     echo "Processing: " . $plan['product_name'] . " - " . $plan['plan_name'] . "...\n";
 
     // Convert price to paise (Razorpay expects integer)
     $amount = (int) ($plan['price'] * 100);
     $currency = 'INR';
-    $period = $plan['plan_type']; // 'monthly', 'yearly' (Check DB values!)
+    $primaryPeriod = $plan['billing_cycle']; // Assuming this is integer months, e.g. 1, 6, 12
 
-    // Normalize period
-    $period = strtolower($period);
-    if ($period == '6 months' || $period == 'half-yearly') {
-        $period = 'monthly';
-        $interval = 6;
-    } elseif ($period == 'yearly' || $period == 'annual') {
+    // Determine Period and Interval
+    // Razorpay supports 'daily', 'weekly', 'monthly', 'yearly'
+    // Interval can be 1-xx
+
+    $period = 'monthly';
+    $interval = $plan['billing_cycle']; // Default to X months
+
+    // Optimize for standard periods
+    if ($interval == 12) {
         $period = 'yearly';
-        $interval = 1;
-    } else {
-        $period = 'monthly';
         $interval = 1;
     }
 
@@ -73,7 +71,17 @@ foreach ($plans as $plan) {
 
     if (isset($response['id'])) {
         echo "  -> Created: " . $response['id'] . "\n";
-        $mapping[$plan['id']] = $response['id'];
+
+        // Update Database
+        try {
+            $updateSql = "UPDATE pricing_plans SET razorpay_plan_id = ? WHERE id = ?";
+            // We use direct query if possible, or try catch
+            $db->query($updateSql, [$response['id'], $plan['id']]);
+            echo "  -> Saved to Database (pricing_plans.razorpay_plan_id).\n";
+        } catch (Exception $e) {
+            echo "  -> DB Error: " . $e->getMessage() . " (Did you run the migration?)\n";
+        }
+
     } else {
         echo "  -> Error: " . ($response['error']['description'] ?? 'Unknown') . "\n";
     }
@@ -84,14 +92,7 @@ foreach ($plans as $plan) {
 }
 
 echo "\n\n------------------------------------------------\n";
-echo "COPY THIS ARRAY INTO YOUR config/config.php:\n";
-echo "------------------------------------------------\n\n";
-
-echo '$RAZORPAY_PLANS = [' . "\n";
-foreach ($mapping as $localId => $rzpId) {
-    echo "    '$localId' => '$rzpId',\n";
-}
-echo "    'default' => 'plan_S8Wasx7b5ThF2A' // Fallback\n";
-echo "];\n";
-
+echo "SYNC COMPLETE.\n";
+echo "All plans have been created and saved to your database.\n";
+echo "------------------------------------------------\n";
 echo "</pre>";

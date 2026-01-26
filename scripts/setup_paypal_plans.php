@@ -9,8 +9,18 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../classes/Database.php';
 require_once __DIR__ . '/../includes/functions.php';
 
-echo "--- PayPal Plan Automation starting ---\n";
+// Optimization for Browser run
+if (php_sapi_name() !== 'cli') {
+    set_time_limit(0);
+    ob_implicit_flush(true);
+    while (ob_get_level())
+        ob_end_flush();
+    echo "<pre>"; // Preserve spacing for logs
+}
 
+echo "--- PayPal Plan Automation starting ---\n";
+echo str_repeat(" ", 1024); // Pad to force browser to render early
+echo "\n";
 // 1. Create a general product for the platform if not already done
 echo "Creating/Getting PayPal Product...\n";
 $productResponse = createPayPalProduct("SiteOnSub Services", "Subscription services for SiteOnSub platform");

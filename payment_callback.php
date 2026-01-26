@@ -3,9 +3,15 @@
  * Payment Callback - Handle Razorpay Response
  */
 
+// Debugging - Remove in production later
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/models/Order.php';
+require_once __DIR__ . '/models/Product.php';
 require_once __DIR__ . '/models/Subscription.php';
 
 // Check if we have the necessary POST parameters

@@ -226,14 +226,14 @@ if (!is_array($faqs)) {
                 stage. No hidden fees, cancel anytime.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
+        <div class="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto items-start">
             <?php foreach ($pricingPlans as $index => $plan):
                 $isPopular = $plan['is_popular'] ?? false;
                 $features = !empty($plan['features']) ? json_decode($plan['features'], true) : [];
                 $features = is_array($features) ? $features : [];
                 ?>
                 <div
-                    class="relative flex flex-col p-8 rounded-[2rem] transition-all duration-300 <?php echo $isPopular ? 'bg-[#0f0e1b] dark:bg-white text-white dark:text-[#0f0e1b] shadow-2xl scale-105 z-10' : 'bg-white dark:bg-[#1a1c2e] border border-gray-100 dark:border-white/5 text-[#0f0e1b] dark:text-white hover:shadow-xl'; ?>">
+                    class="relative flex flex-col p-8 rounded-[2rem] w-full md:w-[380px] transition-all duration-300 <?php echo $isPopular ? 'bg-[#0f0e1b] dark:bg-white text-white dark:text-[#0f0e1b] shadow-2xl scale-105 z-10' : 'bg-white dark:bg-[#1a1c2e] border border-gray-100 dark:border-white/5 text-[#0f0e1b] dark:text-white hover:shadow-xl'; ?>">
 
                     <?php if ($isPopular): ?>
                         <div

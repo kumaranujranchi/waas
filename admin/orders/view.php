@@ -191,6 +191,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php echo e($order['payment_id'] ?: 'N/A'); ?>
                         </p>
                     </div>
+                    <?php if (!empty($order['service_expire']) || strpos(strtolower($order['payment_method'] ?? ''), 'subscription') !== false): ?>
+                        <div
+                            class="col-span-1 md:col-span-2 p-4 bg-primary/5 rounded-2xl border border-primary/10 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] font-black text-primary uppercase tracking-widest mb-1">Service
+                                    Validity</p>
+                                <p class="text-md font-black text-[#0f0e1b] dark:text-white">
+                                    <?php if (!empty($order['service_expire'])): ?>
+                                        <?php echo date('M d, Y', strtotime($order['service_start'])); ?> —
+                                        <?php echo date('M d, Y', strtotime($order['service_expire'])); ?>
+                                    <?php else: ?>
+                                        <span class="text-gray-400 italic">No validity data linked</span>
+                                    <?php endif; ?>
+                                </p>
+                            </div>
+                            <?php if (!empty($order['subscription_status'])): ?>
+                                <span
+                                    class="px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest <?php
+                                    echo $order['subscription_status'] === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'; ?>">
+                                    <?php echo $order['subscription_status']; ?>
+                                </span>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                     <div>
                         <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Currency</p>
                         <p class="text-sm font-black text-[#0f0e1b] dark:text-white uppercase">

@@ -8,7 +8,7 @@ require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/functions.php';
 
 // Remove strict login requirement for viewing the page
-// requireLogin(); 
+// requireLogin();
 
 require_once __DIR__ . '/models/Product.php';
 require_once __DIR__ . '/models/Order.php';
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         // RAZORPAY FLOW
-        // 1. Get Razorpay Plan ID from Config/Mapping
+// 1. Get Razorpay Plan ID from Config/Mapping
         global $RAZORPAY_PLANS;
 
         // Debug: Ensure array is available or reload config if needed
@@ -143,7 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!$razorpayPlanId) {
-            $debugInfo = isset($RAZORPAY_PLANS) ? "Keys available: " . implode(', ', array_keys($RAZORPAY_PLANS)) : "Config not loaded";
+            $debugInfo = isset($RAZORPAY_PLANS) ? "Keys available: " . implode(', ', array_keys($RAZORPAY_PLANS)) : "Config not
+loaded";
             $error = "Payment plan configuration missing for Plan ID: {$planId}. ({$debugInfo}) Please contact support.";
         } else {
             // 2. Create Subscription on Razorpay
@@ -239,31 +240,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Razorpay -->
                             <label
-                                class="relative flex items-center p-4 border-2 rounded-xl cursor-pointer hover:border-primary/50 transition-all group has-[:checked]:border-primary has-[:checked]:bg-primary/5 border-gray-100 dark:border-white/5">
-                                <input type="radio" name="payment_method" value="razorpay" checked class="sr-only">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="size-6 rounded-full border-2 border-gray-300 flex items-center justify-center group-has-[:checked]:border-primary group-has-[:checked]:after:content-[''] group-has-[:checked]:after:size-3 group-has-[:checked]:after:rounded-full group-has-[:checked]:after:bg-primary transition-all">
-                                    </div>
-                                    <div>
-                                        <p class="font-bold text-[#0f0e1b] dark:text-white">Razorpay (India)</p>
-                                        <p class="text-xs text-gray-500">Cards, UPI, Netbanking</p>
-                                    </div>
+                                class="relative flex items-center p-4 border-2 rounded-xl cursor-pointer hover:border-primary/50 transition-all border-gray-100 dark:border-white/5 payment-method-card">
+                                <input type="radio" name="payment_method" value="razorpay" checked
+                                    class="mr-3 w-5 h-5 accent-primary">
+                                <div>
+                                    <p class="font-bold text-[#0f0e1b] dark:text-white">Razorpay (India)</p>
+                                    <p class="text-xs text-gray-500">Cards, UPI, Netbanking</p>
                                 </div>
                             </label>
 
                             <!-- PayPal -->
                             <label
-                                class="relative flex items-center p-4 border-2 rounded-xl cursor-pointer hover:border-primary/50 transition-all group has-[:checked]:border-primary has-[:checked]:bg-primary/5 border-gray-100 dark:border-white/5">
-                                <input type="radio" name="payment_method" value="paypal" class="sr-only">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="size-6 rounded-full border-2 border-gray-300 flex items-center justify-center group-has-[:checked]:border-primary group-has-[:checked]:after:content-[''] group-has-[:checked]:after:size-3 group-has-[:checked]:after:rounded-full group-has-[:checked]:after:bg-primary transition-all">
-                                    </div>
-                                    <div>
-                                        <p class="font-bold text-[#0f0e1b] dark:text-white">PayPal (International)</p>
-                                        <p class="text-xs text-gray-500">Checkout with PayPal or Card</p>
-                                    </div>
+                                class="relative flex items-center p-4 border-2 rounded-xl cursor-pointer hover:border-primary/50 transition-all border-gray-100 dark:border-white/5 payment-method-card">
+                                <input type="radio" name="payment_method" value="paypal"
+                                    class="mr-3 w-5 h-5 accent-primary">
+                                <div>
+                                    <p class="font-bold text-[#0f0e1b] dark:text-white">PayPal (International)</p>
+                                    <p class="text-xs text-gray-500">Checkout with PayPal or Card</p>
                                 </div>
                             </label>
                         </div>
@@ -323,7 +316,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <span class="material-symbols-outlined">payments</span>
                                         Checkout Now
                                     </button>
-                                    <a href="<?php echo baseUrl('product-detail.php?slug=' . $plan['product_id']); ?>"
+                                    <a href="<?php echo baseUrl('product-detail.php?slug=' . ($plan['product_slug'] ?? '')); ?>"
                                         class="w-full py-2 text-gray-500 dark:text-gray-400 text-sm font-medium hover:text-gray-700 dark:hover:text-white transition-colors text-center block">
                                         Cancel
                                     </a>

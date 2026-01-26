@@ -157,7 +157,7 @@ class Product
      */
     public function getPricingPlanById($planId)
     {
-        $sql = "SELECT pp.*, p.name as product_name 
+        $sql = "SELECT pp.*, p.name as product_name, p.slug as product_slug 
                 FROM pricing_plans pp 
                 LEFT JOIN products p ON pp.product_id = p.id 
                 WHERE pp.id = ? AND pp.status = 'active'";

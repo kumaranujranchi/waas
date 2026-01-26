@@ -66,7 +66,8 @@ $completedOrders = array_filter($orders, fn($o) => $o['payment_status'] === 'com
 <div class="bg-white dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10 p-6 mb-8">
     <div class="flex items-center justify-between mb-6">
         <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white">Payment Methods</h3>
-        <button class="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-all flex items-center gap-2">
+        <button
+            class="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-all flex items-center gap-2">
             <span class="material-symbols-outlined">add</span>
             Add Payment Method
         </button>
@@ -76,7 +77,8 @@ $completedOrders = array_filter($orders, fn($o) => $o['payment_status'] === 'com
         <!-- Sample Payment Method -->
         <div class="flex items-center justify-between p-4 border border-gray-200 dark:border-white/10 rounded-lg">
             <div class="flex items-center gap-4">
-                <div class="w-12 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded flex items-center justify-center text-white font-bold text-xs">
+                <div
+                    class="w-12 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded flex items-center justify-center text-white font-bold text-xs">
                     VISA
                 </div>
                 <div>
@@ -85,16 +87,19 @@ $completedOrders = array_filter($orders, fn($o) => $o['payment_status'] === 'com
                 </div>
             </div>
             <div class="flex gap-2">
-                <button class="px-3 py-1 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 rounded transition-all">
+                <button
+                    class="px-3 py-1 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 rounded transition-all">
                     Edit
                 </button>
-                <button class="px-3 py-1 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-all">
+                <button
+                    class="px-3 py-1 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-all">
                     Remove
                 </button>
             </div>
         </div>
 
-        <p class="text-sm text-gray-600 dark:text-gray-400">No payment methods added. Add one to make purchases easier.</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400">No payment methods added. Add one to make purchases easier.
+        </p>
     </div>
 </div>
 
@@ -112,12 +117,18 @@ $completedOrders = array_filter($orders, fn($o) => $o['payment_status'] === 'com
             <table class="w-full">
                 <thead class="bg-gray-50 dark:bg-white/5 border-b border-gray-200 dark:border-white/10">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Date</th>
-                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Invoice #</th>
-                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Description</th>
-                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Amount</th>
-                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Status</th>
-                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Action</th>
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Date
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Invoice
+                            #</th>
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">
+                            Description</th>
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Amount
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Status
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Action
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-white/10">
@@ -136,20 +147,21 @@ $completedOrders = array_filter($orders, fn($o) => $o['payment_status'] === 'com
                                 <?php echo formatPrice($order['final_amount']); ?>
                             </td>
                             <td class="px-4 py-3">
-                                <span class="px-2 py-1 text-xs font-bold rounded-full <?php 
-                                    $statusClass = [
-                                        'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-                                        'completed' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-                                        'failed' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-                                    ];
-                                    echo $statusClass[$order['payment_status']] ?? $statusClass['pending'];
+                                <span class="px-2 py-1 text-xs font-bold rounded-full <?php
+                                $statusClass = [
+                                    'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+                                    'completed' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+                                    'failed' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+                                ];
+                                echo $statusClass[$order['payment_status']] ?? $statusClass['pending'];
                                 ?>">
                                     <?php echo ucfirst($order['payment_status']); ?>
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-sm">
                                 <?php if ($order['payment_status'] === 'completed'): ?>
-                                    <a href="#" class="text-primary font-medium hover:underline">Download</a>
+                                    <a href="<?php echo baseUrl('dashboard/invoice.php?order_id=' . $order['id']); ?>"
+                                        class="text-primary font-medium hover:underline" target="_blank">Download</a>
                                 <?php endif; ?>
                             </td>
                         </tr>

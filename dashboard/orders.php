@@ -116,7 +116,7 @@ $orders = $orderModel->getUserOrders($userId);
                                 View Details
                             </a>
                             <?php if ($order['payment_status'] === 'completed'): ?>
-                                <a href="#"
+                                <a href="<?php echo baseUrl('dashboard/invoice.php?order_id=' . $order['id']); ?>" target="_blank"
                                     class="inline-flex items-center gap-2 px-6 py-2.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-200 rounded-lg font-bold hover:bg-gray-50 dark:hover:bg-white/20 transition-all">
                                     <span class="material-symbols-outlined text-sm">download</span>
                                     Invoice

@@ -84,7 +84,7 @@ if (!$order || $order['user_id'] != getCurrentUserId()) {
                 <span class="material-symbols-outlined text-xl">speed</span>
                 Go to Dashboard
             </a>
-            <a href="<?php echo baseUrl('dashboard/orders.php'); ?>"
+            <a href="<?php echo baseUrl('dashboard/invoice.php?order_id=' . $order['id']); ?>" target="_blank"
                 class="flex-1 py-4 bg-white dark:bg-white/5 text-[#0f0e1b] dark:text-white border-2 border-gray-200 dark:border-white/10 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined text-xl">receipt</span>
                 View Invoice

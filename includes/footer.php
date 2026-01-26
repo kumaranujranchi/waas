@@ -77,6 +77,8 @@
                     </li>
                     <li><a class="hover:text-primary" href="<?php echo baseUrl('cookie-policy.php'); ?>">Cookie
                             Policy</a></li>
+                    <li><a class="hover:text-primary" href="<?php echo baseUrl('shipping-policy.php'); ?>">Shipping Policy</a></li>
+                    <li><a class="hover:text-primary" href="<?php echo baseUrl('cancellation-refund-policy.php'); ?>">Cancellation & Refunds</a></li>
                 </ul>
             </div>
         </div>

@@ -69,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if configuration exists
     $razorpayPlanId = null;
     if (isset($RAZORPAY_PLANS) && is_array($RAZORPAY_PLANS)) {
-        $razorpayPlanId = $RAZORPAY_PLANS[$planId] ?? $RAZORPAY_PLANS['default'] ?? null;
+        // Try exact match -> try config default -> hardcoded fallback
+        $razorpayPlanId = $RAZORPAY_PLANS[$planId] ?? $RAZORPAY_PLANS['default'] ?? 'plan_monthly_default';
     }
 
     if (!$razorpayPlanId) {

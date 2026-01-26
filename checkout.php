@@ -240,9 +240,9 @@ loaded";
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Razorpay -->
                             <label
-                                class="relative flex items-center p-4 border-2 rounded-xl cursor-pointer hover:border-primary/50 transition-all border-gray-100 dark:border-white/5 payment-method-card">
+                                class="relative flex items-center p-5 border-2 rounded-xl cursor-pointer hover:border-primary transition-all border-gray-100 dark:border-white/5 bg-white dark:bg-white/5">
                                 <input type="radio" name="payment_method" value="razorpay" checked
-                                    class="mr-3 w-5 h-5 accent-primary">
+                                    class="w-5 h-5 accent-primary mr-4">
                                 <div>
                                     <p class="font-bold text-[#0f0e1b] dark:text-white">Razorpay (India)</p>
                                     <p class="text-xs text-gray-500">Cards, UPI, Netbanking</p>
@@ -251,9 +251,9 @@ loaded";
 
                             <!-- PayPal -->
                             <label
-                                class="relative flex items-center p-4 border-2 rounded-xl cursor-pointer hover:border-primary/50 transition-all border-gray-100 dark:border-white/5 payment-method-card">
+                                class="relative flex items-center p-5 border-2 rounded-xl cursor-pointer hover:border-primary transition-all border-gray-100 dark:border-white/5 bg-white dark:bg-white/5">
                                 <input type="radio" name="payment_method" value="paypal"
-                                    class="mr-3 w-5 h-5 accent-primary">
+                                    class="w-5 h-5 accent-primary mr-4">
                                 <div>
                                     <p class="font-bold text-[#0f0e1b] dark:text-white">PayPal (International)</p>
                                     <p class="text-xs text-gray-500">Checkout with PayPal or Card</p>
@@ -264,8 +264,7 @@ loaded";
 
                     <div class="grid md:grid-cols-2 gap-10">
                         <div class="space-y-6">
-                            <div
-                                class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex items-start gap-3">
+                            <div class="p-4 bg-gray-50 dark:bg-white/5 rounded-lg flex items-start gap-3">
                                 <span class="material-symbols-outlined text-primary">verified_user</span>
                                 <div>
                                     <p class="text-sm font-bold text-gray-900 dark:text-white">Secure Transaction</p>
@@ -273,8 +272,7 @@ loaded";
                                         using 256-bit SSL technology.</p>
                                 </div>
                             </div>
-                            <div
-                                class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex items-start gap-3">
+                            <div class="p-4 bg-gray-50 dark:bg-white/5 rounded-lg flex items-start gap-3">
                                 <span class="material-symbols-outlined text-primary">sync</span>
                                 <div>
                                     <p class="text-sm font-bold text-gray-900 dark:text-white">Automatic Renewal</p>
@@ -284,8 +282,7 @@ loaded";
                             </div>
                         </div>
 
-                        <div
-                            class="bg-background-light dark:bg-background-dark/50 p-6 rounded-xl flex flex-col justify-between">
+                        <div class="bg-gray-50 dark:bg-white/5 p-6 rounded-xl flex flex-col justify-between">
                             <div class="space-y-4">
                                 <div class="flex justify-between items-center text-sm">
                                     <span class="text-gray-500 dark:text-gray-400">Subtotal</span>
@@ -312,7 +309,7 @@ loaded";
                             <?php if ($isLoggedIn): ?>
                                 <div class="mt-8 space-y-4">
                                     <button type="submit"
-                                        class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-lg shadow-lg hover:shadow-primary/20 brightness-110 transition-all flex items-center justify-center gap-2">
+                                        class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-lg shadow-lg transition-all flex items-center justify-center gap-2">
                                         <span class="material-symbols-outlined">payments</span>
                                         Checkout Now
                                     </button>

@@ -233,7 +233,7 @@ if (!is_array($faqs)) {
                 $features = is_array($features) ? $features : [];
                 ?>
                 <div
-                    class="relative flex flex-col p-8 rounded-[2rem] w-full md:w-[380px] transition-all duration-300 <?php echo $isPopular ? 'bg-[#0f0e1b] dark:bg-white text-white dark:text-[#0f0e1b] shadow-2xl scale-105 z-10' : 'bg-white dark:bg-[#1a1c2e] border border-gray-100 dark:border-white/5 text-[#0f0e1b] dark:text-white hover:shadow-xl'; ?>">
+                    class="relative flex flex-col p-8 rounded-[2rem] w-full md:w-[340px] transition-all duration-300 <?php echo $isPopular ? 'bg-[#0f0e1b] dark:bg-white text-white dark:text-[#0f0e1b] shadow-2xl scale-105 z-10' : 'bg-white dark:bg-[#1a1c2e] border border-gray-100 dark:border-white/5 text-[#0f0e1b] dark:text-white hover:shadow-xl'; ?>">
 
                     <?php if ($isPopular): ?>
                         <div

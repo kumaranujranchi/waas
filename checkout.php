@@ -12,6 +12,7 @@ error_reporting(E_ALL);
 define('DEBUG_MODE', true);
 
 require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/config/database.php'; // Fix: Include database config
 require_once __DIR__ . '/includes/functions.php';
 
 // Models

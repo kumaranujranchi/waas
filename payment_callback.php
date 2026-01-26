@@ -3,14 +3,15 @@
  * Payment Callback - Handle Razorpay Response
  */
 
-// Debugging - Remove in production later
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Output buffering to prevent header errors from warnings
+ob_start();
 
-if (!defined('CURRENCY_SYMBOL')) {
-    require_once __DIR__ . '/config/config.php';
-}
+// Debugging - Remove in production later (optional, set to 0 to be safe)
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(0);
+
+require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/models/Order.php';
 require_once __DIR__ . '/models/Product.php';

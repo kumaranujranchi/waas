@@ -7,6 +7,7 @@ require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../includes/functions.php';
 require_once __DIR__ . '/../../models/Consultation.php';
+require_once __DIR__ . '/../../classes/Mail.php';
 
 // Start session if needed
 if (session_status() === PHP_SESSION_NONE) {
@@ -22,6 +23,15 @@ $consultationModel = new Consultation();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'update_status' && isset($_POST['id'], $_POST['status'])) {
         $consultationModel->updateBookingStatus($_POST['id'], $_POST['status']);
+
+        // If status changed to confirmed, send confirmation email
+        if ($_POST['status'] === 'confirmed') {
+            $booking = $consultationModel->getBookingById($_POST['id']);
+            if ($booking) {
+                Mail::sendBookingConfirmation($booking['email'], $booking['full_name'], $booking);
+            }
+        }
+
         setFlashMessage('success', 'Status updated successfully');
         redirect($_SERVER['PHP_SELF']);
     }

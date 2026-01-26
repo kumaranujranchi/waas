@@ -17,6 +17,7 @@ require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/models/Order.php';
 require_once __DIR__ . '/models/Product.php';
 require_once __DIR__ . '/models/Subscription.php';
+require_once __DIR__ . '/classes/Mail.php';
 
 // Defensive: Ensure SITE_URL is defined if config failed to load completely
 if (!defined('SITE_URL')) {
@@ -91,7 +92,13 @@ if (hash_equals($expectedSignature, $signature)) {
                     'stripe_subscription_id' => $subscriptionId // Storing Razorpay Sub ID in this column for now
                 ];
 
-                $subscriptionModel->createSubscription($subscriptionData);
+                $subId = $subscriptionModel->createSubscription($subscriptionData);
+                if ($subId) {
+                    $orderModel->setSubscriptionId($order['id'], $subId);
+
+                    // Send Order Confirmation Email
+                    Mail::sendOrderConfirmation($order['user_email'], $order['user_name'], $order);
+                }
             }
 
             setFlashMessage('success', 'Payment successful! Your subscription is now active.');

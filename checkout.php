@@ -4,6 +4,9 @@
  */
 
 // Start session and includes BEFORE any output
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/functions.php';
 
@@ -197,9 +200,9 @@ include __DIR__ . '/includes/header.php';
 <main class="flex-1 flex justify-center py-12 px-4">
     <div class="max-w-[720px] w-full space-y-8">
         <div class="text-center md:text-left">
-            <h1 class="text-[#0f0e1b] dark:text-white text-4xl font-black leading-tight tracking-tight">Review and Pay
-            </h1>
-            <p class="text-primary dark:text-primary/80 text-lg font-medium mt-2">Complete your subscription to get
+            <h1 class="text-[#0f0e1b] dark:text-white text-4xl font-extrabold leading-tight tracking-tight">Review and
+                Pay</h1>
+            <p class="text-blue-600 dark:text-blue-400 text-lg font-medium mt-2">Complete your subscription to get
                 started</p>
         </div>
 
@@ -214,16 +217,14 @@ include __DIR__ . '/includes/header.php';
             class="bg-white dark:bg-[#1e1d2d] rounded-xl shadow-xl overflow-hidden border border-gray-100 dark:border-white/5">
             <!-- Selected Plan -->
             <div class="p-6 border-b border-gray-100 dark:border-white/5 bg-primary/5">
-                <div class="flex flex-col gap-4">
-                    <span class="text-primary text-xs font-bold uppercase tracking-wider">Current Selection</span>
+                <div class="flex flex-col gap-2">
+                    <span class="text-blue-600 text-xs font-bold uppercase tracking-wider">Current Selection</span>
                     <h3 class="text-[#0f0e1b] dark:text-white text-xl font-bold">
-                        <?php echo e($plan['product_name']); ?> -
-                        <?php echo e($plan['plan_name']); ?>
+                        <?php echo e($plan['product_name']); ?> - <?php echo e($plan['plan_name']); ?>
                     </h3>
                     <p class="text-gray-500 dark:text-gray-400 text-sm">
-                        <?php echo e($plan['plan_type']); ?> billing -
-                        <?php echo formatPrice($plan['price']); ?> /
-                        <?php echo $plan['billing_cycle']; ?> months
+                        <?php echo e(ucfirst($plan['plan_type'])); ?> billing -
+                        <?php echo formatPrice($plan['price']); ?> / <?php echo $plan['billing_cycle']; ?> months
                     </p>
                 </div>
             </div>
@@ -299,7 +300,7 @@ include __DIR__ . '/includes/header.php';
                                 <div class="h-px bg-gray-200 dark:bg-white/10 my-2"></div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-lg font-bold text-gray-900 dark:text-white">Total</span>
-                                    <span class="text-2xl font-black text-primary">
+                                    <span class="text-2xl font-bold text-blue-600">
                                         <?php echo formatPrice($total); ?>
                                     </span>
                                 </div>
@@ -370,3 +371,4 @@ include __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
+<!-- Execution Complete Marker -->

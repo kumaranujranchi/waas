@@ -51,25 +51,28 @@ $orders = $orderModel->getUserOrders($userId);
                         </div>
                         <div class="flex flex-col md:items-end gap-2">
                             <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold shadow-sm <?php
-                            $statusClass = [
+                            $payStatusClass = [
                                 'pending' => 'bg-yellow-50 text-yellow-700 border border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-900/30',
                                 'completed' => 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/30',
                                 'failed' => 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30',
-                                'cancelled' => 'bg-gray-50 text-gray-700 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-white/10',
                             ];
-                            echo $statusClass[$order['payment_status']] ?? $statusClass['pending'];
+                            echo $payStatusClass[$order['payment_status']] ?? $payStatusClass['pending'];
                             ?>">
-                                <span class="w-1.5 h-1.5 rounded-full mr-2 <?php
-                                $dotClass = [
-                                    'pending' => 'bg-yellow-500',
-                                    'completed' => 'bg-green-500',
-                                    'failed' => 'bg-red-500',
-                                    'cancelled' => 'bg-gray-500',
-                                ];
-                                echo $dotClass[$order['payment_status']] ?? $dotClass['pending'];
-                                ?>"></span>
-                                <?php echo ucfirst($order['payment_status']); ?>
+                                Pay: <?php echo ucfirst($order['payment_status']); ?>
                             </span>
+                            <?php if (!empty($order['order_status'])): ?>
+                                <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold shadow-sm mt-2 <?php
+                                $opsClass = [
+                                    'pending' => 'bg-gray-50 text-gray-700 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-white/10',
+                                    'processing' => 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/30',
+                                    'completed' => 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/30',
+                                    'cancelled' => 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30',
+                                ];
+                                echo $opsClass[$order['order_status']] ?? $opsClass['pending'];
+                                ?>">
+                                    Order: <?php echo ucfirst($order['order_status']); ?>
+                                </span>
+                            <?php endif; ?>
                             <span class="text-3xl font-black text-primary">
                                 <?php echo formatPrice($order['final_amount']); ?>
                             </span>

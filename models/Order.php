@@ -104,9 +104,21 @@ class Order
             require_once __DIR__ . '/Affiliate.php';
             $affiliateModel = new Affiliate();
             $affiliateModel->processCommission($id);
+
+            // Also update order_status to processing or completed? 
+            // Usually, payment completed means order is at least 'processing'
+            $this->updateOperationalStatus($id, 'processing');
         }
 
         return $updated;
+    }
+
+    /**
+     * Update operational/fulfillment status
+     */
+    public function updateOperationalStatus($id, $status)
+    {
+        return $this->db->update('orders', ['order_status' => $status], 'id = ?', [$id]);
     }
 
     /**

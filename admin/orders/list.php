@@ -110,8 +110,22 @@ $orders = $orderModel->getAllOrders();
                                     <span
                                         class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest <?php echo $current['color']; ?>">
                                         <span class="size-1.5 rounded-full <?php echo $current['dot']; ?>"></span>
-                                        <?php echo $order['payment_status']; ?>
+                                        Pay: <?php echo $order['payment_status']; ?>
                                     </span>
+                                    <?php if (!empty($order['order_status'])):
+                                        $opsConfig = [
+                                            'pending' => 'bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-400',
+                                            'processing' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400',
+                                            'completed' => 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400',
+                                            'cancelled' => 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400'
+                                        ];
+                                        $opsColor = $opsConfig[$order['order_status']] ?? $opsConfig['pending'];
+                                        ?>
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest ml-1 <?php echo $opsColor; ?>">
+                                            Order: <?php echo $order['order_status']; ?>
+                                        </span>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="px-8 py-6">
                                     <div class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase">

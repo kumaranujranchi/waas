@@ -50,12 +50,29 @@ class Order
      */
     public function getOrderById($id)
     {
-        $sql = "SELECT o.*, u.full_name as user_name, u.email as user_email 
+        // Try direct link first
+        $sql = "SELECT o.*, u.full_name as user_name, u.email as user_email,
+                       s.start_date as service_start, s.end_date as service_expire, s.subscription_status
                 FROM orders o 
                 LEFT JOIN users u ON o.user_id = u.id 
+                LEFT JOIN subscriptions s ON o.subscription_id = s.id
                 WHERE o.id = ?";
 
-        return $this->db->fetchOne($sql, [$id]);
+        $order = $this->db->fetchOne($sql, [$id]);
+
+        // Fallback: If no direct link, try to guess from the user's latest subscription
+        if ($order && empty($order['service_expire'])) {
+            $subSql = "SELECT start_date as service_start, end_date as service_expire, subscription_status
+                       FROM subscriptions 
+                       WHERE user_id = ? 
+                       ORDER BY created_at DESC LIMIT 1";
+            $fallback = $this->db->fetchOne($subSql, [$order['user_id']]);
+            if ($fallback) {
+                $order = array_merge($order, $fallback);
+            }
+        }
+
+        return $order;
     }
 
     /**
@@ -215,5 +232,13 @@ class Order
                 WHERE o.payment_id = ?";
 
         return $this->db->fetchOne($sql, [$transactionId]);
+    }
+
+    /**
+     * Link an order to its generated subscription
+     */
+    public function setSubscriptionId($orderId, $subscriptionId)
+    {
+        return $this->db->update('orders', ['subscription_id' => $subscriptionId], 'id = ?', [$orderId]);
     }
 }

@@ -17,9 +17,13 @@ if (!defined('CURRENCY_SYMBOL')) {
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../classes/Database.php';
 
-// Razorpay Keys
-$keyId = defined('RAZORPAY_KEY_ID') ? RAZORPAY_KEY_ID : 'rzp_test_S8VnZcp2OFweOn';
-$keySecret = defined('RAZORPAY_KEY_SECRET') ? RAZORPAY_KEY_SECRET : 'N1Df1w3L2vwYv1HHTiGwG0bA';
+// Razorpay Keys (Must be defined in config/config.php)
+$keyId = defined('RAZORPAY_KEY_ID') ? RAZORPAY_KEY_ID : '';
+$keySecret = defined('RAZORPAY_KEY_SECRET') ? RAZORPAY_KEY_SECRET : '';
+
+if (empty($keyId) || empty($keySecret)) {
+    die("Error: Razorpay API keys are not defined in config/config.php");
+}
 
 echo "<h3>Syncing Plans with Razorpay...</h3>";
 echo "<pre>";

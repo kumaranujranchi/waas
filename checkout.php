@@ -197,9 +197,9 @@ echo "<!-- DEBUG: Header Loaded -->";
 ?>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<p style="color:red; text-align:center;">DEBUG: SCRIPT CONTINUING...</p>
+<p style="color:red; text-align:center;">DEBUG: PAGE RENDERING START</p>
 
-<main class="flex-1 flex justify-center py-12 px-4">
+<main class="min-h-[70vh] flex justify-center py-12 px-4 relative z-10">
     <div class="max-w-[720px] w-full space-y-8">
         <div class="text-center md:text-left">
             <h1 class="text-[#0f0e1b] dark:text-white text-4xl font-extrabold leading-tight tracking-tight">Review and

@@ -7,16 +7,10 @@
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/functions.php';
 
-// Remove strict login requirement for viewing the page
-// requireLogin();
-
+// Models
 require_once __DIR__ . '/models/Product.php';
 require_once __DIR__ . '/models/Order.php';
 require_once __DIR__ . '/models/Subscription.php';
-
-$pageTitle = 'Checkout | SiteOnSub';
-// Now include header which outputs HTML
-include __DIR__ . '/includes/header.php';
 
 $productModel = new Product();
 $currentUser = getCurrentUser(); // Will be null if not logged in
@@ -27,7 +21,8 @@ $planId = $_GET['plan_id'] ?? null;
 
 if (!$planId) {
     setFlashMessage('error', 'Please select a plan');
-    redirect(baseUrl('index.php'));
+    header("Location: " . baseUrl('index.php'));
+    exit;
 }
 
 // Get plan details
@@ -143,8 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!$razorpayPlanId) {
-            $debugInfo = isset($RAZORPAY_PLANS) ? "Keys available: " . implode(', ', array_keys($RAZORPAY_PLANS)) : "Config not
-loaded";
+            $debugInfo = isset($RAZORPAY_PLANS) ? "Keys available: " . implode(', ', array_keys($RAZORPAY_PLANS)) : "Config not loaded";
             $error = "Payment plan configuration missing for Plan ID: {$planId}. ({$debugInfo}) Please contact support.";
         } else {
             // 2. Create Subscription on Razorpay
@@ -192,6 +186,10 @@ loaded";
         }
     }
 }
+
+// AFTER ALL LOGIC, set page title and include header
+$pageTitle = 'Checkout | SiteOnSub';
+include __DIR__ . '/includes/header.php';
 ?>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

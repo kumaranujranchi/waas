@@ -46,7 +46,7 @@ $affiliates = $affiliateModel->getAllAffiliates();
                     <tr
                         class="bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/10 text-xs uppercase text-gray-500 font-bold tracking-wider">
                         <th class="py-4 px-6">Partner</th>
-                        <th class="py-4 px-6">Referral Code</th>
+                        <th class="py-4 px-6">Referrals (Conv)</th>
                         <th class="py-4 px-6">Rate</th>
                         <th class="py-4 px-6">Balance</th>
                         <th class="py-4 px-6">Status</th>
@@ -71,17 +71,20 @@ $affiliates = $affiliateModel->getAllAffiliates();
                                     <div class="text-sm text-gray-500">
                                         <?php echo e($aff['email']); ?>
                                     </div>
-                                </td>
-                                <td class="py-4 px-6">
                                     <code
-                                        class="px-2 py-1 bg-gray-100 dark:bg-black/20 rounded text-primary font-mono text-sm"><?php echo e($aff['referral_code']); ?></code>
+                                        class="text-[10px] font-mono text-gray-400"><?php echo e($aff['referral_code']); ?></code>
+                                </td>
+                                <td class="py-4 px-6 text-sm">
+                                    <span
+                                        class="font-black text-gray-900 dark:text-white"><?php echo $aff['total_referrals']; ?></span>
+                                    <span class="text-gray-400 mx-1">/</span>
+                                    <span class="text-accent-green font-bold"><?php echo $aff['converted_referrals']; ?></span>
                                 </td>
                                 <td class="py-4 px-6 text-sm text-gray-600 dark:text-gray-400">
                                     <?php echo $aff['commission_rate']; ?>%
                                 </td>
                                 <td class="py-4 px-6 font-bold text-[#0f0e1b] dark:text-white">
-                                    $
-                                    <?php echo number_format($aff['balance'], 2); ?>
+                                    $<?php echo number_format($aff['balance'], 2); ?>
                                 </td>
                                 <td class="py-4 px-6">
                                     <?php
@@ -96,18 +99,13 @@ $affiliates = $affiliateModel->getAllAffiliates();
                                         <?php echo $aff['status']; ?>
                                     </span>
                                 </td>
-                                <td class="py-4 px-6 text-right">
+                                <td class="py-4 px-6 text-right space-x-2">
+                                    <a href="view.php?id=<?php echo $aff['id']; ?>"
+                                        class="inline-flex items-center px-3 py-1 bg-primary/10 text-primary rounded text-[10px] font-black uppercase hover:bg-primary hover:text-white transition-all">View</a>
+
                                     <?php if ($aff['status'] === 'pending'): ?>
                                         <a href="?action=approve&id=<?php echo $aff['id']; ?>"
-                                            class="text-green-600 hover:underline font-bold text-xs uppercase mr-3">Approve</a>
-                                        <a href="?action=reject&id=<?php echo $aff['id']; ?>"
-                                            class="text-red-500 hover:underline font-bold text-xs uppercase">Reject</a>
-                                    <?php elseif ($aff['status'] === 'active'): ?>
-                                        <a href="?action=reject&id=<?php echo $aff['id']; ?>"
-                                            class="text-red-500 hover:underline font-bold text-xs uppercase">Ban</a>
-                                    <?php elseif ($aff['status'] === 'rejected'): ?>
-                                        <a href="?action=approve&id=<?php echo $aff['id']; ?>"
-                                            class="text-green-600 hover:underline font-bold text-xs uppercase">Reactivate</a>
+                                            class="text-green-600 hover:underline font-bold text-xs uppercase">Approve</a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

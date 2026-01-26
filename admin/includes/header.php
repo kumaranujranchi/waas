@@ -101,6 +101,12 @@ $currentUser = getCurrentUser();
                     <span class="font-bold text-sm">Orders</span>
                 </a>
 
+                <a href="<?php echo baseUrl('admin/affiliates/list.php'); ?>"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo strpos($_SERVER['PHP_SELF'], 'affiliates/') !== false ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5'; ?>">
+                    <span class="material-symbols-outlined">sell</span>
+                    <span class="font-bold text-sm">Affiliates</span>
+                </a>
+
                 <a href="<?php echo baseUrl('admin/users/list.php'); ?>"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all <?php echo strpos($_SERVER['PHP_SELF'], 'users/') !== false ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5'; ?>">
                     <span class="material-symbols-outlined">group</span>
@@ -205,7 +211,8 @@ $currentUser = getCurrentUser();
                                 <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-0.5">
                                     Administrator</p>
                                 <p class="text-sm font-bold text-gray-800 dark:text-white truncate">
-                                    <?php echo e($currentUser['full_name']); ?></p>
+                                    <?php echo e($currentUser['full_name']); ?>
+                                </p>
                             </div>
 
                             <a href="<?php echo baseUrl('admin/settings.php'); ?>"

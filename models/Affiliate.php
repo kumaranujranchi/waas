@@ -107,7 +107,9 @@ class Affiliate
      */
     public function getAllAffiliates()
     {
-        $sql = "SELECT a.*, u.full_name, u.email 
+        $sql = "SELECT a.*, u.full_name, u.email,
+                (SELECT COUNT(*) FROM referrals WHERE affiliate_id = a.id) as total_referrals,
+                (SELECT COUNT(*) FROM referrals WHERE affiliate_id = a.id AND status = 'paid') as converted_referrals
                 FROM affiliates a
                 JOIN users u ON a.user_id = u.id
                 ORDER BY a.created_at DESC";
@@ -120,6 +122,14 @@ class Affiliate
     public function updateStatus($id, $status)
     {
         return $this->db->update('affiliates', ['status' => $status], 'id = ?', [$id]);
+    }
+
+    /**
+     * Update Commission Rate (Admin)
+     */
+    public function updateCommissionRate($id, $rate)
+    {
+        return $this->db->update('affiliates', ['commission_rate' => $rate], 'id = ?', [$id]);
     }
     /**
      * Process Commission for an Order
@@ -186,6 +196,73 @@ class Affiliate
                 }
             }
         }
+        return false;
+    }
+
+    /**
+     * Get Affiliate Detailed Info
+     */
+    public function getAffiliateById($id)
+    {
+        $sql = "SELECT a.*, u.full_name, u.email 
+                FROM affiliates a
+                JOIN users u ON a.user_id = u.id
+                WHERE a.id = ?";
+        return $this->db->fetchOne($sql, [$id]);
+    }
+
+    /**
+     * Get Detailed Referrals for Admin
+     */
+    public function getReferralsDetailed($affiliateId)
+    {
+        $sql = "SELECT r.*, u.full_name, u.email, u.created_at as user_joined
+                FROM referrals r
+                JOIN users u ON r.user_id = u.id
+                WHERE r.affiliate_id = ?
+                ORDER BY r.created_at DESC";
+        return $this->db->fetchAll($sql, [$affiliateId]);
+    }
+
+    /**
+     * Get Payout History
+     */
+    public function getPayouts($affiliateId)
+    {
+        $sql = "SELECT * FROM affiliate_payouts WHERE affiliate_id = ? ORDER BY created_at DESC";
+        return $this->db->fetchAll($sql, [$affiliateId]);
+    }
+
+    /**
+     * Record a Payout
+     */
+    public function recordPayout($affiliateId, $amount, $method, $transactionId = null, $notes = null)
+    {
+        // 1. Check current balance
+        $affiliate = $this->getAffiliateById($affiliateId);
+        if (!$affiliate || $affiliate['balance'] < $amount) {
+            return false;
+        }
+
+        // 2. Create payout record
+        $payoutData = [
+            'affiliate_id' => $affiliateId,
+            'amount' => $amount,
+            'status' => 'paid',
+            'payment_method' => $method,
+            'transaction_id' => $transactionId,
+            'admin_notes' => $notes
+        ];
+
+        $payoutId = $this->db->insert('affiliate_payouts', $payoutData);
+
+        if ($payoutId) {
+            // 3. Deduct from balance
+            $newBalance = floatval($affiliate['balance']) - floatval($amount);
+            $this->db->update('affiliates', ['balance' => $newBalance], 'id = ?', [$affiliateId]);
+            return $payoutId;
+        }
+
         return false;
     }
 }

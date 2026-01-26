@@ -17,7 +17,13 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../models/User.php';
 
 // Redirect if already logged in
+// Redirect if already logged in
 if (isLoggedIn()) {
+    $redirectUrl = $_GET['redirect'] ?? null;
+    if ($redirectUrl) {
+        redirect(baseUrl(urldecode($redirectUrl)));
+    }
+
     if (isAdmin()) {
         redirect(baseUrl('admin/index.php'));
     } else {
@@ -92,10 +98,10 @@ include __DIR__ . '/../includes/header.php';
             <form method="POST" action="" class="space-y-6">
                 <!-- Preserve Redirect URL -->
                 <!-- Preserve Redirect URL -->
-                <?php 
+                <?php
                 $redirectParam = $_REQUEST['redirect'] ?? null;
-                if ($redirectParam): 
-                ?>
+                if ($redirectParam):
+                    ?>
                     <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirectParam); ?>">
                 <?php endif; ?>
 

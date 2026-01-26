@@ -281,11 +281,14 @@ if (isset($_GET['ref']) && !empty($_GET['ref'])) {
                         href="<?php echo baseUrl('consultation.php'); ?>">Book Consultation</a>
                     <a class="text-[#0f0e1b] dark:text-white/80 text-sm font-medium hover:text-primary transition-colors"
                         href="<?php echo baseUrl('how-it-works.php'); ?>">How it works</a>
+                    <a class="text-[#0f0e1b] dark:text-white/80 text-sm font-medium hover:text-primary transition-colors"
+                        href="<?php echo baseUrl('contact-us.php'); ?>">Contact Us</a>
                 </nav>
             <?php else: ?>
                 <!-- Affiliate Header Replacement -->
                 <nav class="hidden md:flex items-center gap-8">
-                    <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold uppercase tracking-wider">
+                    <span
+                        class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold uppercase tracking-wider">
                         Partner Portal
                     </span>
                 </nav>

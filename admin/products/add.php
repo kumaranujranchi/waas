@@ -126,7 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'plan_type' => $plan['type'],
                             'price' => $plan['price'],
                             'billing_cycle' => $plan['cycle'],
-                            'status' => $plan['enabled'] ? 'active' : 'inactive'
+                            'status' => $plan['enabled'] ? 'active' : 'inactive',
+                            'razorpay_plan_id' => $_POST['razorpay_plan_' . $plan['type']] ?? null,
+                            'paypal_plan_id' => $_POST['paypal_plan_' . $plan['type']] ?? null
                         ]);
                     }
                 }
@@ -292,9 +294,26 @@ include __DIR__ . '/../includes/header.php';
                     <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
                 </div>
             </div>
-            <input type="number" step="0.01" name="price_monthly"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                placeholder="0.00" />
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Price (₹)</label>
+                    <input type="number" step="0.01" name="price_monthly"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                        placeholder="0.00" />
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Razorpay Plan ID</label>
+                    <input type="text" name="razorpay_plan_monthly"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                        placeholder="plan_..." />
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">PayPal Plan ID</label>
+                    <input type="text" name="paypal_plan_monthly"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                        placeholder="P-..." />
+                </div>
+            </div>
         </div>
 
         <!-- Half-Yearly -->
@@ -307,9 +326,26 @@ include __DIR__ . '/../includes/header.php';
                     <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
                 </div>
             </div>
-            <input type="number" step="0.01" name="price_half_yearly"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                placeholder="0.00" />
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Price (₹)</label>
+                    <input type="number" step="0.01" name="price_half_yearly"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                        placeholder="0.00" />
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Razorpay Plan ID</label>
+                    <input type="text" name="razorpay_plan_semi_annual"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                        placeholder="plan_..." />
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">PayPal Plan ID</label>
+                    <input type="text" name="paypal_plan_semi_annual"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                        placeholder="P-..." />
+                </div>
+            </div>
         </div>
 
         <!-- Yearly -->
@@ -322,9 +358,26 @@ include __DIR__ . '/../includes/header.php';
                     <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
                 </div>
             </div>
-            <input type="number" step="0.01" name="price_yearly"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                placeholder="0.00" />
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Price (₹)</label>
+                    <input type="number" step="0.01" name="price_yearly"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                        placeholder="0.00" />
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Razorpay Plan ID</label>
+                    <input type="text" name="razorpay_plan_yearly"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                        placeholder="plan_..." />
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">PayPal Plan ID</label>
+                    <input type="text" name="paypal_plan_yearly"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                        placeholder="P-..." />
+                </div>
+            </div>
         </div>
     </div>
 </div>

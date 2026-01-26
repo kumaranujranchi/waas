@@ -58,72 +58,136 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $orderModel = new Order();
     $subscriptionModel = new Subscription();
 
-    // 1. Get Razorpay Plan ID from Config/Mapping
-    global $RAZORPAY_PLANS;
-    
-    // Debug: Ensure array is available or reload config if needed
-    if (!isset($RAZORPAY_PLANS)) {
-        require __DIR__ . '/config/config.php';
-    }
+    // Branch based on method
+    $paymentMethod = $_POST['payment_method'] ?? 'razorpay';
 
-    // Check if configuration exists
-    $razorpayPlanId = null;
+    if ($paymentMethod === 'paypal') {
+        // PAYPAL FLOW
+        $paypalPlanId = $plan['paypal_plan_id'] ?? null;
 
-    // 1. Check Database First (Best Practice)
-    if (!empty($plan['razorpay_plan_id'])) {
-        $razorpayPlanId = $plan['razorpay_plan_id'];
-    }
-    // 2. Fallback to Config array (Legacy)
-    elseif (isset($RAZORPAY_PLANS) && is_array($RAZORPAY_PLANS)) {
-        // Try exact match -> try config default -> hardcoded fallback
-        $razorpayPlanId = $RAZORPAY_PLANS[$planId] ?? $RAZORPAY_PLANS['default'] ?? 'plan_S8Wasx7b5ThF2A';
-    }
-
-    if (!$razorpayPlanId) {
-        $debugInfo = isset($RAZORPAY_PLANS) ? "Keys available: " . implode(', ', array_keys($RAZORPAY_PLANS)) : "Config not loaded";
-        $error = "Payment plan configuration missing for Plan ID: {$planId}. ({$debugInfo}) Please contact support.";
-    } else {
-        // 2. Create Subscription on Razorpay
-        $razorpaySub = createRazorpaySubscription($razorpayPlanId);
-
-        if (isset($razorpaySub['error'])) {
-            $error = "Gateway Error: " . ($razorpaySub['error']['description'] ?? $razorpaySub['error']);
-        } elseif (isset($razorpaySub['id'])) {
-            // Success - Get Subscription ID
-            $subscriptionId = $razorpaySub['id'];
-
-            // 3. Create Local Order (Pending)
-            $orderData = [
-                'user_id' => getCurrentUserId(),
-                'order_number' => generateOrderNumber(),
-                'total_amount' => $subtotal,
-                'tax_amount' => $tax,
-                'discount_amount' => 0,
-                'final_amount' => $total,
-                'currency' => CURRENCY,
-                'payment_status' => 'pending',
-                'payment_method' => 'razorpay_subscription',
-                'billing_email' => $currentUser['email'],
-                'billing_name' => $currentUser['full_name'],
-                'payment_id' => $subscriptionId // Store RZP Sub ID temporarily
-            ];
-
-            $orderItems = [
-                [
-                    'product_id' => $plan['product_id'],
-                    'plan_id' => $planId,
-                    'product_name' => $plan['product_name'],
-                    'plan_name' => $plan['plan_name'],
-                    'price' => $plan['price'],
-                    'quantity' => 1
-                ]
-            ];
-
-            $orderResult = $orderModel->createOrder($orderData, $orderItems);
-
-            // 4. Trigger Razorpay JS (handled below in HTML)
+        if (!$paypalPlanId) {
+            $error = "PayPal is not configured for this plan yet. Please use Razorpay or contact support.";
         } else {
-            $error = "Unknown error from payment gateway.";
+            $paypalSub = createPayPalSubscription($paypalPlanId);
+
+            if (isset($paypalSub['error'])) {
+                $error = "PayPal Error: " . ($paypalSub['error']['description'] ?? $paypalSub['error']);
+            } else {
+                // Success - Find the approval link
+                $approvalUrl = null;
+                foreach ($paypalSub['links'] as $link) {
+                    if ($link['rel'] === 'approve') {
+                        $approvalUrl = $link['href'];
+                        break;
+                    }
+                }
+
+                if ($approvalUrl) {
+                    // Create Local Order (Pending)
+                    $orderData = [
+                        'user_id' => getCurrentUserId(),
+                        'order_number' => generateOrderNumber(),
+                        'total_amount' => $subtotal,
+                        'tax_amount' => $tax,
+                        'discount_amount' => 0,
+                        'final_amount' => $total,
+                        'currency' => 'USD', // PayPal usually needs USD or similar for international
+                        'payment_status' => 'pending',
+                        'payment_method' => 'paypal_subscription',
+                        'billing_email' => $currentUser['email'],
+                        'billing_name' => $currentUser['full_name'],
+                        'payment_id' => $paypalSub['id'] // Store PayPal Sub ID
+                    ];
+
+                    $orderItems = [
+                        [
+                            'product_id' => $plan['product_id'],
+                            'plan_id' => $planId,
+                            'product_name' => $plan['product_name'],
+                            'plan_name' => $plan['plan_name'],
+                            'price' => $plan['price'],
+                            'quantity' => 1
+                        ]
+                    ];
+
+                    $orderModel->createOrder($orderData, $orderItems);
+
+                    // Redirect to PayPal
+                    redirect($approvalUrl);
+                } else {
+                    $error = "Failed to initiate PayPal checkout. Approval missing.";
+                }
+            }
+        }
+    } else {
+        // RAZORPAY FLOW
+        // 1. Get Razorpay Plan ID from Config/Mapping
+        global $RAZORPAY_PLANS;
+
+        // Debug: Ensure array is available or reload config if needed
+        if (!isset($RAZORPAY_PLANS)) {
+            require __DIR__ . '/config/config.php';
+        }
+
+        // Check if configuration exists
+        $razorpayPlanId = null;
+
+        // 1. Check Database First (Best Practice)
+        if (!empty($plan['razorpay_plan_id'])) {
+            $razorpayPlanId = $plan['razorpay_plan_id'];
+        }
+        // 2. Fallback to Config array (Legacy)
+        elseif (isset($RAZORPAY_PLANS) && is_array($RAZORPAY_PLANS)) {
+            // Try exact match -> try config default -> hardcoded fallback
+            $razorpayPlanId = $RAZORPAY_PLANS[$planId] ?? $RAZORPAY_PLANS['default'] ?? 'plan_S8Wasx7b5ThF2A';
+        }
+
+        if (!$razorpayPlanId) {
+            $debugInfo = isset($RAZORPAY_PLANS) ? "Keys available: " . implode(', ', array_keys($RAZORPAY_PLANS)) : "Config not loaded";
+            $error = "Payment plan configuration missing for Plan ID: {$planId}. ({$debugInfo}) Please contact support.";
+        } else {
+            // 2. Create Subscription on Razorpay
+            $razorpaySub = createRazorpaySubscription($razorpayPlanId);
+
+            if (isset($razorpaySub['error'])) {
+                $error = "Gateway Error: " . ($razorpaySub['error']['description'] ?? $razorpaySub['error']);
+            } elseif (isset($razorpaySub['id'])) {
+                // Success - Get Subscription ID
+                $subscriptionId = $razorpaySub['id'];
+
+                // 3. Create Local Order (Pending)
+                $orderData = [
+                    'user_id' => getCurrentUserId(),
+                    'order_number' => generateOrderNumber(),
+                    'total_amount' => $subtotal,
+                    'tax_amount' => $tax,
+                    'discount_amount' => 0,
+                    'final_amount' => $total,
+                    'currency' => CURRENCY,
+                    'payment_status' => 'pending',
+                    'payment_method' => 'razorpay_subscription',
+                    'billing_email' => $currentUser['email'],
+                    'billing_name' => $currentUser['full_name'],
+                    'payment_id' => $subscriptionId // Store RZP Sub ID temporarily
+                ];
+
+                $orderItems = [
+                    [
+                        'product_id' => $plan['product_id'],
+                        'plan_id' => $planId,
+                        'product_name' => $plan['product_name'],
+                        'plan_name' => $plan['plan_name'],
+                        'price' => $plan['price'],
+                        'quantity' => 1
+                    ]
+                ];
+
+                $orderModel->createOrder($orderData, $orderItems);
+
+                // 4. Trigger Razorpay JS (handled below in HTML)
+            } else {
+                $error = "Unknown error from payment gateway.";
+            }
         }
     }
 }
@@ -167,78 +231,118 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Pricing Breakdown -->
             <div class="p-6 md:p-10">
-                <div class="grid md:grid-cols-2 gap-10">
-                    <div class="space-y-6">
-                        <div class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex items-start gap-3">
-                            <span class="material-symbols-outlined text-primary">verified_user</span>
-                            <div>
-                                <p class="text-sm font-bold text-gray-900 dark:text-white">Secure Transaction</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Your payment is encrypted
-                                    using 256-bit SSL technology.</p>
-                            </div>
-                        </div>
-                        <div class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex items-start gap-3">
-                            <span class="material-symbols-outlined text-primary">sync</span>
-                            <div>
-                                <p class="text-sm font-bold text-gray-900 dark:text-white">Automatic Renewal</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Cancel anytime from your
-                                    dashboard.</p>
-                            </div>
+                <!-- Payment Method Selection -->
+                <form method="POST" action="" id="checkout-form" class="space-y-8">
+                    <div class="space-y-4">
+                        <p class="text-sm font-bold text-[#0f0e1b] dark:text-white uppercase tracking-wider">Select
+                            Payment Method</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Razorpay -->
+                            <label
+                                class="relative flex items-center p-4 border-2 rounded-xl cursor-pointer hover:border-primary/50 transition-all group has-[:checked]:border-primary has-[:checked]:bg-primary/5 border-gray-100 dark:border-white/5">
+                                <input type="radio" name="payment_method" value="razorpay" checked class="sr-only">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="size-6 rounded-full border-2 border-gray-300 flex items-center justify-center group-has-[:checked]:border-primary group-has-[:checked]:after:content-[''] group-has-[:checked]:after:size-3 group-has-[:checked]:after:rounded-full group-has-[:checked]:after:bg-primary transition-all">
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-[#0f0e1b] dark:text-white">Razorpay (India)</p>
+                                        <p class="text-xs text-gray-500">Cards, UPI, Netbanking</p>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- PayPal -->
+                            <label
+                                class="relative flex items-center p-4 border-2 rounded-xl cursor-pointer hover:border-primary/50 transition-all group has-[:checked]:border-primary has-[:checked]:bg-primary/5 border-gray-100 dark:border-white/5">
+                                <input type="radio" name="payment_method" value="paypal" class="sr-only">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="size-6 rounded-full border-2 border-gray-300 flex items-center justify-center group-has-[:checked]:border-primary group-has-[:checked]:after:content-[''] group-has-[:checked]:after:size-3 group-has-[:checked]:after:rounded-full group-has-[:checked]:after:bg-primary transition-all">
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-[#0f0e1b] dark:text-white">PayPal (International)</p>
+                                        <p class="text-xs text-gray-500">Checkout with PayPal or Card</p>
+                                    </div>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
-                    <div
-                        class="bg-background-light dark:bg-background-dark/50 p-6 rounded-xl flex flex-col justify-between">
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-500 dark:text-gray-400">Subtotal</span>
-                                <span class="font-medium text-gray-900 dark:text-white">
-                                    <?php echo formatPrice($subtotal); ?>
-                                </span>
+                    <div class="grid md:grid-cols-2 gap-10">
+                        <div class="space-y-6">
+                            <div
+                                class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex items-start gap-3">
+                                <span class="material-symbols-outlined text-primary">verified_user</span>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-900 dark:text-white">Secure Transaction</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Your payment is encrypted
+                                        using 256-bit SSL technology.</p>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-500 dark:text-gray-400">Tax (
-                                    <?php echo (TAX_RATE * 100); ?>%)
-                                </span>
-                                <span class="font-medium text-gray-900 dark:text-white">
-                                    <?php echo formatPrice($tax); ?>
-                                </span>
-                            </div>
-                            <div class="h-px bg-gray-200 dark:bg-white/10 my-2"></div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-lg font-bold text-gray-900 dark:text-white">Total</span>
-                                <span class="text-2xl font-black text-primary">
-                                    <?php echo formatPrice($total); ?>
-                                </span>
+                            <div
+                                class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex items-start gap-3">
+                                <span class="material-symbols-outlined text-primary">sync</span>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-900 dark:text-white">Automatic Renewal</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Cancel anytime from your
+                                        dashboard.</p>
+                                </div>
                             </div>
                         </div>
 
-                        <?php if ($isLoggedIn): ?>
-                            <form method="POST" action="" class="mt-8 space-y-4">
-                                <button type="submit"
-                                    class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-lg shadow-lg hover:shadow-primary/20 brightness-110 transition-all flex items-center justify-center gap-2">
-                                    <span class="material-symbols-outlined">credit_card</span>
-                                    Pay & Subscribe
-                                </button>
-                                <a href="<?php echo baseUrl('product-detail.php?slug=' . $plan['product_id']); ?>"
-                                    class="w-full py-2 text-gray-500 dark:text-gray-400 text-sm font-medium hover:text-gray-700 dark:hover:text-white transition-colors text-center block">
-                                    Cancel
-                                </a>
-                            </form>
-                        <?php else: ?>
-                            <div class="mt-8 space-y-4">
-                                <a href="<?php echo baseUrl('auth/login.php?redirect=' . urlencode('checkout.php?plan_id=' . $planId)); ?>"
-                                    class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-lg shadow-lg hover:shadow-primary/20 brightness-110 transition-all flex items-center justify-center gap-2">
-                                    <span class="material-symbols-outlined">login</span>
-                                    Login to Continue
-                                </a>
-                                <p class="text-xs text-center text-gray-500 dark:text-gray-400">
-                                    You need an account to manage your subscription.
-                                </p>
+                        <div
+                            class="bg-background-light dark:bg-background-dark/50 p-6 rounded-xl flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-500 dark:text-gray-400">Subtotal</span>
+                                    <span class="font-medium text-gray-900 dark:text-white">
+                                        <?php echo formatPrice($subtotal); ?>
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-500 dark:text-gray-400">Tax (
+                                        <?php echo (TAX_RATE * 100); ?>%)
+                                    </span>
+                                    <span class="font-medium text-gray-900 dark:text-white">
+                                        <?php echo formatPrice($tax); ?>
+                                    </span>
+                                </div>
+                                <div class="h-px bg-gray-200 dark:bg-white/10 my-2"></div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg font-bold text-gray-900 dark:text-white">Total</span>
+                                    <span class="text-2xl font-black text-primary">
+                                        <?php echo formatPrice($total); ?>
+                                    </span>
+                                </div>
                             </div>
-                        <?php endif; ?>
+                            <?php if ($isLoggedIn): ?>
+                                <div class="mt-8 space-y-4">
+                                    <button type="submit"
+                                        class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-lg shadow-lg hover:shadow-primary/20 brightness-110 transition-all flex items-center justify-center gap-2">
+                                        <span class="material-symbols-outlined">payments</span>
+                                        Checkout Now
+                                    </button>
+                                    <a href="<?php echo baseUrl('product-detail.php?slug=' . $plan['product_id']); ?>"
+                                        class="w-full py-2 text-gray-500 dark:text-gray-400 text-sm font-medium hover:text-gray-700 dark:hover:text-white transition-colors text-center block">
+                                        Cancel
+                                    </a>
+                                </div>
+                            <?php else: ?>
+                                <div class="mt-8 space-y-4">
+                                    <a href="<?php echo baseUrl('auth/login.php?redirect=' . urlencode('checkout.php?plan_id=' . $planId)); ?>"
+                                        class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-lg shadow-lg hover:shadow-primary/20 brightness-110 transition-all flex items-center justify-center gap-2">
+                                        <span class="material-symbols-outlined">login</span>
+                                        Login to Continue
+                                    </a>
+                                    <p class="text-xs text-center text-gray-500 dark:text-gray-400">
+                                        You need an account to manage your subscription.
+                                    </p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 

@@ -161,7 +161,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'plan_type' => $plan['type'],
                             'price' => $plan['price'],
                             'billing_cycle' => $plan['cycle'],
-                            'status' => $plan['enabled'] ? 'active' : 'inactive'
+                            'status' => $plan['enabled'] ? 'active' : 'inactive',
+                            'razorpay_plan_id' => $_POST['razorpay_plan_' . $plan['type']] ?? null,
+                            'paypal_plan_id' => $_POST['paypal_plan_' . $plan['type']] ?? null
                         ]);
                     }
                 }
@@ -188,18 +190,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Prepare pricing data
 $pricingData = [
-    'monthly' => ['price' => 0, 'status' => 'inactive'],
-    'half_yearly' => ['price' => 0, 'status' => 'inactive'],
-    'yearly' => ['price' => 0, 'status' => 'inactive']
+    'monthly' => ['price' => 0, 'status' => 'inactive', 'razorpay_plan_id' => '', 'paypal_plan_id' => ''],
+    'half_yearly' => ['price' => 0, 'status' => 'inactive', 'razorpay_plan_id' => '', 'paypal_plan_id' => ''],
+    'yearly' => ['price' => 0, 'status' => 'inactive', 'razorpay_plan_id' => '', 'paypal_plan_id' => '']
 ];
 
 foreach ($pricingPlans as $plan) {
     if ($plan['plan_type'] === 'monthly') {
-        $pricingData['monthly'] = ['price' => $plan['price'], 'status' => $plan['status']];
+        $pricingData['monthly'] = [
+            'price' => $plan['price'],
+            'status' => $plan['status'],
+            'razorpay_plan_id' => $plan['razorpay_plan_id'],
+            'paypal_plan_id' => $plan['paypal_plan_id']
+        ];
     } elseif ($plan['plan_type'] === 'semi_annual') {
-        $pricingData['half_yearly'] = ['price' => $plan['price'], 'status' => $plan['status']];
+        $pricingData['half_yearly'] = [
+            'price' => $plan['price'],
+            'status' => $plan['status'],
+            'razorpay_plan_id' => $plan['razorpay_plan_id'],
+            'paypal_plan_id' => $plan['paypal_plan_id']
+        ];
     } elseif ($plan['plan_type'] === 'yearly') {
-        $pricingData['yearly'] = ['price' => $plan['price'], 'status' => $plan['status']];
+        $pricingData['yearly'] = [
+            'price' => $plan['price'],
+            'status' => $plan['status'],
+            'razorpay_plan_id' => $plan['razorpay_plan_id'],
+            'paypal_plan_id' => $plan['paypal_plan_id']
+        ];
     }
 }
 
@@ -368,10 +385,31 @@ include __DIR__ . '/../includes/header.php';
                             <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
                         </div>
                     </div>
-                    <input type="number" name="price_monthly" step="0.01" min="0"
-                        value="<?php echo $pricingData['monthly']['price']; ?>"
-                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="0.00">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Price (₹)</label>
+                            <input type="number" name="price_monthly" step="0.01" min="0"
+                                value="<?php echo $pricingData['monthly']['price']; ?>"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="0.00">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Razorpay Plan
+                                ID</label>
+                            <input type="text" name="razorpay_plan_monthly"
+                                value="<?php echo e($pricingData['monthly']['razorpay_plan_id']); ?>"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="plan_...">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">PayPal Plan
+                                ID</label>
+                            <input type="text" name="paypal_plan_monthly"
+                                value="<?php echo e($pricingData['monthly']['paypal_plan_id']); ?>"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="P-...">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Half-Yearly -->
@@ -384,10 +422,31 @@ include __DIR__ . '/../includes/header.php';
                             <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
                         </div>
                     </div>
-                    <input type="number" name="price_half_yearly" step="0.01" min="0"
-                        value="<?php echo $pricingData['half_yearly']['price']; ?>"
-                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="0.00">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Price (₹)</label>
+                            <input type="number" name="price_half_yearly" step="0.01" min="0"
+                                value="<?php echo $pricingData['half_yearly']['price']; ?>"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="0.00">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Razorpay Plan
+                                ID</label>
+                            <input type="text" name="razorpay_plan_semi_annual"
+                                value="<?php echo e($pricingData['half_yearly']['razorpay_plan_id']); ?>"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="plan_...">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">PayPal Plan
+                                ID</label>
+                            <input type="text" name="paypal_plan_semi_annual"
+                                value="<?php echo e($pricingData['half_yearly']['paypal_plan_id']); ?>"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="P-...">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Yearly -->
@@ -400,10 +459,31 @@ include __DIR__ . '/../includes/header.php';
                             <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
                         </div>
                     </div>
-                    <input type="number" name="price_yearly" step="0.01" min="0"
-                        value="<?php echo $pricingData['yearly']['price']; ?>"
-                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="0.00">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Price (₹)</label>
+                            <input type="number" name="price_yearly" step="0.01" min="0"
+                                value="<?php echo $pricingData['yearly']['price']; ?>"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="0.00">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">Razorpay Plan
+                                ID</label>
+                            <input type="text" name="razorpay_plan_yearly"
+                                value="<?php echo e($pricingData['yearly']['razorpay_plan_id']); ?>"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="plan_...">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">PayPal Plan
+                                ID</label>
+                            <input type="text" name="paypal_plan_yearly"
+                                value="<?php echo e($pricingData['yearly']['paypal_plan_id']); ?>"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="P-...">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -423,11 +503,11 @@ include __DIR__ . '/../includes/header.php';
             </div>
             <div id="faq-container" class="space-y-4">
                 <?php if (!empty($faqs)): ?>
-                        <?php foreach ($faqs as $index => $faq): ?>
+                    <?php foreach ($faqs as $index => $faq): ?>
                         <div class="faq-item p-4 border-2 border-gray-300 dark:border-white/10 rounded-lg">
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-sm font-bold text-gray-500">FAQ #
-                               <?php echo $index + 1; ?>
+                                    <?php echo $index + 1; ?>
                                 </span>
                                 <button type="button"
                                     onclick="if(confirm('Are you sure you want to delete this FAQ?')) { this.parentElement.parentElement.remove(); }"
@@ -442,8 +522,8 @@ include __DIR__ . '/../includes/header.php';
                                 class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
                                 placeholder="Answer"><?php echo e($faq['answer']); ?></textarea>
                         </div>
-                  <?php endforeach; ?>
-              <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
 

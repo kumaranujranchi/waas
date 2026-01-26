@@ -302,3 +302,116 @@ function createRazorpaySubscription($planId, $totalCount = 120, $startAt = null)
     return json_decode($result, true);
 }
 
+/**
+ * Get PayPal API Access Token
+ */
+function getPayPalAccessToken()
+{
+    $clientId = defined('PAYPAL_CLIENT_ID') ? PAYPAL_CLIENT_ID : '';
+    $secret = defined('PAYPAL_SECRET') ? PAYPAL_SECRET : '';
+    $mode = defined('PAYPAL_MODE') ? PAYPAL_MODE : 'sandbox';
+
+    if (empty($clientId) || empty($secret)) {
+        return ['error' => 'PayPal credentials not configured'];
+    }
+
+    $url = ($mode === 'live')
+        ? 'https://api-m.paypal.com/v1/oauth2/token'
+        : 'https://api-m.sandbox.paypal.com/v1/oauth2/token';
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+    curl_setopt($ch, CURLOPT_USERPWD, $clientId . ":" . $secret);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Accept-Language: en_US']);
+
+    $result = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return ['error' => curl_error($ch)];
+    }
+    curl_close($ch);
+
+    $response = json_decode($result, true);
+    return $response['access_token'] ?? ['error' => 'Failed to get PayPal access token'];
+}
+
+/**
+ * Create PayPal Subscription
+ */
+function createPayPalSubscription($planId)
+{
+    $token = getPayPalAccessToken();
+    if (is_array($token) && isset($token['error'])) {
+        return $token;
+    }
+
+    $mode = defined('PAYPAL_MODE') ? PAYPAL_MODE : 'sandbox';
+    $url = ($mode === 'live')
+        ? 'https://api-m.paypal.com/v1/billing/subscriptions'
+        : 'https://api-m.sandbox.paypal.com/v1/billing/subscriptions';
+
+    $data = [
+        'plan_id' => $planId,
+        'application_context' => [
+            'brand_name' => defined('SITE_NAME') ? SITE_NAME : 'SiteOnSub',
+            'locale' => 'en-US',
+            'shipping_preference' => 'NO_SHIPPING',
+            'user_action' => 'SUBSCRIBE_NOW',
+            'return_url' => baseUrl('paypal_callback.php?status=success'),
+            'cancel_url' => baseUrl('paypal_callback.php?status=cancel')
+        ]
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $token,
+        'PayPal-Request-Id: ' . uniqid()
+    ]);
+
+    $result = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return ['error' => curl_error($ch)];
+    }
+    curl_close($ch);
+
+    return json_decode($result, true);
+}
+
+/**
+ * Verify PayPal Subscription Status
+ */
+function verifyPayPalSubscription($subscriptionId)
+{
+    $token = getPayPalAccessToken();
+    if (is_array($token) && isset($token['error'])) {
+        return $token;
+    }
+
+    $mode = defined('PAYPAL_MODE') ? PAYPAL_MODE : 'sandbox';
+    $url = ($mode === 'live')
+        ? "https://api-m.paypal.com/v1/billing/subscriptions/{$subscriptionId}"
+        : "https://api-m.sandbox.paypal.com/v1/billing/subscriptions/{$subscriptionId}";
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $token
+    ]);
+
+    $result = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return ['error' => curl_error($ch)];
+    }
+    curl_close($ch);
+
+    return json_decode($result, true);
+}

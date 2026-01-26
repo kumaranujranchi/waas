@@ -193,9 +193,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // AFTER ALL LOGIC, set page title and include header
 $pageTitle = 'Checkout | SiteOnSub';
 include __DIR__ . '/includes/header.php';
+echo "<!-- DEBUG: Header Loaded -->";
 ?>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<p style="color:red; text-align:center;">DEBUG: SCRIPT CONTINUING...</p>
 
 <main class="flex-1 flex justify-center py-12 px-4">
     <div class="max-w-[720px] w-full space-y-8">
@@ -231,6 +233,7 @@ include __DIR__ . '/includes/header.php';
 
             <!-- Pricing Breakdown -->
             <div class="p-6 md:p-10">
+                <p>Plan Check: <?php echo $plan['plan_name']; ?></p>
                 <!-- Payment Method Selection -->
                 <form method="POST" action="" id="checkout-form" class="space-y-8">
                     <div class="space-y-4">

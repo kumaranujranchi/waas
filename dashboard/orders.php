@@ -113,7 +113,7 @@ $orders = $orderModel->getUserOrders($userId);
 
                     <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
                         <div class="flex flex-wrap gap-3">
-                            <a href="#"
+                            <a href="<?php echo baseUrl('dashboard/order_view.php?id=' . $order['id']); ?>"
                                 class="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark shadow-md shadow-primary/20 transition-all">
                                 <span class="material-symbols-outlined text-sm">visibility</span>
                                 View Details

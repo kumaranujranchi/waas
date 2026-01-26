@@ -225,8 +225,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             class="w-full bg-gray-50 dark:bg-white/5 border-2 border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-[#0f0e1b] dark:text-white focus:border-primary outline-none transition-all">
                             <option value="pending" <?php echo $order['payment_status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
                             <option value="completed" <?php echo $order['payment_status'] === 'completed' ? 'selected' : ''; ?>>Completed</option>
-                            <option value="failed" <?php echo $order['payment_status'] === 'failed' ? 'selected' : ''; ?>
-                                >Failed</option>
+                            <option value="failed" <?php echo $order['payment_status'] === 'failed' ? 'selected' : ''; ?>>
+                                Failed</option>
                             <option value="refunded" <?php echo $order['payment_status'] === 'refunded' ? 'selected' : ''; ?>>Refunded</option>
                         </select>
                     </div>
@@ -236,8 +236,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <select name="order_status"
                             class="w-full bg-gray-50 dark:bg-white/5 border-2 border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-[#0f0e1b] dark:text-white focus:border-primary outline-none transition-all">
                             <option value="pending" <?php echo ($order['order_status'] ?? 'pending') === 'pending' ? 'selected' : ''; ?>>Pending</option>
-                            <option value="processing" <?php echo ($order['order_status'] ?? '') === 'processing' ? 'selected' : ''; ?>>Processing</option>
-                            <option value="completed" <?php echo ($order['order_status'] ?? '') === 'completed' ? 'selected' : ''; ?>>Completed</option>
+                            <option value="requirements" <?php echo ($order['order_status'] ?? '') === 'requirements' ? 'selected' : ''; ?>>Requirements Capture</option>
+                            <option value="development" <?php echo ($order['order_status'] ?? '') === 'development' ? 'selected' : ''; ?>>In Development</option>
+                            <option value="deployment" <?php echo ($order['order_status'] ?? '') === 'deployment' ? 'selected' : ''; ?>>Deployment & Hosting</option>
+                            <option value="completed" <?php echo ($order['order_status'] ?? '') === 'completed' ? 'selected' : ''; ?>>Completed / Live</option>
                             <option value="cancelled" <?php echo ($order['order_status'] ?? '') === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                         </select>
                     </div>

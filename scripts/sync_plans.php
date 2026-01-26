@@ -14,6 +14,7 @@ error_reporting(E_ALL);
 if (!defined('CURRENCY_SYMBOL')) {
     require_once __DIR__ . '/../config/config.php';
 }
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../classes/Database.php';
 
 // Razorpay Keys

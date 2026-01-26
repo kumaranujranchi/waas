@@ -129,12 +129,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Add new pricing plans
                 $pricing = [
-                    ['name' => 'Monthly', 'type' => 'monthly', 'price' => $_POST['price_monthly'] ?? 0, 'cycle' => 1],
-                    ['name' => 'Half-Yearly', 'type' => 'semi_annual', 'price' => $_POST['price_half_yearly'] ?? 0, 'cycle' => 6],
-                    ['name' => 'Yearly', 'type' => 'yearly', 'price' => $_POST['price_yearly'] ?? 0, 'cycle' => 12]
+                    [
+                        'name' => 'Monthly',
+                        'type' => 'monthly',
+                        'price' => $_POST['price_monthly'] ?? 0,
+                        'cycle' => 1,
+                        'enabled' => isset($_POST['enable_monthly'])
+                    ],
+                    [
+                        'name' => 'Half-Yearly',
+                        'type' => 'semi_annual',
+                        'price' => $_POST['price_half_yearly'] ?? 0,
+                        'cycle' => 6,
+                        'enabled' => isset($_POST['enable_half_yearly'])
+                    ],
+                    [
+                        'name' => 'Yearly',
+                        'type' => 'yearly',
+                        'price' => $_POST['price_yearly'] ?? 0,
+                        'cycle' => 12,
+                        'enabled' => isset($_POST['enable_yearly'])
+                    ]
                 ];
 
                 foreach ($pricing as $plan) {
+                    // Create plan if price is > 0 and it is enabled
                     if ($plan['price'] > 0) {
                         $productModel->createPricingPlan([
                             'product_id' => $productId,
@@ -142,17 +161,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'plan_type' => $plan['type'],
                             'price' => $plan['price'],
                             'billing_cycle' => $plan['cycle'],
-                            'status' => 'active'
+                            'status' => $plan['enabled'] ? 'active' : 'inactive'
                         ]);
                     }
                 }
 
                 // Add new FAQs (no secondary validation needed as they are in JSON blob now)
-                
+
                 $db->commit();
                 setFlashMessage('success', 'Product updated successfully!');
                 redirect(baseUrl('admin/products/list.php'));
-                
+
             } else {
                 $db->rollback();
                 setFlashMessage('error', 'Failed to update product');
@@ -169,18 +188,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Prepare pricing data
 $pricingData = [
-    'monthly' => 0,
-    'half_yearly' => 0,
-    'yearly' => 0
+    'monthly' => ['price' => 0, 'status' => 'inactive'],
+    'half_yearly' => ['price' => 0, 'status' => 'inactive'],
+    'yearly' => ['price' => 0, 'status' => 'inactive']
 ];
 
 foreach ($pricingPlans as $plan) {
     if ($plan['plan_type'] === 'monthly') {
-        $pricingData['monthly'] = $plan['price'];
+        $pricingData['monthly'] = ['price' => $plan['price'], 'status' => $plan['status']];
     } elseif ($plan['plan_type'] === 'semi_annual') {
-        $pricingData['half_yearly'] = $plan['price'];
+        $pricingData['half_yearly'] = ['price' => $plan['price'], 'status' => $plan['status']];
     } elseif ($plan['plan_type'] === 'yearly') {
-        $pricingData['yearly'] = $plan['price'];
+        $pricingData['yearly'] = ['price' => $plan['price'], 'status' => $plan['status']];
     }
 }
 
@@ -284,135 +303,162 @@ include __DIR__ . '/../includes/header.php';
             </div>
         </div>
 
-    <!-- TinyMCE Integration -->
-<!-- Quill Editor Integration -->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script>
-    var quill = new Quill('#editor-container', {
-        theme: 'snow',
-        placeholder: 'Detailed explanation of the service...',
-        modules: {
-            toolbar: [
-                [{ 'header': [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                ['blockquote', 'code-block'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'color': [] }, { 'background': [] }],
-                ['link', 'image'],
-                ['clean']
-            ]
-        }
-    });
+        <!-- TinyMCE Integration -->
+        <!-- Quill Editor Integration -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script>
+            var quill = new Quill('#editor-container', {
+                theme: 'snow',
+                placeholder: 'Detailed explanation of the service...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['blockquote', 'code-block'],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        [{ 'color': [] }, { 'background': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
 
-    // Set initial content
-    // We need to decode the HTML entities back to normal HTML for the editor
-    var initialContent = document.getElementById('full_description').value;
-    var txt = document.createElement("textarea");
-    txt.innerHTML = initialContent;
-    quill.root.innerHTML = txt.value;
+            // Set initial content
+            // We need to decode the HTML entities back to normal HTML for the editor
+            var initialContent = document.getElementById('full_description').value;
+            var txt = document.createElement("textarea");
+            txt.innerHTML = initialContent;
+            quill.root.innerHTML = txt.value;
 
-    // Update hidden input on change
-    quill.on('text-change', function () {
-        document.getElementById('full_description').value = quill.root.innerHTML;
-    });
-</script>
-
-
-
-<div>
-    <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Status</label>
-    <select name="status"
-        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
-        <option value="active" <?php echo $product['status'] === 'active' ? 'selected' : ''; ?>>Active
-        </option>
-        <option value="inactive" <?php echo $product['status'] === 'inactive' ? 'selected' : ''; ?>>
-            Inactive</option>
-    </select>
-</div>
+            // Update hidden input on change
+            quill.on('text-change', function () {
+                document.getElementById('full_description').value = quill.root.innerHTML;
+            });
+        </script>
 
 
-<!-- Pricing Plans -->
-<div class="bg-white dark:bg-white/5 rounded-xl p-8 border-2 border-gray-300 dark:border-white/10 shadow-sm">
-    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary">payments</span>
-        Pricing Plans
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
         <div>
-            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Monthly Price (₹)</label>
-            <input type="number" name="price_monthly" step="0.01" min="0" value="<?php echo $pricingData['monthly']; ?>"
-                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                placeholder="0.00">
+            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Status</label>
+            <select name="status"
+                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
+                <option value="active" <?php echo $product['status'] === 'active' ? 'selected' : ''; ?>>Active
+                </option>
+                <option value="inactive" <?php echo $product['status'] === 'inactive' ? 'selected' : ''; ?>>
+                    Inactive</option>
+            </select>
         </div>
-        <div>
-            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Half-Yearly Price
-                (₹)</label>
-            <input type="number" name="price_half_yearly" step="0.01" min="0"
-                value="<?php echo $pricingData['half_yearly']; ?>"
-                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                placeholder="0.00">
-        </div>
-        <div>
-            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Yearly Price (₹)</label>
-            <input type="number" name="price_yearly" step="0.01" min="0" value="<?php echo $pricingData['yearly']; ?>"
-                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                placeholder="0.00">
-        </div>
-    </div>
-</div>
 
-<!-- FAQs -->
-<div class="bg-white dark:bg-white/5 rounded-xl p-8 border-2 border-gray-300 dark:border-white/10 shadow-sm">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-bold flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary">help</span>
-            Frequently Asked Questions
-        </h2>
-        <button type="button" onclick="addFAQ()"
-            class="px-4 py-2 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition-all flex items-center gap-2">
-            <span class="material-symbols-outlined">add</span>
-            Add FAQ
-        </button>
-    </div>
-    <div id="faq-container" class="space-y-4">
-        <?php if (!empty($faqs)): ?>
-            <?php foreach ($faqs as $index => $faq): ?>
-                <div class="faq-item p-4 border-2 border-gray-300 dark:border-white/10 rounded-lg">
-                    <div class="flex justify-between items-start mb-3">
-                        <span class="text-sm font-bold text-gray-500">FAQ #
-                            <?php echo $index + 1; ?>
-                        </span>
-                        <button type="button"
-                            onclick="if(confirm('Are you sure you want to delete this FAQ?')) { this.parentElement.parentElement.remove(); }"
-                            class="text-red-500 hover:text-red-700">
-                            <span class="material-symbols-outlined">delete</span>
-                        </button>
+
+        <!-- Pricing Plans -->
+        <div class="bg-white dark:bg-white/5 rounded-xl p-8 border-2 border-gray-300 dark:border-white/10 shadow-sm">
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">payments</span>
+                Pricing & Visibility
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Monthly -->
+                <div class="space-y-4 p-4 border border-gray-100 dark:border-white/5 rounded-xl">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white">Monthly Plan</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" name="enable_monthly" id="enable_monthly" value="1" <?php echo $pricingData['monthly']['status'] === 'active' ? 'checked' : ''; ?>
+                                class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
+                        </div>
                     </div>
-                    <input type="text" name="faq_question[]" value="<?php echo e($faq['question']); ?>"
-                        class="w-full px-4 py-2 mb-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
-                        placeholder="Question">
-                    <textarea name="faq_answer[]" rows="2"
-                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
-                        placeholder="Answer"><?php echo e($faq['answer']); ?></textarea>
+                    <input type="number" name="price_monthly" step="0.01" min="0"
+                        value="<?php echo $pricingData['monthly']['price']; ?>"
+                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                        placeholder="0.00">
                 </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
-</div>
 
-<!-- Submit Button -->
-<div class="flex gap-4 mb-12">
-    <button type="submit"
-        class="px-8 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 shadow-lg shadow-primary/25 transition-all">
-        Update Product
-    </button>
-    <a href="<?php echo baseUrl('admin/products/list.php'); ?>"
-        class="px-8 py-4 bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-white/20 transition-all">
-        Cancel
-    </a>
-</div>
-</form>
+                <!-- Half-Yearly -->
+                <div class="space-y-4 p-4 border border-gray-100 dark:border-white/5 rounded-xl">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white">Half-Yearly</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" name="enable_half_yearly" id="enable_half_yearly" value="1" <?php echo $pricingData['half_yearly']['status'] === 'active' ? 'checked' : ''; ?>
+                                class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
+                        </div>
+                    </div>
+                    <input type="number" name="price_half_yearly" step="0.01" min="0"
+                        value="<?php echo $pricingData['half_yearly']['price']; ?>"
+                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                        placeholder="0.00">
+                </div>
+
+                <!-- Yearly -->
+                <div class="space-y-4 p-4 border border-gray-100 dark:border-white/5 rounded-xl">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white">Yearly Plan</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" name="enable_yearly" id="enable_yearly" value="1" <?php echo $pricingData['yearly']['status'] === 'active' ? 'checked' : ''; ?>
+                                class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                            <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
+                        </div>
+                    </div>
+                    <input type="number" name="price_yearly" step="0.01" min="0"
+                        value="<?php echo $pricingData['yearly']['price']; ?>"
+                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                        placeholder="0.00">
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQs -->
+        <div class="bg-white dark:bg-white/5 rounded-xl p-8 border-2 border-gray-300 dark:border-white/10 shadow-sm">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">help</span>
+                    Frequently Asked Questions
+                </h2>
+                <button type="button" onclick="addFAQ()"
+                    class="px-4 py-2 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined">add</span>
+                    Add FAQ
+                </button>
+            </div>
+            <div id="faq-container" class="space-y-4">
+                <?php if (!empty($faqs)): ?>
+                        <?php foreach ($faqs as $index => $faq): ?>
+                        <div class="faq-item p-4 border-2 border-gray-300 dark:border-white/10 rounded-lg">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-sm font-bold text-gray-500">FAQ #
+                               <?php echo $index + 1; ?>
+                                </span>
+                                <button type="button"
+                                    onclick="if(confirm('Are you sure you want to delete this FAQ?')) { this.parentElement.parentElement.remove(); }"
+                                    class="text-red-500 hover:text-red-700">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            </div>
+                            <input type="text" name="faq_question[]" value="<?php echo e($faq['question']); ?>"
+                                class="w-full px-4 py-2 mb-3 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="Question">
+                            <textarea name="faq_answer[]" rows="2"
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                placeholder="Answer"><?php echo e($faq['answer']); ?></textarea>
+                        </div>
+                  <?php endforeach; ?>
+              <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex gap-4 mb-12">
+            <button type="submit"
+                class="px-8 py-4 bg-primary text-white rounded-xl font-bold hover:opacity-90 shadow-lg shadow-primary/25 transition-all">
+                Update Product
+            </button>
+            <a href="<?php echo baseUrl('admin/products/list.php'); ?>"
+                class="px-8 py-4 bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white rounded-xl font-bold hover:bg-gray-300 dark:hover:bg-white/20 transition-all">
+                Cancel
+            </a>
+        </div>
+    </form>
 </div>
 
 <script>

@@ -120,13 +120,18 @@ class Product
     /**
      * Get product pricing plans
      */
-    public function getProductPricingPlans($productId)
+    public function getProductPricingPlans($productId, $activeOnly = false)
     {
-        $sql = "SELECT * FROM pricing_plans 
-                WHERE product_id = ? 
-                ORDER BY billing_cycle ASC";
+        $sql = "SELECT * FROM pricing_plans WHERE product_id = ?";
+        $params = [$productId];
 
-        return $this->db->fetchAll($sql, [$productId]);
+        if ($activeOnly) {
+            $sql .= " AND status = 'active'";
+        }
+
+        $sql .= " ORDER BY billing_cycle ASC";
+
+        return $this->db->fetchAll($sql, $params);
     }
 
     /**

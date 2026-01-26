@@ -95,9 +95,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($productId) {
                 // Handle Pricing Plans
                 $pricing = [
-                    ['name' => 'Monthly', 'type' => 'monthly', 'price' => $_POST['price_monthly'] ?? 0, 'cycle' => 1],
-                    ['name' => 'Half-Yearly', 'type' => 'semi_annual', 'price' => $_POST['price_half_yearly'] ?? 0, 'cycle' => 6],
-                    ['name' => 'Yearly', 'type' => 'yearly', 'price' => $_POST['price_yearly'] ?? 0, 'cycle' => 12]
+                    [
+                        'name' => 'Monthly',
+                        'type' => 'monthly',
+                        'price' => $_POST['price_monthly'] ?? 0,
+                        'cycle' => 1,
+                        'enabled' => isset($_POST['enable_monthly'])
+                    ],
+                    [
+                        'name' => 'Half-Yearly',
+                        'type' => 'semi_annual',
+                        'price' => $_POST['price_half_yearly'] ?? 0,
+                        'cycle' => 6,
+                        'enabled' => isset($_POST['enable_half_yearly'])
+                    ],
+                    [
+                        'name' => 'Yearly',
+                        'type' => 'yearly',
+                        'price' => $_POST['price_yearly'] ?? 0,
+                        'cycle' => 12,
+                        'enabled' => isset($_POST['enable_yearly'])
+                    ]
                 ];
 
                 foreach ($pricing as $plan) {
@@ -108,14 +126,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'plan_type' => $plan['type'],
                             'price' => $plan['price'],
                             'billing_cycle' => $plan['cycle'],
-                            'status' => 'active'
+                            'status' => $plan['enabled'] ? 'active' : 'inactive'
                         ]);
                     }
                 }
 
 
                 // FAQs are now handled via bundled JSON in createProduct
-                
+
                 $db->commit();
                 setFlashMessage('success', 'Product created successfully with pricing and FAQs!');
                 redirect(baseUrl('admin/products/list.php'));
@@ -261,26 +279,49 @@ include __DIR__ . '/../includes/header.php';
 <div class="bg-white dark:bg-white/5 rounded-xl p-8 border border-[#e8e8f3] dark:border-white/10 shadow-sm">
     <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
         <span class="material-symbols-outlined text-accent-green">payments</span>
-        Pricing Plans
+        Pricing & Visibility
     </h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div>
-            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Monthly Price
-                ($)</label>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Monthly -->
+        <div class="space-y-4 p-4 border border-gray-100 dark:border-white/5 rounded-xl">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white">Monthly Plan</label>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" name="enable_monthly" id="enable_monthly" value="1" checked
+                        class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                    <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
+                </div>
+            </div>
             <input type="number" step="0.01" name="price_monthly"
                 class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                 placeholder="0.00" />
         </div>
-        <div>
-            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Half-Yearly Price
-                ($)</label>
+
+        <!-- Half-Yearly -->
+        <div class="space-y-4 p-4 border border-gray-100 dark:border-white/5 rounded-xl">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white">Half-Yearly</label>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" name="enable_half_yearly" id="enable_half_yearly" value="1" checked
+                        class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                    <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
+                </div>
+            </div>
             <input type="number" step="0.01" name="price_half_yearly"
                 class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                 placeholder="0.00" />
         </div>
-        <div>
-            <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white mb-2">Yearly Price
-                ($)</label>
+
+        <!-- Yearly -->
+        <div class="space-y-4 p-4 border border-gray-100 dark:border-white/5 rounded-xl">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-bold text-[#0f0e1b] dark:text-white">Yearly Plan</label>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" name="enable_yearly" id="enable_yearly" value="1" checked
+                        class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                    <span class="text-[10px] font-black uppercase text-gray-400">Enable</span>
+                </div>
+            </div>
             <input type="number" step="0.01" name="price_yearly"
                 class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                 placeholder="0.00" />

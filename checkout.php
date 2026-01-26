@@ -60,11 +60,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 1. Get Razorpay Plan ID from Config/Mapping
     global $RAZORPAY_PLANS;
-    // Check if $RAZORPAY_PLANS is available
-    $razorpayPlanId = isset($RAZORPAY_PLANS[$planId]) ? $RAZORPAY_PLANS[$planId] : null;
+    
+    // Debug: Ensure array is available or reload config if needed
+    if (!isset($RAZORPAY_PLANS)) {
+        require __DIR__ . '/config/config.php';
+    }
+
+    // Check if configuration exists
+    $razorpayPlanId = null;
+    if (isset($RAZORPAY_PLANS) && is_array($RAZORPAY_PLANS)) {
+        $razorpayPlanId = $RAZORPAY_PLANS[$planId] ?? null;
+    }
 
     if (!$razorpayPlanId) {
-        $error = "Payment plan configuration missing. Please contact support.";
+        $debugInfo = isset($RAZORPAY_PLANS) ? "Keys available: " . implode(', ', array_keys($RAZORPAY_PLANS)) : "Config not loaded";
+        $error = "Payment plan configuration missing for Plan ID: {$planId}. ({$debugInfo}) Please contact support.";
     } else {
         // 2. Create Subscription on Razorpay
         $razorpaySub = createRazorpaySubscription($razorpayPlanId);

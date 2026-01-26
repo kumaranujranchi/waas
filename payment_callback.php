@@ -12,6 +12,7 @@ ini_set('display_startup_errors', 0);
 error_reporting(0);
 
 require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/models/Order.php';
 require_once __DIR__ . '/models/Product.php';

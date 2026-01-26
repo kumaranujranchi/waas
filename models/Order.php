@@ -62,13 +62,28 @@ class Order
 
         // Fallback: If no direct link, try to guess from the user's latest subscription
         if ($order && empty($order['service_expire'])) {
-            $subSql = "SELECT start_date as service_start, end_date as service_expire, subscription_status
-                       FROM subscriptions 
-                       WHERE user_id = ? 
-                       ORDER BY created_at DESC LIMIT 1";
-            $fallback = $this->db->fetchOne($subSql, [$order['user_id']]);
-            if ($fallback) {
-                $order = array_merge($order, $fallback);
+            // First try matching by Razorpay Transaction ID (which is the Subscription ID for subs)
+            if (!empty($order['payment_id'])) {
+                $subSql = "SELECT start_date as service_start, end_date as service_expire, subscription_status
+                           FROM subscriptions 
+                           WHERE stripe_subscription_id = ? 
+                           LIMIT 1";
+                $fallback = $this->db->fetchOne($subSql, [$order['payment_id']]);
+                if ($fallback) {
+                    $order = array_merge($order, $fallback);
+                }
+            }
+
+            // Still nothing? Try latest for user
+            if (empty($order['service_expire'])) {
+                $subSql = "SELECT start_date as service_start, end_date as service_expire, subscription_status
+                           FROM subscriptions 
+                           WHERE user_id = ? 
+                           ORDER BY created_at DESC LIMIT 1";
+                $fallback = $this->db->fetchOne($subSql, [$order['user_id']]);
+                if ($fallback) {
+                    $order = array_merge($order, $fallback);
+                }
             }
         }
 

@@ -7,8 +7,8 @@
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/functions.php';
 
-// Require login (Redirects if not logged in)
-requireLogin();
+// Remove strict login requirement for viewing the page
+// requireLogin(); 
 
 require_once __DIR__ . '/models/Product.php';
 require_once __DIR__ . '/models/Order.php';
@@ -19,7 +19,8 @@ $pageTitle = 'Checkout | SiteOnSub';
 include __DIR__ . '/includes/header.php';
 
 $productModel = new Product();
-$currentUser = getCurrentUser();
+$currentUser = getCurrentUser(); // Will be null if not logged in
+$isLoggedIn = isLoggedIn();
 
 // Get plan ID from URL
 $planId = $_GET['plan_id'] ?? null;
@@ -48,14 +49,17 @@ $subscriptionId = null; // Initialize variable
 
 // Handle Checkout Initiation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!$isLoggedIn) {
+        // Double check login on post logic to be safe, although UI should prevent it
+        setFlashMessage('error', 'Please login to complete your purchase.');
+        redirect(baseUrl('auth/login.php?redirect=checkout.php?plan_id=' . $planId));
+    }
+
     $orderModel = new Order();
     $subscriptionModel = new Subscription();
 
     // 1. Get Razorpay Plan ID from Config/Mapping
     global $RAZORPAY_PLANS;
-    // We need to fetch the plan again or rely on $planId, but $RAZORPAY_PLANS was defined in config.php.
-    // However, config.php is included in header.php usually, but here we manually included config/config.php at top.
-
     // Check if $RAZORPAY_PLANS is available
     $razorpayPlanId = isset($RAZORPAY_PLANS[$planId]) ? $RAZORPAY_PLANS[$planId] : null;
 
@@ -70,9 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif (isset($razorpaySub['id'])) {
             // Success - Get Subscription ID
             $subscriptionId = $razorpaySub['id'];
-
+            
             // 3. Create Local Order (Pending)
-            $orderData = [
+             $orderData = [
                 'user_id' => getCurrentUserId(),
                 'order_number' => generateOrderNumber(),
                 'total_amount' => $subtotal,
@@ -87,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'payment_id' => $subscriptionId // Store RZP Sub ID temporarily
             ];
 
-            $orderItems = [
+             $orderItems = [
                 [
                     'product_id' => $plan['product_id'],
                     'plan_id' => $planId,
@@ -97,12 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'quantity' => 1
                 ]
             ];
-
+            
             $orderResult = $orderModel->createOrder($orderData, $orderItems);
-
+            
             // 4. Trigger Razorpay JS (handled below in HTML)
         } else {
-            $error = "Unknown error from payment gateway.";
+             $error = "Unknown error from payment gateway.";
         }
     }
 }
@@ -119,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 started</p>
         </div>
 
-        <?php if ($error): ?>
+        <?php if($error): ?>
             <div class="bg-red-100 border border-red-200 text-red-800 px-6 py-4 rounded-xl flex items-center gap-3">
                 <span class="material-symbols-outlined">error</span>
                 <?php echo e($error); ?>
@@ -157,11 +161,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         <div class="p-4 bg-background-light dark:bg-background-dark rounded-lg flex items-start gap-3">
-                            <span class="material-symbols-outlined text-primary">sync</span>
+                             <span class="material-symbols-outlined text-primary">sync</span>
                             <div>
                                 <p class="text-sm font-bold text-gray-900 dark:text-white">Automatic Renewal</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Cancel anytime from your
-                                    dashboard.</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Cancel anytime from your dashboard.</p>
                             </div>
                         </div>
                     </div>
@@ -192,24 +195,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <form method="POST" action="" class="mt-8 space-y-4">
-                            <button type="submit"
-                                class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-lg shadow-lg hover:shadow-primary/20 brightness-110 transition-all flex items-center justify-center gap-2">
-                                <span class="material-symbols-outlined">credit_card</span>
-                                Pay & Subscribe
-                            </button>
-                            <a href="<?php echo baseUrl('product-detail.php?slug=' . $plan['product_id']); ?>"
-                                class="w-full py-2 text-gray-500 dark:text-gray-400 text-sm font-medium hover:text-gray-700 dark:hover:text-white transition-colors text-center block">
-                                Cancel
-                            </a>
-                        </form>
+                        <?php if ($isLoggedIn): ?>
+                            <form method="POST" action="" class="mt-8 space-y-4">
+                                <button type="submit"
+                                    class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-lg shadow-lg hover:shadow-primary/20 brightness-110 transition-all flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined">credit_card</span>
+                                    Pay & Subscribe
+                                </button>
+                                <a href="<?php echo baseUrl('product-detail.php?slug=' . $plan['product_id']); ?>"
+                                    class="w-full py-2 text-gray-500 dark:text-gray-400 text-sm font-medium hover:text-gray-700 dark:hover:text-white transition-colors text-center block">
+                                    Cancel
+                                </a>
+                            </form>
+                        <?php else: ?>
+                            <div class="mt-8 space-y-4">
+                                <a href="<?php echo baseUrl('auth/login.php?redirect=checkout.php?plan_id=' . $planId); ?>"
+                                    class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-lg shadow-lg hover:shadow-primary/20 brightness-110 transition-all flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined">login</span>
+                                    Login to Continue
+                                </a>
+                                <p class="text-xs text-center text-gray-500 dark:text-gray-400">
+                                    You need an account to manage your subscription.
+                                </p>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <div class="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-400 pb-10">
-            <div class="flex items-center gap-2 grayscale opacity-70">
+             <div class="flex items-center gap-2 grayscale opacity-70">
                 <img src="<?php echo baseUrl('assets/banklogo/Visa_Inc._logo.svg'); ?>" class="h-4">
                 <img src="<?php echo baseUrl('assets/banklogo/MasterCard_early_1990s_logo.svg'); ?>" class="h-4">
             </div>
@@ -220,27 +236,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </main>
 
-<?php if ($subscriptionId): ?>
-    <script>
-        var options = {
-            "key": "<?php echo RAZORPAY_KEY_ID; ?>",
-            "subscription_id": "<?php echo $subscriptionId; ?>",
-            "name": "SiteOnSub",
-            "description": "<?php echo $plan['product_name'] . ' - ' . $plan['plan_name']; ?>",
-            "image": "<?php echo baseUrl('assets/images/logo.png'); ?>",
-            "callback_url": "<?php echo baseUrl('payment_callback.php'); ?>",
-            "prefill": {
-                "name": "<?php echo e($currentUser['full_name']); ?>",
-                "email": "<?php echo e($currentUser['email']); ?>",
-                "contact": "<?php echo e($currentUser['phone'] ?? ''); ?>"
-            },
-            "theme": {
-                "color": "#5048e5"
-            }
-        };
-        var rzp1 = new Razorpay(options);
-        rzp1.open();
-    </script>
+<?php if($subscriptionId): ?>
+<script>
+var options = {
+    "key": "<?php echo RAZORPAY_KEY_ID; ?>",
+    "subscription_id": "<?php echo $subscriptionId; ?>",
+    "name": "SiteOnSub",
+    "description": "<?php echo $plan['product_name'] . ' - ' . $plan['plan_name']; ?>",
+    "image": "<?php echo baseUrl('assets/images/logo.png'); ?>",
+    "callback_url": "<?php echo baseUrl('payment_callback.php'); ?>",
+    "prefill": {
+        "name": "<?php echo e($currentUser['full_name']); ?>",
+        "email": "<?php echo e($currentUser['email']); ?>",
+        "contact": "<?php echo e($currentUser['phone'] ?? ''); ?>"
+    },
+    "theme": {
+        "color": "#5048e5"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.open();
+</script>
 <?php endif; ?>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

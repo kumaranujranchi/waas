@@ -17,6 +17,11 @@ require_once __DIR__ . '/models/Order.php';
 require_once __DIR__ . '/models/Product.php';
 require_once __DIR__ . '/models/Subscription.php';
 
+// Defensive: Ensure SITE_URL is defined if config failed to load completely
+if (!defined('SITE_URL')) {
+    define('SITE_URL', 'https://siteonsub.com');
+}
+
 // Check if we have the necessary POST parameters
 if (empty($_POST['razorpay_payment_id']) || empty($_POST['razorpay_subscription_id']) || empty($_POST['razorpay_signature'])) {
     setFlashMessage('error', 'Invalid payment response.');

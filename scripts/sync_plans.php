@@ -11,7 +11,9 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/../config/config.php';
+if (!defined('CURRENCY_SYMBOL')) {
+    require_once __DIR__ . '/../config/config.php';
+}
 require_once __DIR__ . '/../classes/Database.php';
 
 // Razorpay Keys
@@ -22,8 +24,11 @@ echo "<h3>Syncing Plans with Razorpay...</h3>";
 echo "<pre>";
 
 // 1. Fetch Plans from DB
+echo "Connecting to Database...\n";
 $db = Database::getInstance();
+echo "Fetching plans...\n";
 $plans = $db->fetchAll("SELECT p.*, prod.name as product_name FROM pricing_plans p JOIN products prod ON p.product_id = prod.id");
+echo "Found " . count($plans) . " plans.\n";
 
 foreach ($plans as $plan) {
     echo "Processing: " . $plan['product_name'] . " - " . $plan['plan_name'] . "...\n";

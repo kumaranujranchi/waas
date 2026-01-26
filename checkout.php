@@ -4,9 +4,6 @@
  */
 
 // Start session and includes BEFORE any output
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/functions.php';
 
@@ -193,11 +190,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // AFTER ALL LOGIC, set page title and include header
 $pageTitle = 'Checkout | SiteOnSub';
 include __DIR__ . '/includes/header.php';
-echo "<!-- DEBUG: Header Loaded -->";
 ?>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<p style="color:red; text-align:center;">DEBUG: PAGE RENDERING START</p>
 
 <main class="min-h-[70vh] flex justify-center py-12 px-4 relative z-10">
     <div class="max-w-[720px] w-full space-y-8">
@@ -233,7 +228,6 @@ echo "<!-- DEBUG: Header Loaded -->";
 
             <!-- Pricing Breakdown -->
             <div class="p-6 md:p-10">
-                <p>Plan Check: <?php echo $plan['plan_name']; ?></p>
                 <!-- Payment Method Selection -->
                 <form method="POST" action="" id="checkout-form" class="space-y-8">
                     <div class="space-y-4">

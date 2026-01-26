@@ -66,10 +66,10 @@ define('GOOGLE_REDIRECT_URI', SITE_URL . '/auth/google_callback.php');
 
 // Email Settings (SMTP)
 define('SMTP_HOST', 'smtp.hostinger.com');
-define('SMTP_PORT', 465);
+define('SMTP_PORT', 587);
 define('SMTP_USERNAME', 'support@siteonsub.com');
-define('SMTP_PASSWORD', 'Anuj@2026@027');
-define('SMTP_ENCRYPTION', 'ssl');
+define('SMTP_PASSWORD', 'Anuj@2026@2027');
+define('SMTP_ENCRYPTION', 'tls');
 
 // Security
 define('PASSWORD_MIN_LENGTH', 8);

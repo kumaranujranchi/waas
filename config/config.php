@@ -60,15 +60,15 @@ define('PAYPAL_SECRET', 'YOUR_PAYPAL_SECRET');
 define('PAYPAL_MODE', 'sandbox'); // 'sandbox' or 'live'
 
 // Google Auth Configuration
-define('GOOGLE_CLIENT_ID', '1062996273887-oc0bb2af0rrnov0p6ft5foigon08cjfi.apps.googleusercontent.com');
-define('GOOGLE_CLIENT_SECRET', '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');
+define('GOOGLE_CLIENT_ID', 'YOUR_GOOGLE_CLIENT_ID');
+define('GOOGLE_CLIENT_SECRET', 'YOUR_GOOGLE_CLIENT_SECRET');
 define('GOOGLE_REDIRECT_URI', SITE_URL . '/auth/google_callback.php');
 
 // Email Settings (SMTP)
 define('SMTP_HOST', 'smtp.hostinger.com');
 define('SMTP_PORT', 587);
 define('SMTP_USERNAME', 'support@siteonsub.com');
-define('SMTP_PASSWORD', 'Anuj@2026@2027');
+define('SMTP_PASSWORD', 'YOUR_SMTP_PASSWORD_HERE');
 define('SMTP_ENCRYPTION', 'tls');
 
 // Security

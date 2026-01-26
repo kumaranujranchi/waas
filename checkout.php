@@ -4,13 +4,6 @@
  */
 
 // Start session and includes BEFORE any output
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// Force Debug Mode to prevent config.php from turning errors off
-define('DEBUG_MODE', true);
-
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php'; // Fix: Include database config
 require_once __DIR__ . '/includes/functions.php';
@@ -353,25 +346,7 @@ include __DIR__ . '/includes/header.php';
 </main>
 
 <?php if ($subscriptionId): ?>
-    <script>
-        var options = {
-            "key": "<?php echo RAZORPAY_KEY_ID; ?>",
-            "subscription_id": "<?php echo $subscriptionId; ?>",
-            "name": "SiteOnSub",
-            "description": "<?php echo $plan['product_name'] . ' - ' . $plan['plan_name']; ?>",
-            "image": "<?php echo baseUrl('assets/images/logo.png'); ?>",
-            "callback_url": "<?php echo baseUrl('payment_callback.php'); ?>",
-            "prefill": {
-                "name": "<?php echo e($currentUser['full_name']); ?>",
-                "email": "<?php echo e($currentUser['email']); ?>",
-                "contact": "<?php echo e($currentUser['phone'] ?? ''); ?>"
-            },
-            "theme": {
-                "color": "#5048e5"
-            }
-        };
-        var rzp1 = new Razorpay(options);
-        rzp1.open();
+    <script>     var options = {         "key": "<?php echo RAZORPAY_KEY_ID; ?>",         "subscription_id": "<?php echo $subscriptionId; ?>",         "name": "SiteOnSub",         "description": "<?php echo $plan['product_name'] . ' - ' . $plan['plan_name']; ?>",         "image": "<?php echo baseUrl('assets/images/logo.png'); ?>",         "callback_url": "<?php echo baseUrl('payment_callback.php'); ?>",         "prefill": {             "name": "<?php echo e($currentUser['full_name']); ?>",             "email": "<?php echo e($currentUser['email']); ?>",             "contact": "<?php echo e($currentUser['phone'] ?? ''); ?>"         },         "theme": {             "color": "#5048e5"         }     };     var rzp1 = new Razorpay(options);     rzp1.open();
     </script>
 <?php endif; ?>
 

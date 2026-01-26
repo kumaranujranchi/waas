@@ -415,3 +415,94 @@ function verifyPayPalSubscription($subscriptionId)
 
     return json_decode($result, true);
 }
+
+/**
+ * Create PayPal Product (Required before creating plans)
+ */
+function createPayPalProduct($name, $description, $type = 'SERVICE', $category = 'SOFTWARE')
+{
+    $token = getPayPalAccessToken();
+    if (is_array($token) && isset($token['error']))
+        return $token;
+
+    $mode = defined('PAYPAL_MODE') ? PAYPAL_MODE : 'sandbox';
+    $url = ($mode === 'live') ? 'https://api-m.paypal.com/v1/catalogs/products' : 'https://api-m.sandbox.paypal.com/v1/catalogs/products';
+
+    $data = [
+        'name' => $name,
+        'description' => $description,
+        'type' => $type,
+        'category' => $category,
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $token,
+        'PayPal-Request-Id: ' . uniqid()
+    ]);
+
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return json_decode($result, true);
+}
+
+/**
+ * Create PayPal Plan
+ */
+function createPayPalPlan($productId, $name, $price, $intervalCount, $intervalUnit = 'MONTH')
+{
+    $token = getPayPalAccessToken();
+    if (is_array($token) && isset($token['error']))
+        return $token;
+
+    $mode = defined('PAYPAL_MODE') ? PAYPAL_MODE : 'sandbox';
+    $url = ($mode === 'live') ? 'https://api-m.paypal.com/v1/billing/plans' : 'https://api-m.sandbox.paypal.com/v1/billing/plans';
+
+    $data = [
+        'product_id' => $productId,
+        'name' => $name,
+        'billing_cycles' => [
+            [
+                'frequency' => [
+                    'interval_unit' => $intervalUnit,
+                    'interval_count' => $intervalCount
+                ],
+                'tenure_type' => 'REGULAR',
+                'sequence' => 1,
+                'total_cycles' => 0, // Infinite
+                'pricing_scheme' => [
+                    'fixed_price' => [
+                        'value' => number_format($price / 85, 2, '.', ''), // Approximate USD conversion
+                        'currency_code' => 'USD'
+                    ]
+                ]
+            ]
+        ],
+        'payment_preferences' => [
+            'auto_bill_outstanding' => true,
+            'setup_fee' => ['value' => '0', 'currency_code' => 'USD'],
+            'setup_fee_failure_action' => 'CONTINUE',
+            'payment_failure_threshold' => 3
+        ]
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $token,
+        'PayPal-Request-Id: ' . uniqid()
+    ]);
+
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return json_decode($result, true);
+}

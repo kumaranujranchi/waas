@@ -95,7 +95,7 @@ if (hash_equals($expectedSignature, $signature)) {
             }
 
             setFlashMessage('success', 'Payment successful! Your subscription is now active.');
-            redirect(baseUrl('dashboard/index.php'));
+            redirect(baseUrl('payment_success.php?order_id=' . $order['id']));
 
         } else {
             // Order not found for this subscription ID

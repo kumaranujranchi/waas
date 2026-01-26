@@ -1,12 +1,11 @@
 <?php
 /**
- * Setup PayPal Plans Script
- * Run this to generate PayPal Plans for all products and update the database.
- */
-
-// Error warning
+ *// Setup PayPal Plans Script
 ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+// Run this to generate PayPal Plans for all products and update the database.
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';

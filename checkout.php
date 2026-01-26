@@ -3,15 +3,20 @@
  * Checkout Page
  */
 
-$pageTitle = 'Checkout | SiteOnSub';
-include __DIR__ . '/includes/header.php';
+// Start session and includes BEFORE any output
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/includes/functions.php';
 
-// Require login
+// Require login (Redirects if not logged in)
 requireLogin();
 
 require_once __DIR__ . '/models/Product.php';
 require_once __DIR__ . '/models/Order.php';
 require_once __DIR__ . '/models/Subscription.php';
+
+$pageTitle = 'Checkout | SiteOnSub';
+// Now include header which outputs HTML
+include __DIR__ . '/includes/header.php';
 
 $productModel = new Product();
 $currentUser = getCurrentUser();
@@ -39,6 +44,7 @@ $total = $subtotal + $tax;
 
 // Initialize error
 $error = null;
+$subscriptionId = null; // Initialize variable
 
 // Handle Checkout Initiation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -47,7 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 1. Get Razorpay Plan ID from Config/Mapping
     global $RAZORPAY_PLANS;
-    $razorpayPlanId = $RAZORPAY_PLANS[$planId] ?? null;
+    // We need to fetch the plan again or rely on $planId, but $RAZORPAY_PLANS was defined in config.php.
+    // However, config.php is included in header.php usually, but here we manually included config/config.php at top.
+
+    // Check if $RAZORPAY_PLANS is available
+    $razorpayPlanId = isset($RAZORPAY_PLANS[$planId]) ? $RAZORPAY_PLANS[$planId] : null;
 
     if (!$razorpayPlanId) {
         $error = "Payment plan configuration missing. Please contact support.";
@@ -56,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $razorpaySub = createRazorpaySubscription($razorpayPlanId);
 
         if (isset($razorpaySub['error'])) {
-            $error = "Gateway Error: " . $razorpaySub['error']['description'] ?? $razorpaySub['error'];
+            $error = "Gateway Error: " . ($razorpaySub['error']['description'] ?? $razorpaySub['error']);
         } elseif (isset($razorpaySub['id'])) {
             // Success - Get Subscription ID
             $subscriptionId = $razorpaySub['id'];
@@ -90,8 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $orderResult = $orderModel->createOrder($orderData, $orderItems);
 
-            // 4. Trigger Razorpay JS
-            // Pass necessary data to JavaScript
+            // 4. Trigger Razorpay JS (handled below in HTML)
         } else {
             $error = "Unknown error from payment gateway.";
         }
@@ -211,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </main>
 
-<?php if (isset($subscriptionId)): ?>
+<?php if ($subscriptionId): ?>
     <script>
         var options = {
             "key": "<?php echo RAZORPAY_KEY_ID; ?>",

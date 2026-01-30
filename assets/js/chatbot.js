@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create Chat Widget HTML
     const chatWidget = document.createElement('div');
     chatWidget.innerHTML = `
-        <div id="sos-chatbot" class="fixed bottom-6 right-6 z-50 font-sans">
+        <div id="sos-chatbot" class="fixed bottom-6 right-6 z-[9990] font-sans">
             <!-- Chat Window -->
             <div id="sos-chat-window" class="hidden flex-col w-[350px] h-[500px] bg-white dark:bg-[#1a1c2e] rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 transition-all duration-300 origin-bottom-right transform scale-95 opacity-0">
                 <!-- Header -->
@@ -20,9 +20,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             <span class="text-xs text-white/80">Support & Sales</span>
                         </div>
                     </div>
-                    <button id="sos-close-btn" class="hover:bg-white/20 p-1 rounded-full transition-colors">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
+                    <div class="flex items-center gap-1">
+                        <button id="sos-minimize-btn" class="hover:bg-white/20 p-1 rounded-full transition-colors" title="Minimize">
+                            <span class="material-symbols-outlined">remove</span>
+                        </button>
+                        <button id="sos-close-btn" class="hover:bg-white/20 p-1 rounded-full transition-colors" title="Close">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
                 </div>
                 
                 <!-- Messages Area -->
@@ -63,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Elements
     const toggleBtn = document.getElementById('sos-toggle-btn');
     const closeBtn = document.getElementById('sos-close-btn');
+    const minimizeBtn = document.getElementById('sos-minimize-btn');
     const chatWindow = document.getElementById('sos-chat-window');
     const chatForm = document.getElementById('sos-chat-form');
     const chatInput = document.getElementById('sos-chat-input');
@@ -79,14 +85,17 @@ document.addEventListener('DOMContentLoaded', function() {
         chatInput.focus();
     });
 
-    closeBtn.addEventListener('click', () => {
+    const closeAction = () => {
         chatWindow.classList.remove('scale-100', 'opacity-100');
         chatWindow.classList.add('scale-95', 'opacity-0');
         setTimeout(() => {
             chatWindow.classList.add('hidden');
             toggleBtn.classList.remove('hidden');
         }, 300);
-    });
+    };
+
+    closeBtn.addEventListener('click', closeAction);
+    minimizeBtn.addEventListener('click', closeAction);
 
     // Send Message
     chatForm.addEventListener('submit', async (e) => {

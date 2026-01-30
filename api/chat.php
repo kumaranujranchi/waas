@@ -48,6 +48,35 @@ if (empty($userMessage)) {
 
 $userName = $input['user_name'] ?? 'User';
 
+// --- Start Dynamic Knowledge Base ---
+require_once __DIR__ . '/../models/Product.php';
+$productModel = new Product();
+$products = $productModel->getAllProducts();
+$knowledgeBase = "";
+
+if (!empty($products)) {
+    $knowledgeBase .= "Current Services and Pricing:\n";
+    foreach ($products as $product) {
+        $knowledgeBase .= "- Service: " . $product['name'] . "\n";
+        $knowledgeBase .= "  Description: " . ($product['short_description'] ?? 'Professional WaaS service') . "\n";
+
+        $plans = $productModel->getProductPricingPlans($product['id'], true);
+        if (!empty($plans)) {
+            $knowledgeBase .= "  Pricing Plans:\n";
+            foreach ($plans as $plan) {
+                $knowledgeBase .= "    * " . $plan['name'] . ": ₹" . number_with_commas($plan['price']) . " / " . $plan['billing_cycle'] . "\n";
+            }
+        }
+        $knowledgeBase .= "\n";
+    }
+}
+
+function number_with_commas($n)
+{
+    return number_format($n, 0, '.', ',');
+}
+// --- End Dynamic Knowledge Base ---
+
 // System Prompt / Training Data
 $systemPrompt = <<<EOT
 You are the sales and support AI assistant for "SiteOnSub", a Website as a Service (WaaS) platform.
@@ -74,39 +103,43 @@ Here is your training data:
 - Exit Charges: Nominal one-time fee depending on complexity.
 - Safe Custody: Data kept for 1 month, Source code for 1 year after exit.
 
-4. Monthly Plan Inclusions
+4. Real-time Service & Pricing (FETCHED FROM DATABASE)
+{$knowledgeBase}
+
+5. Monthly Plan Inclusions
 - Included: Development, Support, Maintenance, Site updates, Hosting, Database (if in plan).
 - Not Included: Domain (Client buys domain for full ownership).
 
-5. SEO Policy
+6. SEO Policy
 - Free with Plan: On-page SEO, Technical SEO, Website-level fixes, Google Search Console error fixing.
 - Client Role: Just report errors.
 - Not Included: Backlink building, Off-page SEO.
 
-6. Updates Policy
+7. Updates Policy
 - 3 updates per month FREE (Content changes, minor fixes).
 - More than 3 updates: Custom pricing based on complexity.
 
-7. Support & Monitoring
+8. Support & Monitoring
 - Monitoring: Daily monitoring of all websites.
 - Server Issues: Prior email notification.
 - Non-Server Issues: 24 hours recovery.
 - Support: Monday - Saturday, 10 AM - 12 PM.
 - Urgent: Mark ticket as High Priority.
 
-8. Target Audience
+9. Target Audience
 - Startups, Small Businesses, Agencies, Enterprises, NGOs, E-commerce, Service businesses.
 
-9. Tone Guidelines
+10. Tone Guidelines
 - Language: Simple Hinglish.
 - Style: Friendly, Clear, Non-technical.
 - Focus: Cost saving, Ownership, No lock-in, Tension-free.
 
-10. Closing Example
+11. Closing Example
 - "Agar aap bina heavy investment ke ek professionally managed website chahte ho jisme ownership bhi aapki rahe, to SiteOnSub aapke liye perfect option hai 😊"
 
 IMPORTANT INSTRUCTIONS:
-- If asked about pricing not mentioned here, refer them to the pricing section on the website.
+- If asked about pricing not mentioned in the dynamic data above, refer them to the pricing section on the website.
+- Use the pricing from the "Real-time Service & Pricing" section above as the source of truth.
 - Do not make up facts.
 - Be concise.
 - Use emojis occasionally to be friendly.

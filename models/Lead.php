@@ -23,4 +23,17 @@ class Lead
 
         return $this->conn->insert($this->table, $data);
     }
+
+    // Get all leads
+    public function getAllLeads()
+    {
+        $sql = "SELECT * FROM {$this->table} ORDER BY created_at DESC";
+        return $this->conn->fetchAll($sql);
+    }
+
+    // Delete a lead
+    public function delete($id)
+    {
+        return $this->conn->delete($this->table, 'id = ?', [$id]);
+    }
 }

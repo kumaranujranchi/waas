@@ -8,15 +8,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let chatState = JSON.parse(localStorage.getItem(STATE_KEY)) || {
         isLeadCaptured: false,
         leadId: null,
-        userName: 'User'
+        userName: 'User',
+        isMaximized: false
     };
 
     // Create Chat Widget HTML
     const chatWidget = document.createElement('div');
     chatWidget.innerHTML = `
-        <div id="sos-chatbot" class="fixed bottom-6 right-6 z-[9990] font-sans">
+        <div id="sos-chatbot" class="fixed bottom-6 right-6 z-[9990] font-sans transition-all duration-300">
             <!-- Chat Window -->
-            <div id="sos-chat-window" class="hidden flex flex-col w-[350px] h-[500px] max-h-[80vh] bg-white dark:bg-[#1a1c2e] rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 transition-all duration-300 origin-bottom-right transform scale-95 opacity-0">
+            <div id="sos-chat-window" class="hidden flex flex-col bg-white dark:bg-[#1a1c2e] rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 transition-all duration-300 origin-bottom-right transform scale-95 opacity-0">
                 <!-- Header -->
                 <div class="bg-primary p-4 flex justify-between items-center text-white shrink-0">
                     <div class="flex items-center gap-3">
@@ -29,11 +30,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                     <div class="flex items-center gap-1">
+                        <button id="sos-resizer-btn" class="hover:bg-white/20 p-1 rounded-full transition-colors hidden md:flex" title="Maximize">
+                            <span class="material-symbols-outlined text-[20px]">open_in_full</span>
+                        </button>
                         <button id="sos-minimize-btn" class="hover:bg-white/20 p-1 rounded-full transition-colors" title="Minimize">
-                            <span class="material-symbols-outlined">remove</span>
+                            <span class="material-symbols-outlined text-[20px]">remove</span>
                         </button>
                         <button id="sos-close-btn" class="hover:bg-white/20 p-1 rounded-full transition-colors" title="Close">
-                            <span class="material-symbols-outlined">close</span>
+                            <span class="material-symbols-outlined text-[20px]">close</span>
                         </button>
                     </div>
                 </div>
@@ -70,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.getElementById('sos-toggle-btn');
     const closeBtn = document.getElementById('sos-close-btn');
     const minimizeBtn = document.getElementById('sos-minimize-btn');
+    const resizerBtn = document.getElementById('sos-resizer-btn');
     const chatWindow = document.getElementById('sos-chat-window');
     
     // Screens
@@ -77,6 +82,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatForm = document.getElementById('sos-chat-form');
     const chatInput = document.getElementById('sos-chat-input');
     const messagesContainer = document.getElementById('sos-messages');
+
+    // Resizing Logic
+    const applySize = () => {
+        if (chatState.isMaximized) {
+            chatWindow.classList.remove('w-[350px]', 'h-[500px]');
+            chatWindow.classList.add('w-[90vw]', 'md:w-[800px]', 'h-[80vh]');
+            resizerBtn.querySelector('span').textContent = 'close_fullscreen';
+            resizerBtn.title = 'Restore';
+        } else {
+            chatWindow.classList.remove('w-[90vw]', 'md:w-[800px]', 'h-[80vh]');
+            chatWindow.classList.add('w-[350px]', 'h-[500px]');
+            resizerBtn.querySelector('span').textContent = 'open_in_full';
+            resizerBtn.title = 'Maximize';
+        }
+    };
+
+    resizerBtn.addEventListener('click', () => {
+        chatState.isMaximized = !chatState.isMaximized;
+        localStorage.setItem(STATE_KEY, JSON.stringify(chatState));
+        applySize();
+    });
+
+    // Initial size application
+    applySize();
 
     // Initial Greeting
     const showGreeting = () => {

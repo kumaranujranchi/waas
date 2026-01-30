@@ -256,4 +256,12 @@ class Order
     {
         return $this->db->update('orders', ['subscription_id' => $subscriptionId], 'id = ?', [$orderId]);
     }
+
+    /**
+     * Generic Update Order
+     */
+    public function updateOrder($id, $data)
+    {
+        return $this->db->update('orders', $data, 'id = ?', [$id]);
+    }
 }

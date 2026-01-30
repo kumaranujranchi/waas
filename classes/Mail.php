@@ -137,4 +137,55 @@ class Mail
             return false;
         }
     }
+
+    /**
+     * Send Payment Pending Email
+     */
+    public static function sendPaymentPending($toEmail, $userName, $orderNumber, $amount, $paymentLink)
+    {
+        $mail = self::getMailer();
+        if (!$mail)
+            return false;
+
+        try {
+            $mail->addAddress($toEmail, $userName);
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Action Required: Complete Your Payment | ' . SITE_NAME;
+
+            $body = "
+                <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;'>
+                    <div style='text-align: center; margin-bottom: 20px;'>
+                        <h1 style='color: #4f46e5; margin: 0;'>" . SITE_NAME . "</h1>
+                    </div>
+                    <p>Hello <strong>$userName</strong>,</p>
+                    <p>We noticed that you initiated an order <strong>#$orderNumber</strong> but the payment was not completed.</p>
+                    
+                    <div style='background: #fffbeb; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; margin: 20px 0;'>
+                        <p style='margin: 0; font-weight: bold; color: #b45309;'>Payment Pending</p>
+                        <p style='margin: 5px 0;'>Amount Due: " . CURRENCY_SYMBOL . number_format($amount, 2) . "</p>
+                    </div>
+
+                    <p>To avoid cancellation, please complete your payment by clicking the button below:</p>
+                    
+                    <div style='text-align: center; margin-top: 30px;'>
+                        <a href='$paymentLink' style='background: #4f46e5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Complete Payment</a>
+                    </div>
+                    
+                    <p style='text-align: center; margin-top: 20px; font-size: 14px;'>
+                        <a href='$paymentLink' style='color: #4f46e5;'>$paymentLink</a>
+                    </p>
+
+                    <hr style='border: 0; border-top: 1px solid #eee; margin-top: 40px;'>
+                    <p style='font-size: 12px; color: #9ca3af;'>If you have already paid, please ignore this message.</p>
+                </div>
+            ";
+
+            $mail->Body = $body;
+            return $mail->send();
+        } catch (Exception $e) {
+            error_log("Payment pending email error: " . $e->getMessage());
+            return false;
+        }
+    }
 }

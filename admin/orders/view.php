@@ -274,6 +274,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
             </div>
 
+            <?php if ($order['payment_status'] === 'pending'): ?>
+                <!-- Actions -->
+                <div
+                    class="bg-white dark:bg-white/5 rounded-3xl border-2 border-gray-300 dark:border-white/10 shadow-sm p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="material-symbols-outlined text-primary">notifications_active</span>
+                        <h3 class="text-sm font-black uppercase tracking-widest text-[#0f0e1b] dark:text-white">Actions</h3>
+                    </div>
+                    <form action="send_reminder.php" method="POST">
+                        <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
+                        <button type="submit" onclick="return confirm('Send payment reminder email to customer?')"
+                            class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-600/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-sm">send</span>
+                            Send Payment Reminder
+                        </button>
+                    </form>
+                </div>
+            <?php endif; ?>
+
             <!-- Customer Details -->
             <div
                 class="bg-white dark:bg-white/5 rounded-3xl border-2 border-gray-300 dark:border-white/10 shadow-sm p-8">

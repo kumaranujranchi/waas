@@ -17,13 +17,33 @@ $productModel = new Product();
 $currentUser = getCurrentUser(); // Will be null if not logged in
 $isLoggedIn = isLoggedIn();
 
-// Get plan ID from URL
+// Get plan ID or Order ID from URL
 $planId = $_GET['plan_id'] ?? null;
+$orderId = $_GET['order_id'] ?? null;
 
-if (!$planId) {
-    setFlashMessage('error', 'Please select a plan');
+if (!$planId && !$orderId) {
+    setFlashMessage('error', 'Invalid request');
     header("Location: " . baseUrl('index.php'));
     exit;
+}
+
+// Logic for Resuming Payment (Order ID)
+$existingOrder = null;
+if ($orderId) {
+    $orderModel = new Order();
+    $existingOrder = $orderModel->getOrderById($orderId);
+
+    if (!$existingOrder || $existingOrder['user_id'] != getCurrentUserId() || $existingOrder['payment_status'] === 'completed') {
+        setFlashMessage('error', 'Invalid or completed order');
+        redirect(baseUrl('dashboard/orders.php'));
+    }
+
+    // Get the plan from the order items
+    // Assuming single item order for now as per current logic
+    $orderItems = $orderModel->getOrderItems($orderId);
+    if (!empty($orderItems)) {
+        $planId = $orderItems[0]['plan_id'];
+    }
 }
 
 // Get plan details
@@ -34,10 +54,16 @@ if (!$plan) {
     redirect(baseUrl('index.php'));
 }
 
-// Calculate totals
-$subtotal = $plan['price'];
-$tax = calculateTax($subtotal);
-$total = $subtotal + $tax;
+// Calculate totals (Use existing order totals if available to match exactly)
+if ($existingOrder) {
+    $subtotal = $existingOrder['total_amount'];
+    $tax = $existingOrder['tax_amount'];
+    $total = $existingOrder['final_amount'];
+} else {
+    $subtotal = $plan['price'];
+    $tax = calculateTax($subtotal);
+    $total = $subtotal + $tax;
+}
 
 // Initialize error
 $error = null;
@@ -46,10 +72,11 @@ $subscriptionId = null; // Initialize variable
 // Handle Checkout Initiation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$isLoggedIn) {
-        // Double check login on post logic to be safe, although UI should prevent it
+        $redirectUrl = $orderId ? 'checkout.php?order_id=' . $orderId : 'checkout.php?plan_id=' . $planId;
         setFlashMessage('error', 'Please login to complete your purchase.');
-        redirect(baseUrl('auth/login.php?redirect=checkout.php?plan_id=' . $planId));
+        redirect(baseUrl('auth/login.php?redirect=' . urlencode($redirectUrl)));
     }
+
 
     $orderModel = new Order();
     $subscriptionModel = new Subscription();
@@ -93,34 +120,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Success - Get Subscription ID
             $subscriptionId = $razorpaySub['id'];
 
-            // 3. Create Local Order (Pending)
-            $orderData = [
-                'user_id' => getCurrentUserId(),
-                'order_number' => generateOrderNumber(),
-                'total_amount' => $subtotal,
-                'tax_amount' => $tax,
-                'discount_amount' => 0,
-                'final_amount' => $total,
-                'currency' => CURRENCY,
-                'payment_status' => 'pending',
-                'payment_method' => 'razorpay_subscription',
-                'billing_email' => $currentUser['email'],
-                'billing_name' => $currentUser['full_name'],
-                'payment_id' => $subscriptionId // Store RZP Sub ID temporarily
-            ];
+            // 3. Create or Update Local Order
+            if ($existingOrder) {
+                // Update existing order with new payment method/ID if needed
+                // But mainly just keep the ID
+                $localOrderId = $existingOrder['id'];
 
-            $orderItems = [
-                [
-                    'product_id' => $plan['product_id'],
-                    'plan_id' => $planId,
-                    'product_name' => $plan['product_name'],
-                    'plan_name' => $plan['plan_name'],
-                    'price' => $plan['price'],
-                    'quantity' => 1
-                ]
-            ];
+                // Update the payment_id in DB to the new subscription ID
+                $orderModel->updateOrder($localOrderId, ['payment_id' => $subscriptionId]);
+            } else {
+                // Create New Order
+                $orderData = [
+                    'user_id' => getCurrentUserId(),
+                    'order_number' => generateOrderNumber(),
+                    'total_amount' => $subtotal,
+                    'tax_amount' => $tax,
+                    'discount_amount' => 0,
+                    'final_amount' => $total,
+                    'currency' => CURRENCY,
+                    'payment_status' => 'pending',
+                    'payment_method' => 'razorpay_subscription',
+                    'billing_email' => $currentUser['email'],
+                    'billing_name' => $currentUser['full_name'],
+                    'payment_id' => $subscriptionId // Store RZP Sub ID temporarily
+                ];
 
-            $orderModel->createOrder($orderData, $orderItems);
+                $orderItems = [
+                    [
+                        'product_id' => $plan['product_id'],
+                        'plan_id' => $planId,
+                        'product_name' => $plan['product_name'],
+                        'plan_name' => $plan['plan_name'],
+                        'price' => $plan['price'],
+                        'quantity' => 1
+                    ]
+                ];
+
+                $localOrderId = $orderModel->createOrder($orderData, $orderItems);
+
+                // Trigger Payment Pending Email
+                sendPaymentPendingEmail($localOrderId);
+            }
 
             // 4. Trigger Razorpay JS (handled below in HTML)
         } else {

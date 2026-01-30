@@ -405,6 +405,41 @@ function cancelRazorpaySubscription($subscriptionId)
     return json_decode($result, true);
 }
 
+/**
+ * Send Payment Pending Email Helper
+ */
+function sendPaymentPendingEmail($orderId)
+{
+    require_once __DIR__ . '/../classes/Database.php';
+    require_once __DIR__ . '/../classes/Mail.php';
+
+    $db = Database::getInstance();
+
+    // Fetch Order with User Details
+    $sql = "
+        SELECT o.*, u.full_name, u.email 
+        FROM orders o 
+        JOIN users u ON o.user_id = u.id 
+        WHERE o.id = ?
+    ";
+
+    $order = $db->fetchOne($sql, [$orderId]);
+
+    if (!$order) {
+        return false;
+    }
+
+    $paymentLink = baseUrl('checkout.php?order_id=' . $order['id']);
+
+    return Mail::sendPaymentPending(
+        $order['email'],
+        $order['full_name'],
+        $order['order_number'],
+        $order['final_amount'],
+        $paymentLink
+    );
+}
+
 
 
 

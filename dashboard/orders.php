@@ -128,7 +128,8 @@ $orders = $orderModel->getUserOrders($userId);
                         </div>
 
                         <?php if ($order['payment_status'] === 'pending'): ?>
-                            <a href="#" class="text-sm font-bold text-primary hover:underline">Complete Payment →</a>
+                            <a href="<?php echo baseUrl('checkout.php?order_id=' . $order['id']); ?>"
+                                class="text-sm font-bold text-primary hover:underline">Complete Payment →</a>
                         <?php endif; ?>
                     </div>
                 </div>

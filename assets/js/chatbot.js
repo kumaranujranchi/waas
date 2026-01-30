@@ -3,6 +3,14 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // State Management
+    const STATE_KEY = 'sos_chat_state';
+    let chatState = JSON.parse(localStorage.getItem(STATE_KEY)) || {
+        isLeadCaptured: false,
+        leadId: null,
+        userName: 'User'
+    };
+
     // Create Chat Widget HTML
     const chatWidget = document.createElement('div');
     chatWidget.innerHTML = `
@@ -29,31 +37,68 @@ document.addEventListener('DOMContentLoaded', function() {
                         </button>
                     </div>
                 </div>
-                
-                <!-- Messages Area -->
-                <!-- Added data-lenis-prevent to stop Lenis smooth scroll interference -->
-                <div id="sos-messages" data-lenis-prevent class="flex-1 min-h-0 p-4 overflow-y-auto space-y-4 bg-gray-50 dark:bg-[#0f0e1b] scroll-smooth overscroll-contain">
-                    <!-- Welcome Message -->
-                    <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
-                        </div>
-                        <div class="bg-white dark:bg-white/10 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-white/5">
-                            Hi! 👋 Main SiteOnSub ka AI banking assistant hu. <br><br>
-                            Aap mujhse website subscription plans, ownership, ya SEO ke baare me pooch sakte hain. Kaise help kar sakta hu?
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Input Area -->
-                <div class="p-4 bg-white dark:bg-[#1a1c2e] border-t border-gray-100 dark:border-white/10 shrink-0">
-                    <form id="sos-chat-form" class="flex items-center gap-2">
-                        <input type="text" id="sos-chat-input" placeholder="Type your message..." 
-                            class="flex-1 px-4 py-2 rounded-full border border-gray-200 dark:border-white/10 dark:bg-white/5 focus:outline-none focus:border-primary text-sm">
-                        <button type="submit" class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                            <span class="material-symbols-outlined text-sm">send</span>
+                <!-- LEAD FORM (Visible if no lead captured) -->
+                <div id="sos-lead-form-container" class="${chatState.isLeadCaptured ? 'hidden' : 'flex'} flex-col flex-1 p-6 overflow-y-auto bg-gray-50 dark:bg-[#0f0e1b]">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="material-symbols-outlined text-primary text-3xl">diversity_3</span>
+                        </div>
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-1">Welcome! 👋</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Please introduce yourself to start chatting.</p>
+                    </div>
+                    
+                    <form id="sos-lead-form" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 ml-1">Full Name</label>
+                            <input type="text" name="name" required placeholder="John Doe"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 dark:bg-white/5 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none text-sm transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 ml-1">Phone Number</label>
+                            <input type="tel" name="phone" required placeholder="9876543210" maxlength="10" pattern="[6-9][0-9]{9}"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 dark:bg-white/5 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none text-sm transition-all">
+                            <p class="text-[10px] text-red-500 mt-1 hidden" id="phone-error">Please enter a valid 10-digit mobile number.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 ml-1">Email Address</label>
+                            <input type="email" name="email" required placeholder="john@example.com"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 dark:bg-white/5 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none text-sm transition-all">
+                        </div>
+                        <button type="submit" id="start-chat-btn" 
+                            class="w-full bg-primary text-white py-3 rounded-xl font-medium shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2">
+                            <span>Start Chatting</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
                         </button>
                     </form>
+                </div>
+                
+                <!-- CHAT INTERFACE (Visible if lead captured) -->
+                <!-- Added data-lenis-prevent to stop Lenis smooth scroll interference -->
+                <div id="sos-chat-interface" class="${chatState.isLeadCaptured ? 'flex' : 'hidden'} flex-col flex-1 h-full min-h-0">
+                    <div id="sos-messages" data-lenis-prevent class="flex-1 min-h-0 p-4 overflow-y-auto space-y-4 bg-gray-50 dark:bg-[#0f0e1b] scroll-smooth overscroll-contain">
+                        <!-- Welcome Message -->
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
+                            </div>
+                            <div class="bg-white dark:bg-white/10 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-white/5">
+                                Hi ${chatState.userName}! 👋 Main SiteOnSub ka AI banking assistant hu. <br><br>
+                                Aap mujhse website subscription plans, ownership, ya SEO ke baare me pooch sakte hain. Kaise help kar sakta hu?
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="p-4 bg-white dark:bg-[#1a1c2e] border-t border-gray-100 dark:border-white/10 shrink-0">
+                        <form id="sos-chat-form" class="flex items-center gap-2">
+                            <input type="text" id="sos-chat-input" placeholder="Type your message..." 
+                                class="flex-1 px-4 py-2 rounded-full border border-gray-200 dark:border-white/10 dark:bg-white/5 focus:outline-none focus:border-primary text-sm">
+                            <button type="submit" class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span class="material-symbols-outlined text-sm">send</span>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -71,6 +116,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = document.getElementById('sos-close-btn');
     const minimizeBtn = document.getElementById('sos-minimize-btn');
     const chatWindow = document.getElementById('sos-chat-window');
+    
+    // Screens
+    const leadFormContainer = document.getElementById('sos-lead-form-container');
+    const leadForm = document.getElementById('sos-lead-form');
+    const chatInterface = document.getElementById('sos-chat-interface');
+    
     const chatForm = document.getElementById('sos-chat-form');
     const chatInput = document.getElementById('sos-chat-input');
     const messagesContainer = document.getElementById('sos-messages');
@@ -83,7 +134,10 @@ document.addEventListener('DOMContentLoaded', function() {
             chatWindow.classList.add('scale-100', 'opacity-100');
         }, 10);
         toggleBtn.classList.add('hidden');
-        chatInput.focus();
+        
+        if (chatState.isLeadCaptured) {
+            chatInput.focus();
+        }
     });
 
     const closeAction = () => {
@@ -98,7 +152,79 @@ document.addEventListener('DOMContentLoaded', function() {
     closeBtn.addEventListener('click', closeAction);
     minimizeBtn.addEventListener('click', closeAction);
 
-    // Send Message
+    // Handle Lead Form Submission
+    leadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const btn = document.getElementById('start-chat-btn');
+        const formData = new FormData(leadForm);
+        const name = formData.get('name').trim();
+        const email = formData.get('email').trim();
+        const phone = formData.get('phone').trim();
+
+        // Strict Phone Validation
+        const phoneRegex = /^[6-9]\d{9}$/;
+        const phoneError = document.getElementById('phone-error');
+        
+        if (!phoneRegex.test(phone)) {
+            phoneError.classList.remove('hidden');
+            return;
+        } else {
+            phoneError.classList.add('hidden');
+        }
+
+        // Loading State
+        const originalBtnContent = btn.innerHTML;
+        btn.innerHTML = '<span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Connecting...';
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(extractBaseUrl() + 'api/chat.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    action: 'save_lead',
+                    name: name,
+                    email: email,
+                    phone: phone
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Success! Switch to chat
+                chatState = {
+                    isLeadCaptured: true,
+                    leadId: data.lead_id,
+                    userName: name
+                };
+                localStorage.setItem(STATE_KEY, JSON.stringify(chatState));
+                
+                // Show chat interface
+                leadFormContainer.classList.add('hidden');
+                chatInterface.classList.remove('hidden');
+                chatInterface.classList.add('flex');
+                
+                // Update Welcome Message Name
+                const welcomeMsg = messagesContainer.querySelector('.text-sm');
+                if (welcomeMsg) {
+                    welcomeMsg.innerHTML = welcomeMsg.innerHTML.replace('Hi User!', `Hi ${name}!`);
+                }
+
+            } else {
+                alert('Connection failed. Please try again.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Something went wrong. Please check your connection.');
+        } finally {
+            btn.innerHTML = originalBtnContent;
+            btn.disabled = false;
+        }
+    });
+
+    // Send Chat Message
     chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const message = chatInput.value.trim();
@@ -117,7 +243,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch(extractBaseUrl() + 'api/chat.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message })
+                body: JSON.stringify({ 
+                    message: message,
+                    user_name: chatState.userName
+                })
             });
 
             const data = await response.json();

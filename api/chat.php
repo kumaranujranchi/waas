@@ -14,17 +14,46 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $input = json_decode(file_get_contents('php://input'), true);
 $userMessage = $input['message'] ?? '';
 
+// Handle Lead Saving
+if (isset($input['action']) && $input['action'] === 'save_lead') {
+    require_once __DIR__ . '/../models/Lead.php';
+
+    $name = $input['name'] ?? '';
+    $email = $input['email'] ?? '';
+    $phone = $input['phone'] ?? '';
+
+    if (empty($name) || empty($email) || empty($phone)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Name, Email and Phone are required']);
+        exit;
+    }
+
+    $lead = new Lead();
+    $leadId = $lead->create($name, $email, $phone);
+
+    if ($leadId) {
+        echo json_encode(['success' => true, 'lead_id' => $leadId]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to save lead']);
+    }
+    exit;
+}
+
 if (empty($userMessage)) {
     http_response_code(400);
     echo json_encode(['error' => 'Message is required']);
     exit;
 }
 
+$userName = $input['user_name'] ?? 'User';
+
 // System Prompt / Training Data
 $systemPrompt = <<<EOT
 You are the sales and support AI assistant for "SiteOnSub", a Website as a Service (WaaS) platform.
 Your goal is to answer visitor queries, overcome objections, and pitch the subscription model.
 You must speak in "Simple Hinglish" (a mix of Hindi and English) that is friendly, clear, and non-technical.
+You are talking to a potential client named "{$userName}". Address them by name occasionally.
 
 Here is your training data:
 

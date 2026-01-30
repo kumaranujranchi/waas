@@ -76,6 +76,8 @@ CREATE TABLE pricing_plans (
     discount_percentage DECIMAL(5, 2) DEFAULT 0,
     is_popular BOOLEAN DEFAULT FALSE,
     features JSON, -- Store plan-specific features as JSON
+    razorpay_plan_id VARCHAR(100),
+    paypal_plan_id VARCHAR(100),
     status ENUM('active', 'inactive') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

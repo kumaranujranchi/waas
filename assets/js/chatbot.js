@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                     <div class="flex items-center gap-1">
-                        <button id="sos-resizer-btn" class="hover:bg-white/20 p-1 rounded-full transition-colors hidden md:flex" title="Maximize">
+                        <button id="sos-resizer-btn" class="hover:bg-white/20 p-1 rounded-full transition-colors flex" title="Maximize">
                             <span class="material-symbols-outlined text-[20px]">open_in_full</span>
                         </button>
                         <button id="sos-minimize-btn" class="hover:bg-white/20 p-1 rounded-full transition-colors" title="Minimize">

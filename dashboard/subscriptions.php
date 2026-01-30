@@ -167,7 +167,35 @@ $inactiveSubscriptions = array_filter($subscriptions, fn($s) => $s['subscription
     <?php endif; ?>
 </div>
 
+<!-- Custom Confirmation Modal -->
+<div id="cancelModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+    <div class="bg-white dark:bg-[#1a1b2e] rounded-2xl shadow-2xl w-full max-w-md mx-4 transform scale-95 transition-transform duration-300 translate-y-4" id="cancelModalContent">
+        <div class="p-6 text-center">
+            <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
+                <span class="material-symbols-outlined text-3xl text-red-600 dark:text-red-500">warning</span>
+            </div>
+            <h3 class="text-xl font-bold text-[#0f0e1b] dark:text-white mb-2">Cancel Subscription?</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm leading-relaxed">
+                Are you sure you want to cancel? The plan will remain active until the end of the current billing cycle, but it will not renew.
+            </p>
+            <div class="flex gap-3 justify-center">
+                <button onclick="closeCancelModal()" 
+                    class="px-5 py-2.5 rounded-xl font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-all">
+                    No, Keep It
+                </button>
+                <button id="confirmCancelBtn" 
+                    class="px-5 py-2.5 rounded-xl font-bold bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-600/20 transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">cancel</span>
+                    Yes, Cancel It
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    let currentSubscriptionId = null;
+
     function showTab(tabName) {
         // Hide all tabs
         document.querySelectorAll('.tab-content').forEach(tab => {
@@ -186,13 +214,39 @@ $inactiveSubscriptions = array_filter($subscriptions, fn($s) => $s['subscription
     }
 
     function cancelSubscription(subscriptionId) {
-        if (!confirm('Are you sure you want to cancel this subscription? The plan will remain active until the end of the current billing cycle.')) {
-            return;
-        }
+        currentSubscriptionId = subscriptionId;
+        const modal = document.getElementById('cancelModal');
+        const modalContent = document.getElementById('cancelModalContent');
+        
+        modal.classList.remove('hidden');
+        // Small delay to allow display:block to apply before opacity transition
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95', 'translate-y-4');
+            modalContent.classList.add('scale-100', 'translate-y-0');
+        }, 10);
+    }
 
-        const button = event.target;
-        const originalText = button.innerText;
-        button.innerText = 'Cancelling...';
+    function closeCancelModal() {
+        const modal = document.getElementById('cancelModal');
+        const modalContent = document.getElementById('cancelModalContent');
+        
+        modal.classList.add('opacity-0');
+        modalContent.classList.remove('scale-100', 'translate-y-0');
+        modalContent.classList.add('scale-95', 'translate-y-4');
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            currentSubscriptionId = null;
+        }, 300);
+    }
+
+    document.getElementById('confirmCancelBtn').addEventListener('click', function() {
+        if (!currentSubscriptionId) return;
+
+        const button = this;
+        const originalContent = button.innerHTML;
+        button.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">progress_activity</span> Cancelling...';
         button.disabled = true;
 
         fetch('api/cancel_subscription.php', {
@@ -200,26 +254,36 @@ $inactiveSubscriptions = array_filter($subscriptions, fn($s) => $s['subscription
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ subscription_id: subscriptionId })
+            body: JSON.stringify({ subscription_id: currentSubscriptionId })
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Subscription cancelled successfully.');
-                    location.reload();
-                } else {
-                    alert('Error: ' + data.message);
-                    button.innerText = originalText;
-                    button.disabled = false;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An unexpected error occurred.');
-                button.innerText = originalText;
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closeCancelModal();
+                // Show success toast or reload
+                location.reload(); 
+            } else {
+                alert('Error: ' + data.message);
+                button.innerHTML = originalContent;
                 button.disabled = false;
-            });
-    }
+                closeCancelModal();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An unexpected error occurred.');
+            button.innerHTML = originalContent;
+            button.disabled = false;
+            closeCancelModal();
+        });
+    });
+
+    // Close modal on outside click
+    document.getElementById('cancelModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCancelModal();
+        }
+    });
 </script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

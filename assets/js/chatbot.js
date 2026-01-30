@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <span class="material-symbols-outlined text-xl">smart_toy</span>
                         </div>
                         <div>
-                            <h3 class="font-bold text-lg leading-none">SiteOnSub AI</h3>
+                            <h3 class="font-bold text-lg leading-none">SOS Support</h3>
                             <span class="text-xs text-white/80">Support & Sales</span>
                         </div>
                     </div>

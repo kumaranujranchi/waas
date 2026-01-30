@@ -26,8 +26,8 @@ echo "Using Key ID: " . substr(RAZORPAY_KEY_ID, 0, 15) . "...\n";
 // Function to create plan on Razorpay
 function createRazorpayPlan($name, $amount, $currency = 'INR', $period = 'monthly', $interval = 1)
 {
-    $apiKey = RAZORPAY_KEY_ID;
-    $apiSecret = RAZORPAY_KEY_SECRET;
+    $apiKey = 'rzp_live_RwX28Qv2VotZir';
+    $apiSecret = '0OEb6iiMFr84RUcA90wXZVYY';
 
     $url = 'https://api.razorpay.com/v1/plans';
 

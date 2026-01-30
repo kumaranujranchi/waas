@@ -47,6 +47,13 @@ if (isset($_GET['code'])) {
 
             setFlashMessage('success', 'Logged in with Google successfully!');
 
+            // Check for redirect URL
+            if (isset($_SESSION['login_redirect'])) {
+                $redirectUrl = $_SESSION['login_redirect'];
+                unset($_SESSION['login_redirect']);
+                redirect(baseUrl($redirectUrl));
+            }
+
             if ($user['role'] === 'admin') {
                 redirect(baseUrl('admin/index.php'));
             } else {

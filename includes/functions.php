@@ -370,6 +370,41 @@ function createRazorpayPlanFromAdmin($name, $amount, $type)
     return $response['id'] ?? ['error' => 'No ID returned'];
 }
 
+/**
+ * Cancel Razorpay Subscription
+ */
+function cancelRazorpaySubscription($subscriptionId)
+{
+    $apiKey = defined('RAZORPAY_KEY_ID') ? RAZORPAY_KEY_ID : '';
+    $apiSecret = defined('RAZORPAY_KEY_SECRET') ? RAZORPAY_KEY_SECRET : '';
+
+    if (empty($apiKey) || empty($apiSecret)) {
+        return ['error' => 'Razorpay keys not configured'];
+    }
+
+    $url = 'https://api.razorpay.com/v1/subscriptions/' . $subscriptionId . '/cancel';
+
+    $data = [
+        'cancel_at_cycle_end' => 0 // Cancel immediately
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_USERPWD, $apiKey . ':' . $apiSecret);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+    $result = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return ['error' => curl_error($ch)];
+    }
+    curl_close($ch);
+
+    return json_decode($result, true);
+}
+
 
 
 

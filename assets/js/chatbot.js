@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 
                 <!-- Messages Area -->
-                <div id="sos-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50 dark:bg-[#0f0e1b] scroll-smooth">
+                <div id="sos-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50 dark:bg-[#0f0e1b] scroll-smooth" style="overscroll-behavior: contain;">
                     <!-- Welcome Message -->
                     <div class="flex gap-3">
                         <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">

@@ -189,6 +189,13 @@ class Product
         } elseif (is_array($data['faqs'])) {
             $data['faqs'] = json_encode($data['faqs']);
         }
+
+        // Handle samples
+        if (!isset($data['samples'])) {
+            $data['samples'] = json_encode([]);
+        } elseif (is_array($data['samples'])) {
+            $data['samples'] = json_encode($data['samples']);
+        }
         return $this->db->insert('products', $data);
     }
 
@@ -200,6 +207,10 @@ class Product
         // Ensure faqs is not null if passed
         if (array_key_exists('faqs', $data) && is_array($data['faqs'])) {
             $data['faqs'] = json_encode($data['faqs']);
+        }
+
+        if (array_key_exists('samples', $data) && is_array($data['samples'])) {
+            $data['samples'] = json_encode($data['samples']);
         }
         return $this->db->update('products', $data, 'id = ?', [$id]);
     }

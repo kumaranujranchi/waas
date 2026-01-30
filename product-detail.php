@@ -102,6 +102,11 @@ $faqs = !empty($product['faqs']) ? json_decode($product['faqs'], true) : [];
 if (!is_array($faqs)) {
     $faqs = [];
 }
+// Decode Samples
+$samples = !empty($product['samples']) ? json_decode($product['samples'], true) : [];
+if (!is_array($samples)) {
+    $samples = [];
+}
 ?>
 
 <main class="flex-1 max-w-[1200px] mx-auto w-full px-6 py-12">
@@ -213,6 +218,55 @@ if (!is_array($faqs)) {
                             <?php echo e($feature['feature_description']); ?>
                         </p>
                     </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- Service Samples Section -->
+    <?php if (!empty($samples)): ?>
+        <div class="mb-32">
+            <div class="flex items-center gap-4 mb-16">
+                <div class="h-px flex-1 bg-gray-100 dark:bg-white/10"></div>
+                <h2 class="text-2xl font-black text-[#0f0e1b] dark:text-white uppercase tracking-widest">
+                    Live Samples
+                </h2>
+                <div class="h-px flex-1 bg-gray-100 dark:bg-white/10"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <?php foreach ($samples as $sample): ?>
+                    <a href="<?php echo e($sample['url']); ?>" target="_blank" rel="noopener noreferrer"
+                        class="group block bg-white dark:bg-[#1a1c2e] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/10 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="relative aspect-video overflow-hidden bg-gray-100 dark:bg-white/5">
+                            <?php if (!empty($sample['thumbnail'])): ?>
+                                <img src="<?php echo baseUrl($sample['thumbnail']); ?>" alt="<?php echo e($sample['name']); ?>"
+                                    class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                            <?php else: ?>
+                                <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                    <span class="material-symbols-outlined text-6xl">image</span>
+                                </div>
+                            <?php endif; ?>
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300">
+                            </div>
+                            <div
+                                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span
+                                    class="px-6 py-3 bg-white text-black rounded-full font-bold text-sm shadow-xl flex items-center gap-2">
+                                    Visit Site <span class="material-symbols-outlined text-base">arrow_outward</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3
+                                class="text-lg font-bold text-[#0f0e1b] dark:text-white group-hover:text-primary transition-colors">
+                                <?php echo e($sample['name']); ?>
+                            </h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate">
+                                <?php echo e($sample['url']); ?>
+                            </p>
+                        </div>
+                    </a>
                 <?php endforeach; ?>
             </div>
         </div>

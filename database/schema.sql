@@ -52,6 +52,7 @@ CREATE TABLE products (
     image_url VARCHAR(500),
     badge VARCHAR(50), -- 'Website', 'Software', 'New', etc.
     faqs JSON, -- Store FAQs as JSON array
+    samples JSON, -- Store Service Samples as JSON array
     is_featured BOOLEAN DEFAULT FALSE,
     status ENUM('active', 'inactive', 'draft') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

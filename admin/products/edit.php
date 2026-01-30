@@ -39,6 +39,11 @@ if (!is_array($faqs)) {
     $faqs = [];
 }
 
+$samples = !empty($product['samples']) ? json_decode($product['samples'], true) : [];
+if (!is_array($samples)) {
+    $samples = [];
+}
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = [
@@ -67,6 +72,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     $data['faqs'] = $faqs;
+
+    // Process Samples
+    $samples = [];
+    if (isset($_POST['sample_name']) && is_array($_POST['sample_name'])) {
+        $uploadSampleDir = __DIR__ . '/../../uploads/samples/';
+        if (!file_exists($uploadSampleDir)) {
+            mkdir($uploadSampleDir, 0755, true);
+        }
+
+        foreach ($_POST['sample_name'] as $index => $name) {
+            $url = $_POST['sample_url'][$index] ?? '';
+            $thumbnailPath = $_POST['existing_sample_thumbnail'][$index] ?? '';
+
+            // Handle new file upload for this specific sample
+            if (isset($_FILES['sample_thumbnail']['name'][$index]) && $_FILES['sample_thumbnail']['error'][$index] === UPLOAD_ERR_OK) {
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+                $fileType = mime_content_type($_FILES['sample_thumbnail']['tmp_name'][$index]);
+
+                if (in_array($fileType, $allowedTypes)) {
+                    $fileExtension = pathinfo($_FILES['sample_thumbnail']['name'][$index], PATHINFO_EXTENSION);
+                    $fileName = uniqid('sample_') . '.' . $fileExtension;
+                    $targetPath = $uploadSampleDir . $fileName;
+
+                    if (move_uploaded_file($_FILES['sample_thumbnail']['tmp_name'][$index], $targetPath)) {
+                        $thumbnailPath = 'uploads/samples/' . $fileName;
+                    }
+                }
+            }
+
+            if (trim($name) !== '') {
+                $samples[] = [
+                    'name' => sanitizeInput($name),
+                    'url' => sanitizeInput($url),
+                    'thumbnail' => $thumbnailPath
+                ];
+            }
+        }
+    }
+    $data['samples'] = $samples;
 
     // DEBUG LOGGING (Background only)
     error_log("--- UPDATE PRODUCT DEBUG ---");
@@ -498,6 +542,65 @@ include __DIR__ . '/../includes/header.php';
             </div>
         </div>
 
+        <!-- Service Samples -->
+        <div class="bg-white dark:bg-white/5 rounded-xl p-8 border-2 border-gray-300 dark:border-white/10 shadow-sm">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">collections</span>
+                    Service Samples
+                </h2>
+                <button type="button" onclick="addSample()"
+                    class="px-4 py-2 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined">add</span>
+                    Add Sample
+                </button>
+            </div>
+            <div id="samples-container" class="space-y-4">
+                <?php if (!empty($samples)): ?>
+                    <?php foreach ($samples as $index => $sample): ?>
+                        <div class="sample-item p-4 border-2 border-gray-300 dark:border-white/10 rounded-lg">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-sm font-bold text-gray-500">Sample #<?php echo $index + 1; ?></span>
+                                <button type="button"
+                                    onclick="if(confirm('Delete this sample?')) { this.parentElement.parentElement.remove(); }"
+                                    class="text-red-500 hover:text-red-700">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 mb-1">Website Name</label>
+                                    <input type="text" name="sample_name[]" value="<?php echo e($sample['name'] ?? ''); ?>"
+                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                        placeholder="e.g. My Portfolio">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 mb-1">Website URL</label>
+                                    <input type="url" name="sample_url[]" value="<?php echo e($sample['url'] ?? ''); ?>"
+                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
+                                        placeholder="https://example.com">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-gray-500 mb-1">Thumbnail</label>
+                                    <input type="hidden" name="existing_sample_thumbnail[]"
+                                        value="<?php echo e($sample['thumbnail'] ?? ''); ?>">
+                                    <?php if (!empty($sample['thumbnail'])): ?>
+                                        <div class="mb-2">
+                                            <img src="<?php echo baseUrl($sample['thumbnail']); ?>"
+                                                class="h-16 w-auto rounded border">
+                                        </div>
+                                    <?php endif; ?>
+                                    <input type="file" name="sample_thumbnail[]" accept="image/*"
+                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 text-sm">
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+
         <!-- FAQs -->
         <div class="bg-white dark:bg-white/5 rounded-xl p-8 border-2 border-gray-300 dark:border-white/10 shadow-sm">
             <div class="flex justify-between items-center mb-6">
@@ -553,6 +656,43 @@ include __DIR__ . '/../includes/header.php';
 
 <script>
     let faqCount = <?php echo count($faqs); ?>;
+    let sampleCount = <?php echo count($samples); ?>;
+
+    function addSample() {
+        sampleCount++;
+        const container = document.getElementById('samples-container');
+        const item = document.createElement('div');
+        item.className = 'sample-item p-4 border-2 border-gray-300 dark:border-white/10 rounded-lg';
+        item.innerHTML = `
+            <div class="flex justify-between items-start mb-3">
+                <span class="text-sm font-bold text-gray-500">Sample #${sampleCount}</span>
+                <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700">
+                    <span class="material-symbols-outlined">delete</span>
+                </button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">Website Name</label>
+                    <input type="text" name="sample_name[]" 
+                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none" 
+                        placeholder="e.g. My Portfolio">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">Website URL</label>
+                    <input type="url" name="sample_url[]" 
+                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none" 
+                        placeholder="https://example.com">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-500 mb-1">Thumbnail</label>
+                    <input type="hidden" name="existing_sample_thumbnail[]" value="">
+                    <input type="file" name="sample_thumbnail[]" accept="image/*"
+                         class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 text-sm">
+                </div>
+            </div>
+        `;
+        container.appendChild(item);
+    }
 
     function addFAQ() {
         faqCount++;

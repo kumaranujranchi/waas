@@ -473,8 +473,9 @@ include __DIR__ . '/../includes/header.php';
                                 ID</label>
                             <input type="text" name="razorpay_plan_monthly"
                                 value="<?php echo e($pricingData['monthly']['razorpay_plan_id']); ?>"
-                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
-                                placeholder="plan_...">
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none <?php echo !empty($pricingData['monthly']['razorpay_plan_id']) ? 'bg-gray-100 dark:bg-white/10 cursor-not-allowed opacity-60' : ''; ?>"
+                                placeholder="plan_..."
+                                <?php echo !empty($pricingData['monthly']['razorpay_plan_id']) ? 'readonly' : ''; ?>>
                         </div>
 
                     </div>
@@ -503,8 +504,9 @@ include __DIR__ . '/../includes/header.php';
                                 ID</label>
                             <input type="text" name="razorpay_plan_semi_annual"
                                 value="<?php echo e($pricingData['half_yearly']['razorpay_plan_id']); ?>"
-                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
-                                placeholder="plan_...">
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none <?php echo !empty($pricingData['half_yearly']['razorpay_plan_id']) ? 'bg-gray-100 dark:bg-white/10 cursor-not-allowed opacity-60' : ''; ?>"
+                                placeholder="plan_..."
+                                <?php echo !empty($pricingData['half_yearly']['razorpay_plan_id']) ? 'readonly' : ''; ?>>
                         </div>
 
                     </div>
@@ -533,8 +535,9 @@ include __DIR__ . '/../includes/header.php';
                                 ID</label>
                             <input type="text" name="razorpay_plan_yearly"
                                 value="<?php echo e($pricingData['yearly']['razorpay_plan_id']); ?>"
-                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
-                                placeholder="plan_...">
+                                class="w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none <?php echo !empty($pricingData['yearly']['razorpay_plan_id']) ? 'bg-gray-100 dark:bg-white/10 cursor-not-allowed opacity-60' : ''; ?>"
+                                placeholder="plan_..."
+                                <?php echo !empty($pricingData['yearly']['razorpay_plan_id']) ? 'readonly' : ''; ?>>
                         </div>
 
                     </div>

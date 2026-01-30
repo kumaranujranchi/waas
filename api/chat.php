@@ -47,6 +47,7 @@ if (empty($userMessage)) {
 }
 
 $userName = $input['user_name'] ?? 'User';
+$isLeadCaptured = $input['is_lead_captured'] ?? false;
 
 // --- Start Dynamic Knowledge Base ---
 require_once __DIR__ . '/../models/Product.php';
@@ -82,7 +83,26 @@ $systemPrompt = <<<EOT
 You are the sales and support AI assistant for "SiteOnSub", a Website as a Service (WaaS) platform.
 Your goal is to answer visitor queries, overcome objections, and pitch the subscription model.
 You must speak in "Simple Hinglish" (a mix of Hindi and English) that is friendly, clear, and non-technical.
-You are talking to a potential client named "{$userName}". Address them by name occasionally.
+
+EOT;
+
+if (!$isLeadCaptured) {
+    $systemPrompt .= <<<EOT
+CRITICAL: You are in "LEAD CAPTURE MODE".
+Before answering complex questions, you MUST gather the user's Full Name, Email, and Phone Number.
+- Do not ask for all three at once. Ask one item per message to keep it conversational.
+- Be polite. Say something like "Zaroor! Main aapki help karunga, par pehle kya aap apna naam bata sakte hain?"
+- Validation: Ensure Phone is 10 digits and Email looks real.
+- ONCE YOU HAVE ALL THREE DETAILS (Name, Email, Phone), you MUST append this EXACT string at the end of your response:
+  DATA_CAPTURE{"name": "USER_NAME", "email": "USER_EMAIL", "phone": "USER_PHONE"}
+  Replacing the values with the actual data you collected.
+
+EOT;
+} else {
+    $systemPrompt .= "You are talking to a potential client named \"{$userName}\". Address them by name occasionally.\n";
+}
+
+$systemPrompt .= <<<EOT
 
 Here is your training data:
 
@@ -97,7 +117,7 @@ Here is your training data:
 
 3. Website Ownership & Exit Policy
 - Ownership: Website is custom-coded for the client.
-- Exit Options: 
+- Exit Options:
   a) Code + Data Handover: Source code provided, data migrated to client DB.
   b) Client Server Hosting: Hosted on client's server with data migration.
 - Exit Charges: Nominal one-time fee depending on complexity.
@@ -173,7 +193,33 @@ if (curl_errno($ch)) {
 } else {
     $result = json_decode($response, true);
     if ($httpCode === 200 && isset($result['choices'][0]['message']['content'])) {
-        echo json_encode(['reply' => $result['choices'][0]['message']['content']]);
+        $reply = $result['choices'][0]['message']['content'];
+
+        // Detect DATA_CAPTURE signal
+        if (preg_match('/DATA_CAPTURE({.*?})/', $reply, $matches)) {
+            $captureData = json_decode($matches[1], true);
+            if ($captureData && isset($captureData['name'], $captureData['email'], $captureData['phone'])) {
+                require_once __DIR__ . '/../models/Lead.php';
+                $lead = new Lead();
+                $leadId = $lead->create($captureData['name'], $captureData['email'], $captureData['phone']);
+
+                if ($leadId) {
+                    // Clean the reply for the user
+                    $reply = str_replace($matches[0], "", $reply);
+                    echo json_encode([
+                        'reply' => trim($reply),
+                        'lead_captured' => true,
+                        'user_data' => [
+                            'name' => $captureData['name'],
+                            'id' => $leadId
+                        ]
+                    ]);
+                    exit;
+                }
+            }
+        }
+
+        echo json_encode(['reply' => $reply]);
     } else {
         // Fallback or error handling
         error_log("DeepSeek API Error: " . $response);

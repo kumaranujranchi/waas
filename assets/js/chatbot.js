@@ -1,5 +1,5 @@
 /**
- * SiteOnSub Chatbot
+ * SiteOnSub Chatbot - Conversational Lead Generation
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -38,55 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
 
-                <!-- LEAD FORM (Visible if no lead captured) -->
-                <div id="sos-lead-form-container" class="${chatState.isLeadCaptured ? 'hidden' : 'flex'} flex-col flex-1 p-6 overflow-y-auto bg-gray-50 dark:bg-[#0f0e1b]">
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <span class="material-symbols-outlined text-primary text-3xl">diversity_3</span>
-                        </div>
-                        <h4 class="font-bold text-gray-800 dark:text-white mb-1">Welcome! 👋</h4>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Please introduce yourself to start chatting.</p>
-                    </div>
-                    
-                    <form id="sos-lead-form" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 ml-1">Full Name</label>
-                            <input type="text" name="name" required placeholder="John Doe"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 dark:bg-white/5 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none text-sm transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 ml-1">Phone Number</label>
-                            <input type="tel" name="phone" required placeholder="9876543210" maxlength="10" pattern="[6-9][0-9]{9}"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 dark:bg-white/5 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none text-sm transition-all">
-                            <p class="text-[10px] text-red-500 mt-1 hidden" id="phone-error">Please enter a valid 10-digit mobile number.</p>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 ml-1">Email Address</label>
-                            <input type="email" name="email" required placeholder="john@example.com"
-                                class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 dark:bg-white/5 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none text-sm transition-all">
-                        </div>
-                        <button type="submit" id="start-chat-btn" 
-                            class="w-full bg-primary text-white py-3 rounded-xl font-medium shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2">
-                            <span>Start Chatting</span>
-                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                        </button>
-                    </form>
-                </div>
-                
-                <!-- CHAT INTERFACE (Visible if lead captured) -->
-                <!-- Added data-lenis-prevent to stop Lenis smooth scroll interference -->
-                <div id="sos-chat-interface" class="${chatState.isLeadCaptured ? 'flex' : 'hidden'} flex-col flex-1 h-full min-h-0">
+                <!-- CHAT INTERFACE -->
+                <div id="sos-chat-interface" class="flex flex-col flex-1 h-full min-h-0">
                     <div id="sos-messages" data-lenis-prevent class="flex-1 min-h-0 p-4 overflow-y-auto space-y-4 bg-gray-50 dark:bg-[#0f0e1b] scroll-smooth overscroll-contain">
-                        <!-- Welcome Message -->
-                        <div class="flex gap-3">
-                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
-                            </div>
-                            <div class="bg-white dark:bg-white/10 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-700 dark:text-gray-200 border border-gray-100 dark:border-white/5">
-                                Hi ${chatState.userName}! 👋 Main SiteOnSub ka AI banking assistant hu. <br><br>
-                                Aap mujhse website subscription plans, ownership, ya SEO ke baare me pooch sakte hain. Kaise help kar sakta hu?
-                            </div>
-                        </div>
+                        <!-- Initial AI Message will be appended here -->
                     </div>
 
                     <!-- Input Area -->
@@ -118,13 +73,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatWindow = document.getElementById('sos-chat-window');
     
     // Screens
-    const leadFormContainer = document.getElementById('sos-lead-form-container');
-    const leadForm = document.getElementById('sos-lead-form');
     const chatInterface = document.getElementById('sos-chat-interface');
-    
     const chatForm = document.getElementById('sos-chat-form');
     const chatInput = document.getElementById('sos-chat-input');
     const messagesContainer = document.getElementById('sos-messages');
+
+    // Initial Greeting
+    const showGreeting = () => {
+        if (messagesContainer.children.length === 0) {
+            const greeting = chatState.isLeadCaptured 
+                ? `Hi ${chatState.userName}! 👋 SiteOnSub me aapka swagat hai. Main aapki kaise help kar sakta hu?`
+                : `Hello! 👋 SiteOnSub me aapka swagat hai. Main SiteOnSub ka AI Support agent hu.\n\nMain aapke answers de sakta hu, par usse pehle kya main aapka **naam** jaan sakta hu?`;
+            appendMessage(greeting, 'ai');
+        }
+    };
 
     // Toggle Chat
     toggleBtn.addEventListener('click', () => {
@@ -134,10 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
             chatWindow.classList.add('scale-100', 'opacity-100');
         }, 10);
         toggleBtn.classList.add('hidden');
-        
-        if (chatState.isLeadCaptured) {
-            chatInput.focus();
-        }
+        showGreeting();
+        chatInput.focus();
     });
 
     const closeAction = () => {
@@ -151,78 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     closeBtn.addEventListener('click', closeAction);
     minimizeBtn.addEventListener('click', closeAction);
-
-    // Handle Lead Form Submission
-    leadForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const btn = document.getElementById('start-chat-btn');
-        const formData = new FormData(leadForm);
-        const name = formData.get('name').trim();
-        const email = formData.get('email').trim();
-        const phone = formData.get('phone').trim();
-
-        // Strict Phone Validation
-        const phoneRegex = /^[6-9]\d{9}$/;
-        const phoneError = document.getElementById('phone-error');
-        
-        if (!phoneRegex.test(phone)) {
-            phoneError.classList.remove('hidden');
-            return;
-        } else {
-            phoneError.classList.add('hidden');
-        }
-
-        // Loading State
-        const originalBtnContent = btn.innerHTML;
-        btn.innerHTML = '<span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Connecting...';
-        btn.disabled = true;
-
-        try {
-            const response = await fetch(extractBaseUrl() + 'api/chat.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    action: 'save_lead',
-                    name: name,
-                    email: email,
-                    phone: phone
-                })
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                // Success! Switch to chat
-                chatState = {
-                    isLeadCaptured: true,
-                    leadId: data.lead_id,
-                    userName: name
-                };
-                localStorage.setItem(STATE_KEY, JSON.stringify(chatState));
-                
-                // Show chat interface
-                leadFormContainer.classList.add('hidden');
-                chatInterface.classList.remove('hidden');
-                chatInterface.classList.add('flex');
-                
-                // Update Welcome Message Name
-                const welcomeMsg = messagesContainer.querySelector('.text-sm');
-                if (welcomeMsg) {
-                    welcomeMsg.innerHTML = welcomeMsg.innerHTML.replace('Hi User!', `Hi ${name}!`);
-                }
-
-            } else {
-                alert('Connection failed. Please try again.');
-            }
-        } catch (error) {
-            console.error(error);
-            alert('Something went wrong. Please check your connection.');
-        } finally {
-            btn.innerHTML = originalBtnContent;
-            btn.disabled = false;
-        }
-    });
 
     // Send Chat Message
     chatForm.addEventListener('submit', async (e) => {
@@ -245,23 +133,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     message: message,
-                    user_name: chatState.userName
+                    user_name: chatState.userName,
+                    is_lead_captured: chatState.isLeadCaptured
                 })
             });
 
             const data = await response.json();
             
             // Remove Loading
-            document.getElementById(loadingId).remove();
+            const loadingEl = document.getElementById(loadingId);
+            if (loadingEl) loadingEl.remove();
 
             if (data.reply) {
                 appendMessage(data.reply, 'ai');
+                
+                // Handle Automatic Lead Capture from AI
+                if (data.lead_captured && data.user_data) {
+                    chatState.isLeadCaptured = true;
+                    chatState.userName = data.user_data.name;
+                    chatState.leadId = data.user_data.id;
+                    localStorage.setItem(STATE_KEY, JSON.stringify(chatState));
+                    console.log('Lead captured via conversation:', chatState.userName);
+                }
             } else {
                 appendMessage(data.error || 'Something went wrong.', 'ai', true);
             }
 
         } catch (error) {
-            document.getElementById(loadingId).remove();
+            const loadingEl = document.getElementById(loadingId);
+            if (loadingEl) loadingEl.remove();
             appendMessage('Network error. Please try again.', 'ai', true);
         }
 
@@ -329,14 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function extractBaseUrl() {
-        // If we are in admin or auth or dashboard, we need to go up levels
-        // Easiest way is to check the depth of the path
         const path = window.location.pathname;
-        // Count how many segments are deeper than root. 
-        // We assume site is at root or subdirectory. 
-        // Better approach: Use the logo link or similar anchor if available, or just relative.. 
-        // Let's stick to relative for simplicity in this PHP setup.
-        
         if (path.includes('/admin/products/') || path.includes('/admin/users/') || path.includes('/dashboard/settings/')) {
             return '../../';
         }

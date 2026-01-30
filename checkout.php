@@ -55,135 +55,76 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $subscriptionModel = new Subscription();
 
     // Branch based on method
-    $paymentMethod = $_POST['payment_method'] ?? 'razorpay';
+    // Default to Razorpay
+    $paymentMethod = 'razorpay';
 
-    if ($paymentMethod === 'paypal') {
-        // PAYPAL FLOW
-        $paypalPlanId = $plan['paypal_plan_id'] ?? null;
+    // RAZORPAY FLOW
+    // 1. Get Razorpay Plan ID from Config/Mapping
+    global $RAZORPAY_PLANS;
 
-        if (!$paypalPlanId) {
-            $error = "PayPal is not configured for this plan yet. Please use Razorpay or contact support.";
-        } else {
-            $paypalSub = createPayPalSubscription($paypalPlanId);
+    // Debug: Ensure array is available or reload config if needed
+    if (!isset($RAZORPAY_PLANS)) {
+        require __DIR__ . '/config/config.php';
+    }
 
-            if (isset($paypalSub['error'])) {
-                $error = "PayPal Error: " . ($paypalSub['error']['description'] ?? $paypalSub['error']);
-            } else {
-                // Success - Find the approval link
-                $approvalUrl = null;
-                foreach ($paypalSub['links'] as $link) {
-                    if ($link['rel'] === 'approve') {
-                        $approvalUrl = $link['href'];
-                        break;
-                    }
-                }
+    // Check if configuration exists
+    $razorpayPlanId = null;
 
-                if ($approvalUrl) {
-                    // Create Local Order (Pending)
-                    $orderData = [
-                        'user_id' => getCurrentUserId(),
-                        'order_number' => generateOrderNumber(),
-                        'total_amount' => $subtotal,
-                        'tax_amount' => $tax,
-                        'discount_amount' => 0,
-                        'final_amount' => $total,
-                        'currency' => 'USD', // PayPal usually needs USD or similar for international
-                        'payment_status' => 'pending',
-                        'payment_method' => 'paypal_subscription',
-                        'billing_email' => $currentUser['email'],
-                        'billing_name' => $currentUser['full_name'],
-                        'payment_id' => $paypalSub['id'] // Store PayPal Sub ID
-                    ];
+    // 1. Check Database First (Best Practice)
+    if (!empty($plan['razorpay_plan_id'])) {
+        $razorpayPlanId = $plan['razorpay_plan_id'];
+    }
+    // 2. Fallback to Config array (Legacy)
+    elseif (isset($RAZORPAY_PLANS) && is_array($RAZORPAY_PLANS)) {
+        // Try exact match -> try config default -> hardcoded fallback
+        $razorpayPlanId = $RAZORPAY_PLANS[$planId] ?? $RAZORPAY_PLANS['default'] ?? 'plan_S8Wasx7b5ThF2A';
+    }
 
-                    $orderItems = [
-                        [
-                            'product_id' => $plan['product_id'],
-                            'plan_id' => $planId,
-                            'product_name' => $plan['product_name'],
-                            'plan_name' => $plan['plan_name'],
-                            'price' => $plan['price'],
-                            'quantity' => 1
-                        ]
-                    ];
-
-                    $orderModel->createOrder($orderData, $orderItems);
-
-                    // Redirect to PayPal
-                    redirect($approvalUrl);
-                } else {
-                    $error = "Failed to initiate PayPal checkout. Approval missing.";
-                }
-            }
-        }
+    if (!$razorpayPlanId) {
+        $debugInfo = isset($RAZORPAY_PLANS) ? "Keys available: " . implode(', ', array_keys($RAZORPAY_PLANS)) : "Config not loaded";
+        $error = "Payment plan configuration missing for Plan ID: {$planId}. ({$debugInfo}) Please contact support.";
     } else {
-        // RAZORPAY FLOW
-// 1. Get Razorpay Plan ID from Config/Mapping
-        global $RAZORPAY_PLANS;
+        // 2. Create Subscription on Razorpay
+        $razorpaySub = createRazorpaySubscription($razorpayPlanId);
 
-        // Debug: Ensure array is available or reload config if needed
-        if (!isset($RAZORPAY_PLANS)) {
-            require __DIR__ . '/config/config.php';
-        }
+        if (isset($razorpaySub['error'])) {
+            $error = "Gateway Error: " . ($razorpaySub['error']['description'] ?? $razorpaySub['error']);
+        } elseif (isset($razorpaySub['id'])) {
+            // Success - Get Subscription ID
+            $subscriptionId = $razorpaySub['id'];
 
-        // Check if configuration exists
-        $razorpayPlanId = null;
+            // 3. Create Local Order (Pending)
+            $orderData = [
+                'user_id' => getCurrentUserId(),
+                'order_number' => generateOrderNumber(),
+                'total_amount' => $subtotal,
+                'tax_amount' => $tax,
+                'discount_amount' => 0,
+                'final_amount' => $total,
+                'currency' => CURRENCY,
+                'payment_status' => 'pending',
+                'payment_method' => 'razorpay_subscription',
+                'billing_email' => $currentUser['email'],
+                'billing_name' => $currentUser['full_name'],
+                'payment_id' => $subscriptionId // Store RZP Sub ID temporarily
+            ];
 
-        // 1. Check Database First (Best Practice)
-        if (!empty($plan['razorpay_plan_id'])) {
-            $razorpayPlanId = $plan['razorpay_plan_id'];
-        }
-        // 2. Fallback to Config array (Legacy)
-        elseif (isset($RAZORPAY_PLANS) && is_array($RAZORPAY_PLANS)) {
-            // Try exact match -> try config default -> hardcoded fallback
-            $razorpayPlanId = $RAZORPAY_PLANS[$planId] ?? $RAZORPAY_PLANS['default'] ?? 'plan_S8Wasx7b5ThF2A';
-        }
+            $orderItems = [
+                [
+                    'product_id' => $plan['product_id'],
+                    'plan_id' => $planId,
+                    'product_name' => $plan['product_name'],
+                    'plan_name' => $plan['plan_name'],
+                    'price' => $plan['price'],
+                    'quantity' => 1
+                ]
+            ];
 
-        if (!$razorpayPlanId) {
-            $debugInfo = isset($RAZORPAY_PLANS) ? "Keys available: " . implode(', ', array_keys($RAZORPAY_PLANS)) : "Config not loaded";
-            $error = "Payment plan configuration missing for Plan ID: {$planId}. ({$debugInfo}) Please contact support.";
+            $orderModel->createOrder($orderData, $orderItems);
+
+            // 4. Trigger Razorpay JS (handled below in HTML)
         } else {
-            // 2. Create Subscription on Razorpay
-            $razorpaySub = createRazorpaySubscription($razorpayPlanId);
-
-            if (isset($razorpaySub['error'])) {
-                $error = "Gateway Error: " . ($razorpaySub['error']['description'] ?? $razorpaySub['error']);
-            } elseif (isset($razorpaySub['id'])) {
-                // Success - Get Subscription ID
-                $subscriptionId = $razorpaySub['id'];
-
-                // 3. Create Local Order (Pending)
-                $orderData = [
-                    'user_id' => getCurrentUserId(),
-                    'order_number' => generateOrderNumber(),
-                    'total_amount' => $subtotal,
-                    'tax_amount' => $tax,
-                    'discount_amount' => 0,
-                    'final_amount' => $total,
-                    'currency' => CURRENCY,
-                    'payment_status' => 'pending',
-                    'payment_method' => 'razorpay_subscription',
-                    'billing_email' => $currentUser['email'],
-                    'billing_name' => $currentUser['full_name'],
-                    'payment_id' => $subscriptionId // Store RZP Sub ID temporarily
-                ];
-
-                $orderItems = [
-                    [
-                        'product_id' => $plan['product_id'],
-                        'plan_id' => $planId,
-                        'product_name' => $plan['product_name'],
-                        'plan_name' => $plan['plan_name'],
-                        'price' => $plan['price'],
-                        'quantity' => 1
-                    ]
-                ];
-
-                $orderModel->createOrder($orderData, $orderItems);
-
-                // 4. Trigger Razorpay JS (handled below in HTML)
-            } else {
-                $error = "Unknown error from payment gateway.";
-            }
+            $error = "Unknown error from payment gateway.";
         }
     }
 }
@@ -232,30 +173,25 @@ include __DIR__ . '/includes/header.php';
                 <!-- Payment Method Selection -->
                 <form method="POST" action="" id="checkout-form" class="space-y-8">
                     <div class="space-y-4">
-                        <p class="text-sm font-bold text-[#0f0e1b] dark:text-white uppercase tracking-wider">Select
-                            Payment Method</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Razorpay -->
-                            <label
-                                class="relative flex items-center p-5 border-2 rounded-xl cursor-pointer hover:border-primary transition-all border-gray-100 dark:border-white/5 bg-white dark:bg-white/5">
-                                <input type="radio" name="payment_method" value="razorpay" checked
-                                    class="w-5 h-5 accent-primary mr-4">
-                                <div>
-                                    <p class="font-bold text-[#0f0e1b] dark:text-white">Razorpay (India)</p>
-                                    <p class="text-xs text-gray-500">Cards, UPI, Netbanking</p>
-                                </div>
-                            </label>
+                        <div class="space-y-4">
+                            <p class="text-sm font-bold text-[#0f0e1b] dark:text-white uppercase tracking-wider">Payment
+                                Method</p>
 
-                            <!-- PayPal -->
-                            <label
-                                class="relative flex items-center p-5 border-2 rounded-xl cursor-pointer hover:border-primary transition-all border-gray-100 dark:border-white/5 bg-white dark:bg-white/5">
-                                <input type="radio" name="payment_method" value="paypal"
-                                    class="w-5 h-5 accent-primary mr-4">
-                                <div>
-                                    <p class="font-bold text-[#0f0e1b] dark:text-white">PayPal (International)</p>
-                                    <p class="text-xs text-gray-500">Checkout with PayPal or Card</p>
+                            <!-- Razorpay Only -->
+                            <div class="relative flex items-center p-5 border-2 rounded-xl border-primary bg-primary/5">
+                                <input type="hidden" name="payment_method" value="razorpay">
+                                <div class="flex items-center gap-4 w-full">
+                                    <span class="material-symbols-outlined text-primary text-2xl">check_circle</span>
+                                    <div>
+                                        <p class="font-bold text-[#0f0e1b] dark:text-white">Razorpay (Cards, UPI,
+                                            Netbanking)</p>
+                                        <p class="text-xs text-gray-500">Secure payment gateway trusted by businesses.
+                                        </p>
+                                    </div>
+                                    <img src="<?php echo baseUrl('assets/images/razorpay.png'); ?>" alt="Razorpay"
+                                        class="h-6 ml-auto opacity-80" onerror="this.style.display='none'">
                                 </div>
-                            </label>
+                            </div>
                         </div>
                     </div>
 
@@ -346,7 +282,7 @@ include __DIR__ . '/includes/header.php';
 </main>
 
 <?php if ($subscriptionId): ?>
-    <script>     var options = {         "key": "<?php echo RAZORPAY_KEY_ID; ?>",         "subscription_id": "<?php echo $subscriptionId; ?>",         "name": "SiteOnSub",         "description": "<?php echo $plan['product_name'] . ' - ' . $plan['plan_name']; ?>",         "image": "<?php echo baseUrl('assets/images/logo.png'); ?>",         "callback_url": "<?php echo baseUrl('payment_callback.php'); ?>",         "prefill": {             "name": "<?php echo e($currentUser['full_name']); ?>",             "email": "<?php echo e($currentUser['email']); ?>",             "contact": "<?php echo e($currentUser['phone'] ?? ''); ?>"         },         "theme": {             "color": "#5048e5"         }     };     var rzp1 = new Razorpay(options);     rzp1.open();
+    <script>     var options = { "key": "<?php echo RAZORPAY_KEY_ID; ?>", "subscription_id": "<?php echo $subscriptionId; ?>", "name": "SiteOnSub", "description": "<?php echo $plan['product_name'] . ' - ' . $plan['plan_name']; ?>", "image": "<?php echo baseUrl('assets/images/logo.png'); ?>", "callback_url": "<?php echo baseUrl('payment_callback.php'); ?>", "prefill": { "name": "<?php echo e($currentUser['full_name']); ?>", "email": "<?php echo e($currentUser['email']); ?>", "contact": "<?php echo e($currentUser['phone'] ?? ''); ?>" }, "theme": { "color": "#5048e5" } }; var rzp1 = new Razorpay(options); rzp1.open();
     </script>
 <?php endif; ?>
 

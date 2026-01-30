@@ -307,12 +307,7 @@ include __DIR__ . '/../includes/header.php';
                         class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
                         placeholder="plan_..." />
                 </div>
-                <div>
-                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">PayPal Plan ID</label>
-                    <input type="text" name="paypal_plan_monthly"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
-                        placeholder="P-..." />
-                </div>
+
             </div>
         </div>
 
@@ -339,12 +334,7 @@ include __DIR__ . '/../includes/header.php';
                         class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
                         placeholder="plan_..." />
                 </div>
-                <div>
-                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">PayPal Plan ID</label>
-                    <input type="text" name="paypal_plan_semi_annual"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
-                        placeholder="P-..." />
-                </div>
+
             </div>
         </div>
 
@@ -371,12 +361,7 @@ include __DIR__ . '/../includes/header.php';
                         class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
                         placeholder="plan_..." />
                 </div>
-                <div>
-                    <label class="block text-[10px] uppercase font-black text-gray-400 mb-1">PayPal Plan ID</label>
-                    <input type="text" name="paypal_plan_yearly"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-white/10 dark:bg-white/5 focus:border-primary outline-none"
-                        placeholder="P-..." />
-                </div>
+
             </div>
         </div>
     </div>

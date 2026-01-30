@@ -77,8 +77,11 @@
                     </li>
                     <li><a class="hover:text-primary" href="<?php echo baseUrl('cookie-policy.php'); ?>">Cookie
                             Policy</a></li>
-                    <li><a class="hover:text-primary" href="<?php echo baseUrl('shipping-policy.php'); ?>">Shipping Policy</a></li>
-                    <li><a class="hover:text-primary" href="<?php echo baseUrl('cancellation-refund-policy.php'); ?>">Cancellation & Refunds</a></li>
+                    <li><a class="hover:text-primary" href="<?php echo baseUrl('shipping-policy.php'); ?>">Shipping
+                            Policy</a></li>
+                    <li><a class="hover:text-primary"
+                            href="<?php echo baseUrl('cancellation-refund-policy.php'); ?>">Cancellation & Refunds</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -100,12 +103,7 @@
                         alt="Mastercard" class="h-6 w-auto object-contain">
 
                     <!-- Amex -->
-                    <img src="<?php echo baseUrl('assets/banklogo/American_Express_logo_(2018).svg'); ?>"
-                        alt="American Express" class="h-6 w-auto object-contain">
 
-                    <!-- PayPal -->
-                    <img src="<?php echo baseUrl('assets/banklogo/PayPal_Logo2014.svg'); ?>" alt="PayPal"
-                        class="h-5 w-auto object-contain">
 
                     <div
                         class="flex items-center gap-1 border border-slate-200 dark:border-white/10 rounded px-1.5 py-0.5 bg-white">

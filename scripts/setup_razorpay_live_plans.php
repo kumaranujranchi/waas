@@ -16,12 +16,27 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../classes/Database.php';
 
 // Ensure we are in CLI
-if (php_sapi_name() !== 'cli') {
-    die("This script can only be run from the command line.\n");
-}
+// if (php_sapi_name() !== 'cli') {
+//     die("This script can only be run from the command line.\n");
+// }
 
-echo "Starting Razorpay Live Plan Migration...\n";
-echo "Using Key ID: " . substr(RAZORPAY_KEY_ID, 0, 15) . "...\n";
+// Simple HTML styling
+echo '<!DOCTYPE html>
+<html>
+<head>
+    <title>Razorpay Live Migration</title>
+    <style>
+        body { font-family: monospace; background: #1a1a1a; color: #00ff00; padding: 20px; line-height: 1.5; }
+        .error { color: #ff5555; }
+        .success { color: #55ff55; }
+        .info { color: #55ffff; }
+        hr { border: 0; border-top: 1px solid #333; margin: 10px 0; }
+    </style>
+</head>
+<body>
+<h3>Starting Razorpay Live Plan Migration...</h3>';
+
+echo "Using Key ID: " . substr('rzp_live_RwX28Qv2VotZir', 0, 15) . "...<br><br>";
 
 // Function to create plan on Razorpay
 function createRazorpayPlan($name, $amount, $currency = 'INR', $period = 'monthly', $interval = 1)
@@ -78,10 +93,10 @@ try {
 
     $plans = $db->fetchAll($sql);
 
-    echo "Found " . count($plans) . " active plans to sync.\n\n";
+    echo "Found " . count($plans) . " active plans to sync.<br><br>";
 
     foreach ($plans as $plan) {
-        echo "Processing: " . $plan['product_name'] . " - " . $plan['plan_name'] . "...\n";
+        echo "<div class='info'>Processing: " . $plan['product_name'] . " - " . $plan['plan_name'] . "...</div>";
 
         // Determine period and interval
         $period = 'monthly';
@@ -105,21 +120,24 @@ try {
         $rzpPlan = createRazorpayPlan($planName, $plan['price'], 'INR', $period, $interval);
 
         if (isset($rzpPlan['id'])) {
-            echo "  -> Created on Razorpay: " . $rzpPlan['id'] . "\n";
+            echo "<span class='success'>  -> Created on Razorpay: " . $rzpPlan['id'] . "</span><br>";
 
             // Update Database
             $updateSql = "UPDATE pricing_plans SET razorpay_plan_id = ? WHERE id = ?";
             $db->query($updateSql, [$rzpPlan['id'], $plan['id']]);
-            echo "  -> Database updated.\n";
+            echo "<span class='success'>  -> Database updated.</span><br>";
         } else {
-            echo "  -> ERROR: " . ($rzpPlan['error'] ?? 'Unknown error') . "\n";
+            echo "<span class='error'>  -> ERROR: " . ($rzpPlan['error'] ?? 'Unknown error') . "</span><br>";
         }
 
-        echo "--------------------------------------------------\n";
+        echo "<hr>";
+        flush(); // Flush output to browser
     }
 
-    echo "\nMigration Completed!\n";
+    echo "<h3>Migration Completed!</h3>";
+    echo "<p>Please delete this file from your server now.</p>";
+    echo "</body></html>";
 
 } catch (Exception $e) {
-    echo "Critical Error: " . $e->getMessage() . "\n";
+    echo "<h3 class='error'>Critical Error: " . $e->getMessage() . "</h3></body></html>";
 }

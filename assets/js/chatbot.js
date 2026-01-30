@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     chatWidget.innerHTML = `
         <div id="sos-chatbot" class="fixed bottom-6 right-6 z-[9990] font-sans">
             <!-- Chat Window -->
-            <div id="sos-chat-window" class="hidden flex-col w-[350px] h-[500px] bg-white dark:bg-[#1a1c2e] rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 transition-all duration-300 origin-bottom-right transform scale-95 opacity-0">
+            <div id="sos-chat-window" class="hidden flex flex-col w-[350px] h-[500px] bg-white dark:bg-[#1a1c2e] rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 transition-all duration-300 origin-bottom-right transform scale-95 opacity-0">
                 <!-- Header -->
                 <div class="bg-primary p-4 flex justify-between items-center text-white">
                     <div class="flex items-center gap-3">

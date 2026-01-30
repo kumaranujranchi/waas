@@ -153,6 +153,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ];
 
                 foreach ($pricing as $plan) {
+                    // Start Automation Logic
+                    $newRazorpayPlanId = $_POST['razorpay_plan_' . $plan['type']] ?? null;
+
+                    // Get old plan data to compare
+                    $oldPlan = null;
+                    foreach ($pricingPlans as $p) {
+                        if ($p['plan_type'] === $plan['type']) {
+                            $oldPlan = $p;
+                            break;
+                        }
+                    }
+
+                    // Check if price changed or ID is missing (and price is valid)
+                    $priceChanged = $oldPlan && (float) $oldPlan['price'] !== (float) $plan['price'];
+                    $missingId = empty($newRazorpayPlanId) && $plan['price'] > 0;
+
+                    if (($priceChanged || $missingId) && $plan['enabled'] && $plan['price'] > 0) {
+                        // Generate plan name e.g "E-commerce Elite - Monthly"
+                        $planName = sanitizeInput($_POST['name']) . ' - ' . $plan['name'];
+
+                        // Call Helper to create on Razorpay
+                        $generatedId = createRazorpayPlanFromAdmin($planName, $plan['price'], $plan['type']);
+
+                        if (!is_array($generatedId)) {
+                            $newRazorpayPlanId = $generatedId;
+                        } else {
+                            // Log error silently, system will fallback to empty ID or old ID
+                            error_log("Razorpay Auto-Create Failed: " . print_r($generatedId, true));
+                        }
+                    }
+
                     // Create plan if price is > 0 and it is enabled
                     if ($plan['price'] > 0) {
                         $productModel->createPricingPlan([
@@ -162,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'price' => $plan['price'],
                             'billing_cycle' => $plan['cycle'],
                             'status' => $plan['enabled'] ? 'active' : 'inactive',
-                            'razorpay_plan_id' => $_POST['razorpay_plan_' . $plan['type']] ?? null,
+                            'razorpay_plan_id' => $newRazorpayPlanId,
                             'paypal_plan_id' => $_POST['paypal_plan_' . $plan['type']] ?? null
                         ]);
                     }

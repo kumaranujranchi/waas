@@ -302,6 +302,74 @@ function createRazorpaySubscription($planId, $totalCount = 120, $startAt = null)
     return json_decode($result, true);
 }
 
+/**
+ * Create Razorpay Plan (Admin Automation)
+ */
+function createRazorpayPlanFromAdmin($name, $amount, $type)
+{
+    // Get Keys from Config
+    $apiKey = defined('RAZORPAY_KEY_ID') ? RAZORPAY_KEY_ID : '';
+    $apiSecret = defined('RAZORPAY_KEY_SECRET') ? RAZORPAY_KEY_SECRET : '';
+
+    if (empty($apiKey) || empty($apiSecret)) {
+        return ['error' => 'Razorpay keys not configured'];
+    }
+
+    // Calculate Amount with Tax
+    $taxRate = defined('TAX_RATE') ? TAX_RATE : 0.18;
+    $amountWithTax = $amount + ($amount * $taxRate);
+    $amountInPaise = round($amountWithTax * 100);
+
+    // Determine Period & Interval
+    $period = 'monthly';
+    $interval = 1;
+
+    if ($type === 'semi_annual') {
+        $period = 'monthly';
+        $interval = 6;
+    } elseif ($type === 'yearly') {
+        $period = 'yearly';
+        $interval = 1;
+    }
+
+    $url = 'https://api.razorpay.com/v1/plans';
+
+    $data = [
+        'period' => $period,
+        'interval' => $interval,
+        'item' => [
+            'name' => $name,
+            'amount' => $amountInPaise,
+            'currency' => 'INR',
+            'description' => "Subscription for " . $name . " (Incl. Tax)"
+        ]
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_USERPWD, $apiKey . ':' . $apiSecret);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+    $result = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if (curl_errno($ch)) {
+        return ['error' => curl_error($ch)];
+    }
+    curl_close($ch);
+
+    $response = json_decode($result, true);
+
+    if ($httpCode !== 200) {
+        return ['error' => $response['error']['description'] ?? 'Unknown error'];
+    }
+
+    return $response['id'] ?? ['error' => 'No ID returned'];
+}
+
 
 
 

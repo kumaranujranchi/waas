@@ -172,28 +172,8 @@ include __DIR__ . '/includes/header.php';
             <div class="p-6 md:p-10">
                 <!-- Payment Method Selection -->
                 <form method="POST" action="" id="checkout-form" class="space-y-8">
-                    <div class="space-y-4">
-                        <div class="space-y-4">
-                            <p class="text-sm font-bold text-[#0f0e1b] dark:text-white uppercase tracking-wider">Payment
-                                Method</p>
-
-                            <!-- Razorpay Only -->
-                            <div class="relative flex items-center p-5 border-2 rounded-xl border-primary bg-primary/5">
-                                <input type="hidden" name="payment_method" value="razorpay">
-                                <div class="flex items-center gap-4 w-full">
-                                    <span class="material-symbols-outlined text-primary text-2xl">check_circle</span>
-                                    <div>
-                                        <p class="font-bold text-[#0f0e1b] dark:text-white">Razorpay (Cards, UPI,
-                                            Netbanking)</p>
-                                        <p class="text-xs text-gray-500">Secure payment gateway trusted by businesses.
-                                        </p>
-                                    </div>
-                                    <img src="<?php echo baseUrl('assets/images/razorpay.png'); ?>" alt="Razorpay"
-                                        class="h-6 ml-auto opacity-80" onerror="this.style.display='none'">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Default Payment Method: Razorpay -->
+                    <input type="hidden" name="payment_method" value="razorpay">
 
                     <div class="grid md:grid-cols-2 gap-10">
                         <div class="space-y-6">

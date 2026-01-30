@@ -3,6 +3,7 @@ require_once __DIR__ . '/../config/database.php';
 
 header('Content-Type: application/json');
 
+try {
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 http_response_code(405);
@@ -55,6 +56,11 @@ $productModel = new Product();
 $products = $productModel->getAllProducts();
 $knowledgeBase = "";
 
+function number_with_commas($n)
+{
+return number_format((float)$n, 0, '.', ',');
+}
+
 if (!empty($products)) {
 $knowledgeBase .= "Current Services and Pricing:\n";
 foreach ($products as $product) {
@@ -65,17 +71,12 @@ $plans = $productModel->getProductPricingPlans($product['id'], true);
 if (!empty($plans)) {
 $knowledgeBase .= " Pricing Plans:\n";
 foreach ($plans as $plan) {
-$knowledgeBase .= " * " . $plan['name'] . ": ₹" . number_with_commas($plan['price']) . " / " . $plan['billing_cycle'] .
-"\n";
+$knowledgeBase .= " * " . ($plan['plan_name'] ?? 'Standard') . ": ₹" . number_with_commas($plan['price'] ?? 0) . " / " .
+($plan['billing_cycle'] ?? 'month') . "\n";
 }
 }
 $knowledgeBase .= "\n";
 }
-}
-
-function number_with_commas($n)
-{
-return number_format($n, 0, '.', ',');
 }
 // --- End Dynamic Knowledge Base ---
 
@@ -137,7 +138,7 @@ $systemPrompt = <<<EOT You are the sales and support AI assistant for "SiteOnSub
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
     if (curl_errno($ch)) {
-    echo json_encode(['error' => 'Request failed: ' . curl_error($ch)]);
+    throw new Exception('Request failed: ' . curl_error($ch));
     } else {
     $result = json_decode($response, true);
     if ($httpCode === 200 && isset($result['choices'][0]['message']['content'])) {
@@ -169,10 +170,14 @@ $systemPrompt = <<<EOT You are the sales and support AI assistant for "SiteOnSub
 
     echo json_encode(['reply' => $reply]);
     } else {
-    // Fallback or error handling
+    // Log and return API error
     error_log("DeepSeek API Error: " . $response);
-    echo json_encode(['error' => 'Sorry, main abhi answer nahi kar pa raha hu. Please try again later.']);
+    throw new Exception('API Response Error: ' . ($result['error']['message'] ?? 'Unknown API error'));
     }
     }
 
     curl_close($ch);
+    } catch (Exception $e) {
+    error_log("Chat API Error: " . $e->getMessage());
+    echo json_encode(['error' => 'Sorry, main abhi answer nahi kar pa raha hu. ' . $e->getMessage()]);
+    }

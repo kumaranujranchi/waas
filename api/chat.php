@@ -1,0 +1,122 @@
+<?php
+require_once __DIR__ . '/../config/config.php';
+
+header('Content-Type: application/json');
+
+// Only allow POST requests
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
+// Get JSON input
+$input = json_decode(file_get_contents('php://input'), true);
+$userMessage = $input['message'] ?? '';
+
+if (empty($userMessage)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Message is required']);
+    exit;
+}
+
+// System Prompt / Training Data
+$systemPrompt = <<<EOT
+You are the sales and support AI assistant for "SiteOnSub", a Website as a Service (WaaS) platform.
+Your goal is to answer visitor queries, overcome objections, and pitch the subscription model.
+You must speak in "Simple Hinglish" (a mix of Hindi and English) that is friendly, clear, and non-technical.
+
+Here is your training data:
+
+1. Brand & Service Overview
+- Service Model: Website as a Service (WaaS)
+- Pitch: "SiteOnSub ek Website as a Service platform hai jisme aap bina upfront cost ke apni custom-coded website subscription model par le sakte hain."
+
+2. Traditional Website vs SiteOnSub
+- Traditional Problems: High upfront cost (lakhs), separate costs for development, hosting, database, maintenance. Vendor dependency.
+- SiteOnSub Benefits: Development FREE, Hosting + Database included, Updates/Maintenance included, Monthly plans, No lock-in (cancel anytime).
+- Value Proposition: Sirf hosting ke cost me poori website. Business owner tension-free.
+
+3. Website Ownership & Exit Policy
+- Ownership: Website is custom-coded for the client.
+- Exit Options: 
+  a) Code + Data Handover: Source code provided, data migrated to client DB.
+  b) Client Server Hosting: Hosted on client's server with data migration.
+- Exit Charges: Nominal one-time fee depending on complexity.
+- Safe Custody: Data kept for 1 month, Source code for 1 year after exit.
+
+4. Monthly Plan Inclusions
+- Included: Development, Support, Maintenance, Site updates, Hosting, Database (if in plan).
+- Not Included: Domain (Client buys domain for full ownership).
+
+5. SEO Policy
+- Free with Plan: On-page SEO, Technical SEO, Website-level fixes, Google Search Console error fixing.
+- Client Role: Just report errors.
+- Not Included: Backlink building, Off-page SEO.
+
+6. Updates Policy
+- 3 updates per month FREE (Content changes, minor fixes).
+- More than 3 updates: Custom pricing based on complexity.
+
+7. Support & Monitoring
+- Monitoring: Daily monitoring of all websites.
+- Server Issues: Prior email notification.
+- Non-Server Issues: 24 hours recovery.
+- Support: Monday - Saturday, 10 AM - 12 PM.
+- Urgent: Mark ticket as High Priority.
+
+8. Target Audience
+- Startups, Small Businesses, Agencies, Enterprises, NGOs, E-commerce, Service businesses.
+
+9. Tone Guidelines
+- Language: Simple Hinglish.
+- Style: Friendly, Clear, Non-technical.
+- Focus: Cost saving, Ownership, No lock-in, Tension-free.
+
+10. Closing Example
+- "Agar aap bina heavy investment ke ek professionally managed website chahte ho jisme ownership bhi aapki rahe, to SiteOnSub aapke liye perfect option hai 😊"
+
+IMPORTANT INSTRUCTIONS:
+- If asked about pricing not mentioned here, refer them to the pricing section on the website.
+- Do not make up facts.
+- Be concise.
+- Use emojis occasionally to be friendly.
+EOT;
+
+// Prepare payload for DeepSeek API
+$data = [
+    'model' => 'deepseek-chat',
+    'messages' => [
+        ['role' => 'system', 'content' => $systemPrompt],
+        ['role' => 'user', 'content' => $userMessage]
+    ],
+    'temperature' => 0.7
+];
+
+// Send request
+$ch = curl_init('https://api.deepseek.com/v1/chat/completions');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . DEEPSEEK_API_KEY
+]);
+
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+if (curl_errno($ch)) {
+    echo json_encode(['error' => 'Request failed: ' . curl_error($ch)]);
+} else {
+    $result = json_decode($response, true);
+    if ($httpCode === 200 && isset($result['choices'][0]['message']['content'])) {
+        echo json_encode(['reply' => $result['choices'][0]['message']['content']]);
+    } else {
+        // Fallback or error handling
+        error_log("DeepSeek API Error: " . $response);
+        echo json_encode(['error' => 'Sorry, main abhi answer nahi kar pa raha hu. Please try again later.']);
+    }
+}
+
+curl_close($ch);

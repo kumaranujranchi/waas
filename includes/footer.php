@@ -123,6 +123,9 @@
     </div>
 </footer>
 
+<!-- Chatbot -->
+<script src="<?php echo baseUrl('assets/js/chatbot.js?v=' . time()); ?>"></script>
+
 </body>
 
 </html>

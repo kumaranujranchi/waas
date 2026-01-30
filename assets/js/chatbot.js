@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
     chatWidget.innerHTML = `
         <div id="sos-chatbot" class="fixed bottom-6 right-6 z-[9990] font-sans">
             <!-- Chat Window -->
-            <div id="sos-chat-window" class="hidden flex flex-col w-[350px] h-[500px] bg-white dark:bg-[#1a1c2e] rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 transition-all duration-300 origin-bottom-right transform scale-95 opacity-0">
+            <div id="sos-chat-window" class="hidden flex flex-col w-[350px] h-[500px] max-h-[80vh] bg-white dark:bg-[#1a1c2e] rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 transition-all duration-300 origin-bottom-right transform scale-95 opacity-0">
                 <!-- Header -->
-                <div class="bg-primary p-4 flex justify-between items-center text-white">
+                <div class="bg-primary p-4 flex justify-between items-center text-white shrink-0">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                             <span class="material-symbols-outlined text-xl">smart_toy</span>
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 
                 <!-- Messages Area -->
-                <div id="sos-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50 dark:bg-[#0f0e1b] scroll-smooth" style="overscroll-behavior: contain;">
+                <div id="sos-messages" class="flex-1 min-h-0 p-4 overflow-y-auto space-y-4 bg-gray-50 dark:bg-[#0f0e1b] scroll-smooth" style="overscroll-behavior: contain; touch-action: pan-y;">
                     <!-- Welcome Message -->
                     <div class="flex gap-3">
                         <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
 
                 <!-- Input Area -->
-                <div class="p-4 bg-white dark:bg-[#1a1c2e] border-t border-gray-100 dark:border-white/10">
+                <div class="p-4 bg-white dark:bg-[#1a1c2e] border-t border-gray-100 dark:border-white/10 shrink-0">
                     <form id="sos-chat-form" class="flex items-center gap-2">
                         <input type="text" id="sos-chat-input" placeholder="Type your message..." 
                             class="flex-1 px-4 py-2 rounded-full border border-gray-200 dark:border-white/10 dark:bg-white/5 focus:outline-none focus:border-primary text-sm">

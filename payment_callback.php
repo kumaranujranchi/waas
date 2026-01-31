@@ -10,6 +10,13 @@ ob_start();
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
+// Log to file
+function log_debug($message)
+{
+    file_put_contents(__DIR__ . '/debug_razorpay.log', date('[Y-m-d H:i:s] ') . $message . PHP_EOL, FILE_APPEND);
+}
+log_debug("Callback hit.");
+
 
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
@@ -25,7 +32,9 @@ if (!defined('SITE_URL')) {
 }
 
 // Check if we have the necessary POST parameters
+log_debug("POST params: " . json_encode($_POST));
 if (empty($_POST['razorpay_payment_id']) || empty($_POST['razorpay_subscription_id']) || empty($_POST['razorpay_signature'])) {
+    log_debug("Missing POST parameters");
     setFlashMessage('error', 'Invalid payment response.');
     redirect(baseUrl('dashboard/index.php'));
 }
@@ -38,7 +47,9 @@ $signature = $_POST['razorpay_signature'];
 $apiSecret = defined('RAZORPAY_KEY_SECRET') ? RAZORPAY_KEY_SECRET : '';
 $expectedSignature = hash_hmac('sha256', $paymentId . '|' . $subscriptionId, $apiSecret);
 
+log_debug("Expected Sig: " . $expectedSignature . ", Recv: " . $signature);
 if (hash_equals($expectedSignature, $signature)) {
+    log_debug("Signature Verified.");
     // Signature is valid
     try {
         $orderModel = new Order();
@@ -46,6 +57,7 @@ if (hash_equals($expectedSignature, $signature)) {
 
         // 1. Find the pending order by transaction_id (which we stored as subscription_id temporarily)
         $order = $orderModel->getOrderByTransactionId($subscriptionId);
+        log_debug("Order Found: " . ($order ? 'Yes (ID: ' . $order['id'] . ')' : 'No'));
 
         if ($order) {
             // 2. Update Order Status
@@ -113,12 +125,14 @@ if (hash_equals($expectedSignature, $signature)) {
     } catch (Exception $e) {
         // Log error
         error_log("Payment Callback Error: " . $e->getMessage());
+        log_debug("Exception: " . $e->getMessage());
         setFlashMessage('error', 'Payment processed but failed to update local records. Please contact support.');
         redirect(baseUrl('dashboard/index.php'));
     }
 
 } else {
     // Signature verification failed
+    log_debug("Signature Verification Failed!");
     setFlashMessage('error', 'Payment verification failed! Security signature mismatch.');
     redirect(baseUrl('dashboard/index.php'));
 }

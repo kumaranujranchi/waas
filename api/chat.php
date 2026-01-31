@@ -90,9 +90,10 @@ try {
 
     if (!$isLeadCaptured) {
         $systemPrompt .= "CRITICAL: You are in \"LEAD CAPTURE MODE\".\n";
-        $systemPrompt .= "Before answering complex questions, you MUST gather the user's Full Name, Email, and Phone Number.\n";
-        $systemPrompt .= "- Do not ask for all three at once. Ask one item per message to keep it conversational.\n";
-        $systemPrompt .= "- Be polite. Say something like \"Zaroor! Main aapki help karunga, par pehle kya aap apna naam bata sakte hain?\"\n";
+        $systemPrompt .= "Your goal is to conversationally gather the user's Full Name, Email, and Phone Number while being helpful.\n";
+        $systemPrompt .= "- If the user asks a question, ANSWER it first, then gently ask for their details.\n";
+        $systemPrompt .= "- Do NOT ask for all three at once. Ask one item per message to keep it conversational.\n";
+        $systemPrompt .= "- Be polite. Example: \"Main aapko pricing bata sakta hu! Par kya hum connect karne ke liye aapka naam jaan sakte hain?\"\n";
         $systemPrompt .= "- Validation: Ensure Phone is 10 digits and Email looks real.\n";
         $systemPrompt .= "- ONCE YOU HAVE ALL THREE DETAILS (Name, Email, Phone), you MUST append this EXACT string at the end of your response:\n";
         $systemPrompt .= "  DATA_CAPTURE{\"name\": \"USER_NAME\", \"email\": \"USER_EMAIL\", \"phone\": \"USER_PHONE\"}\n";
@@ -163,12 +164,27 @@ try {
     $systemPrompt .= "- Use emojis occasionally to be friendly.\n";
 
     // 7. Call DeepSeek API
+    $messages = [
+        ['role' => 'system', 'content' => $systemPrompt]
+    ];
+
+    // Append Conversation History
+    if (!empty($input['history']) && is_array($input['history'])) {
+        // Limit history to last 10 messages for token efficiency
+        $history = array_slice($input['history'], -10);
+        foreach ($history as $msg) {
+            if (isset($msg['role'], $msg['content']) && in_array($msg['role'], ['user', 'assistant'])) {
+                $messages[] = ['role' => $msg['role'], 'content' => $msg['content']];
+            }
+        }
+    }
+
+    // Append Current Message
+    $messages[] = ['role' => 'user', 'content' => $userMessage];
+
     $apiData = [
         'model' => 'deepseek-chat',
-        'messages' => [
-            ['role' => 'system', 'content' => $systemPrompt],
-            ['role' => 'user', 'content' => $userMessage]
-        ],
+        'messages' => $messages,
         'temperature' => 0.7
     ];
 

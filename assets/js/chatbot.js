@@ -1,5 +1,5 @@
 /**
- * SiteOnSub Chatbot - Conversational Lead Generation
+ * SiteOnSub Chatbot - Conversational Lead Generation & Support
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
         userName: 'User',
         isMaximized: false
     };
+
+    let messageHistory = []; // Session history
 
     // Create Chat Widget HTML
     const chatWidget = document.createElement('div');
@@ -114,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ? `Hi ${chatState.userName}! 👋 SiteOnSub me aapka swagat hai. Main aapki kaise help kar sakta hu?`
                 : `Hello! 👋 SiteOnSub me aapka swagat hai. Main SiteOnSub ka AI Support agent hu.\n\nMain aapke answers de sakta hu, par usse pehle kya main aapka **naam** jaan sakta hu?`;
             appendMessage(greeting, 'ai');
+            messageHistory.push({role: 'assistant', content: greeting});
         }
     };
 
@@ -149,6 +152,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Add User Message
         appendMessage(message, 'user');
+        messageHistory.push({role: 'user', content: message});
+        
         chatInput.value = '';
         chatInput.disabled = true;
 
@@ -163,7 +168,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({ 
                     message: message,
                     user_name: chatState.userName,
-                    is_lead_captured: chatState.isLeadCaptured
+                    is_lead_captured: chatState.isLeadCaptured,
+                    history: messageHistory
                 })
             });
 
@@ -175,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (data.reply) {
                 appendMessage(data.reply, 'ai');
+                messageHistory.push({role: 'assistant', content: data.reply});
                 
                 // Handle Automatic Lead Capture from AI
                 if (data.lead_captured && data.user_data) {

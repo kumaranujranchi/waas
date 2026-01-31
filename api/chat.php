@@ -65,6 +65,7 @@ try {
             foreach ($products as $product) {
                 $knowledgeBase .= "- Service: " . $product['name'] . "\n";
                 $knowledgeBase .= "  Description: " . ($product['short_description'] ?? 'Professional WaaS service') . "\n";
+                $knowledgeBase .= "  Direct Subscribe Link: " . SITE_URL . "/product-detail.php?slug=" . ($product['slug'] ?? '') . "\n";
 
                 // Get Pricing Plans
                 $plans = $productModel->getProductPricingPlans($product['id'], true);
@@ -138,7 +139,13 @@ try {
     $systemPrompt .= "- 3 updates per month FREE (Content changes, minor fixes).\n";
     $systemPrompt .= "- More than 3 updates: Custom pricing based on complexity.\n\n";
 
-    $systemPrompt .= "8. Support & Monitoring\n";
+    $systemPrompt .= "8. Subscription / Payment Process\n";
+    $systemPrompt .= "- If user asks how to pay or subscribe, DO NOT describe a manual process.\n";
+    $systemPrompt .= "- Instead, provide the **Direct Subscribe Link** for the specific service from the data above.\n";
+    $systemPrompt .= "- Tell them: \"Aap is link par click karke direct plan select kar sakte hain aur payment kar sakte hain. Payment ke baad work start ho jayega.\"\n";
+    $systemPrompt .= "- If unsure which service, ask them to clarify, then give the link.\n\n";
+
+    $systemPrompt .= "9. Support & Monitoring\n";
     $systemPrompt .= "- Monitoring: Daily monitoring of all websites.\n";
     $systemPrompt .= "- Server Issues: Prior email notification.\n";
     $systemPrompt .= "- Non-Server Issues: 24 hours recovery.\n";

@@ -1,175 +1,169 @@
 <?php
-require_once __DIR__ . '/../config/config.php';
-require_once __DIR__ . '/../config/database.php';
+// CRITICAL: Prevent any text output before JSON
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(E_ALL);
 
+// Buffer all output to catch unexpected errors/warnings
+ob_start();
 
 header('Content-Type: application/json');
 
 try {
-    // Only allow POST requests
+    // 1. Load Configurations
+    if (!file_exists(__DIR__ . '/../config/config.php') || !file_exists(__DIR__ . '/../config/database.php')) {
+        throw new Exception("Configuration files not found");
+    }
+
+    require_once __DIR__ . '/../config/config.php';
+    require_once __DIR__ . '/../config/database.php';
+
+    // 2. Security: Only allow POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        http_response_code(405);
-        echo json_encode(['error' => 'Method not allowed']);
-        exit;
+        throw new Exception("Method not allowed", 405);
     }
 
-    // Get JSON input
-    $input = json_decode(file_get_contents('php://input'), true);
-    $userMessage = $input['message'] ?? '';
+    // 3. Parse Input
+    $inputJSON = file_get_contents('php://input');
+    $input = json_decode($inputJSON, true);
 
-    // Handle Lead Saving
-    if (isset($input['action']) && $input['action'] === 'save_lead') {
-        require_once __DIR__ . '/../models/Lead.php';
-
-        $name = $input['name'] ?? '';
-        $email = $input['email'] ?? '';
-        $phone = $input['phone'] ?? '';
-
-        if (empty($name) || empty($email) || empty($phone)) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Name, Email and Phone are required']);
-            exit;
-        }
-
-        $lead = new Lead();
-        $leadId = $lead->create($name, $email, $phone);
-
-        if ($leadId) {
-            echo json_encode(['success' => true, 'lead_id' => $leadId]);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to save lead']);
-        }
-        exit;
+    if (!$input || !isset($input['message'])) {
+        throw new Exception("Message is required");
     }
 
-    if (empty($userMessage)) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Message is required']);
-        exit;
-    }
-
+    $userMessage = trim($input['message']);
     $userName = $input['user_name'] ?? 'User';
     $isLeadCaptured = $input['is_lead_captured'] ?? false;
 
-    // --- Start Dynamic Knowledge Base ---
-    require_once __DIR__ . '/../models/Product.php';
-    $productModel = new Product();
-    $products = $productModel->getAllProducts();
+    // 4. PRE-FLIGHT DB CHECK
+    // We try to connect manually first. If this fails, we SKIP loading models 
+    // to avoid the Database class calling die() and breaking JSON response.
+    $dbAvailable = false;
+    try {
+        if (defined('DB_HOST') && defined('DB_NAME') && defined('DB_USER') && defined('DB_PASS')) {
+            $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . (defined('DB_CHARSET') ? DB_CHARSET : 'utf8mb4');
+            $options = defined('DB_OPTIONS') ? DB_OPTIONS : [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+            $testConn = new PDO($dsn, DB_USER, DB_PASS, $options);
+            $dbAvailable = true;
+            $testConn = null; // Close test connection
+        }
+    } catch (Exception $e) {
+        // DB is down, but we continue so chatbot can at least respond (without dynamic data)
+        // or we can allow it to fail gracefully later.
+        $dbAvailable = false;
+    }
+
+    // 5. Build Knowledge Base
     $knowledgeBase = "";
+    if ($dbAvailable) {
+        require_once __DIR__ . '/../models/Product.php';
+        $productModel = new Product();
+        $products = $productModel->getAllProducts();
 
-    if (!empty($products)) {
-        $knowledgeBase .= "Current Services and Pricing:\n";
-        foreach ($products as $product) {
-            $knowledgeBase .= "- Service: " . $product['name'] . "\n";
-            $knowledgeBase .= "  Description: " . ($product['short_description'] ?? 'Professional WaaS service') . "\n";
+        if (!empty($products)) {
+            $knowledgeBase .= "Current Services and Pricing:\n";
+            foreach ($products as $product) {
+                $knowledgeBase .= "- Service: " . $product['name'] . "\n";
+                $knowledgeBase .= "  Description: " . ($product['short_description'] ?? 'Professional WaaS service') . "\n";
 
-            $plans = $productModel->getProductPricingPlans($product['id'], true);
-            if (!empty($plans)) {
-                $knowledgeBase .= "  Pricing Plans:\n";
-                foreach ($plans as $plan) {
-                    $knowledgeBase .= "    * " . ($plan['plan_name'] ?? 'Standard') . ": ₹" . number_with_commas($plan['price']) . " / " . $plan['billing_cycle'] . "\n";
+                // Get Pricing Plans
+                $plans = $productModel->getProductPricingPlans($product['id'], true);
+                if (!empty($plans)) {
+                    $knowledgeBase .= "  Pricing Plans:\n";
+                    foreach ($plans as $plan) {
+                        // Handle column name 'plan_name' vs 'name' safely
+                        $pName = $plan['plan_name'] ?? $plan['name'] ?? 'Standard';
+                        $price = number_format((float) ($plan['price'] ?? 0), 0, '.', ',');
+                        $cycle = $plan['billing_cycle'] ?? 'month';
+                        $knowledgeBase .= "    * {$pName}: ₹{$price} / {$cycle}\n";
+                    }
                 }
+                $knowledgeBase .= "\n";
             }
-            $knowledgeBase .= "\n";
         }
     }
 
-    function number_with_commas($n)
-    {
-        return number_format($n, 0, '.', ',');
-    }
-    // --- End Dynamic Knowledge Base ---
-
-    // System Prompt / Training Data
-    $systemPrompt = <<<EOT
-You are the sales and support AI assistant for "SiteOnSub", a Website as a Service (WaaS) platform.
-Your goal is to answer visitor queries, overcome objections, and pitch the subscription model.
-You must speak in "Simple Hinglish" (a mix of Hindi and English) that is friendly, clear, and non-technical.
-
-EOT;
+    // 6. Construct System Prompt
+    $systemPrompt = "You are the sales and support AI assistant for \"SiteOnSub\", a Website as a Service (WaaS) platform.\n";
+    $systemPrompt .= "Your goal is to answer visitor queries, overcome objections, and pitch the subscription model.\n";
+    $systemPrompt .= "You must speak in \"Simple Hinglish\" (a mix of Hindi and English) that is friendly, clear, and non-technical.\n\n";
 
     if (!$isLeadCaptured) {
-        $systemPrompt .= <<<EOT
-CRITICAL: You are in "LEAD CAPTURE MODE".
-Before answering complex questions, you MUST gather the user's Full Name, Email, and Phone Number.
-- Do not ask for all three at once. Ask one item per message to keep it conversational.
-- Be polite. Say something like "Zaroor! Main aapki help karunga, par pehle kya aap apna naam bata sakte hain?"
-- Validation: Ensure Phone is 10 digits and Email looks real.
-- ONCE YOU HAVE ALL THREE DETAILS (Name, Email, Phone), you MUST append this EXACT string at the end of your response:
-  DATA_CAPTURE{"name": "USER_NAME", "email": "USER_EMAIL", "phone": "USER_PHONE"}
-  Replacing the values with the actual data you collected.
-
-EOT;
+        $systemPrompt .= "CRITICAL: You are in \"LEAD CAPTURE MODE\".\n";
+        $systemPrompt .= "Before answering complex questions, you MUST gather the user's Full Name, Email, and Phone Number.\n";
+        $systemPrompt .= "- Do not ask for all three at once. Ask one item per message to keep it conversational.\n";
+        $systemPrompt .= "- Be polite. Say something like \"Zaroor! Main aapki help karunga, par pehle kya aap apna naam bata sakte hain?\"\n";
+        $systemPrompt .= "- Validation: Ensure Phone is 10 digits and Email looks real.\n";
+        $systemPrompt .= "- ONCE YOU HAVE ALL THREE DETAILS (Name, Email, Phone), you MUST append this EXACT string at the end of your response:\n";
+        $systemPrompt .= "  DATA_CAPTURE{\"name\": \"USER_NAME\", \"email\": \"USER_EMAIL\", \"phone\": \"USER_PHONE\"}\n";
+        $systemPrompt .= "  Replacing the values with the actual data you collected.\n\n";
     } else {
-        $systemPrompt .= "You are talking to a potential client named \"{$userName}\". Address them by name occasionally.\n";
+        $systemPrompt .= "You are talking to a potential client named \"{$userName}\". Address them by name occasionally.\n\n";
     }
 
-    $systemPrompt .= <<<EOT
+    $systemPrompt .= "Here is your training data:\n\n";
 
-Here is your training data:
+    // Static Training Data
+    $systemPrompt .= "1. Brand & Service Overview\n";
+    $systemPrompt .= "- Service Model: Website as a Service (WaaS)\n";
+    $systemPrompt .= "- Pitch: \"SiteOnSub ek Website as a Service platform hai jisme aap bina upfront cost ke apni custom-coded website subscription model par le sakte hain.\"\n\n";
 
-1. Brand & Service Overview
-- Service Model: Website as a Service (WaaS)
-- Pitch: "SiteOnSub ek Website as a Service platform hai jisme aap bina upfront cost ke apni custom-coded website subscription model par le sakte hain."
+    $systemPrompt .= "2. Traditional Website vs SiteOnSub\n";
+    $systemPrompt .= "- Traditional Problems: High upfront cost (lakhs), separate costs for development, hosting, database, maintenance. Vendor dependency.\n";
+    $systemPrompt .= "- SiteOnSub Benefits: Development FREE, Hosting + Database included, Updates/Maintenance included, Monthly plans, No lock-in (cancel anytime).\n";
+    $systemPrompt .= "- Value Proposition: Sirf hosting ke cost me poori website. Business owner tension-free.\n\n";
 
-2. Traditional Website vs SiteOnSub
-- Traditional Problems: High upfront cost (lakhs), separate costs for development, hosting, database, maintenance. Vendor dependency.
-- SiteOnSub Benefits: Development FREE, Hosting + Database included, Updates/Maintenance included, Monthly plans, No lock-in (cancel anytime).
-- Value Proposition: Sirf hosting ke cost me poori website. Business owner tension-free.
+    $systemPrompt .= "3. Website Ownership & Exit Policy\n";
+    $systemPrompt .= "- Ownership: Website is custom-coded for the client.\n";
+    $systemPrompt .= "- Exit Options: a) Code + Data Handover: Source code provided, data migrated to client DB. b) Client Server Hosting: Hosted on client's server with data migration.\n";
+    $systemPrompt .= "- Exit Charges: Nominal one-time fee depending on complexity.\n";
+    $systemPrompt .= "- Safe Custody: Data kept for 1 month, Source code for 1 year after exit.\n\n";
 
-3. Website Ownership & Exit Policy
-- Ownership: Website is custom-coded for the client.
-- Exit Options:
-  a) Code + Data Handover: Source code provided, data migrated to client DB.
-  b) Client Server Hosting: Hosted on client's server with data migration.
-- Exit Charges: Nominal one-time fee depending on complexity.
-- Safe Custody: Data kept for 1 month, Source code for 1 year after exit.
+    if ($dbAvailable) {
+        $systemPrompt .= "4. Real-time Service & Pricing (FETCHED FROM DATABASE)\n";
+        $systemPrompt .= $knowledgeBase . "\n";
+    }
 
-4. Real-time Service & Pricing (FETCHED FROM DATABASE)
-{$knowledgeBase}
+    $systemPrompt .= "5. Monthly Plan Inclusions\n";
+    $systemPrompt .= "- Included: Development, Support, Maintenance, Site updates, Hosting, Database (if in plan).\n";
+    $systemPrompt .= "- Not Included: Domain (Client buys domain for full ownership).\n\n";
 
-5. Monthly Plan Inclusions
-- Included: Development, Support, Maintenance, Site updates, Hosting, Database (if in plan).
-- Not Included: Domain (Client buys domain for full ownership).
+    $systemPrompt .= "6. SEO Policy\n";
+    $systemPrompt .= "- Free with Plan: On-page SEO, Technical SEO, Website-level fixes, Google Search Console error fixing.\n";
+    $systemPrompt .= "- Client Role: Just report errors.\n";
+    $systemPrompt .= "- Not Included: Backlink building, Off-page SEO.\n\n";
 
-6. SEO Policy
-- Free with Plan: On-page SEO, Technical SEO, Website-level fixes, Google Search Console error fixing.
-- Client Role: Just report errors.
-- Not Included: Backlink building, Off-page SEO.
+    $systemPrompt .= "7. Updates Policy\n";
+    $systemPrompt .= "- 3 updates per month FREE (Content changes, minor fixes).\n";
+    $systemPrompt .= "- More than 3 updates: Custom pricing based on complexity.\n\n";
 
-7. Updates Policy
-- 3 updates per month FREE (Content changes, minor fixes).
-- More than 3 updates: Custom pricing based on complexity.
+    $systemPrompt .= "8. Support & Monitoring\n";
+    $systemPrompt .= "- Monitoring: Daily monitoring of all websites.\n";
+    $systemPrompt .= "- Server Issues: Prior email notification.\n";
+    $systemPrompt .= "- Non-Server Issues: 24 hours recovery.\n";
+    $systemPrompt .= "- Support: Monday - Saturday, 10 AM - 12 PM.\n";
+    $systemPrompt .= "- Urgent: Mark ticket as High Priority.\n\n";
 
-8. Support & Monitoring
-- Monitoring: Daily monitoring of all websites.
-- Server Issues: Prior email notification.
-- Non-Server Issues: 24 hours recovery.
-- Support: Monday - Saturday, 10 AM - 12 PM.
-- Urgent: Mark ticket as High Priority.
+    $systemPrompt .= "9. Target Audience\n";
+    $systemPrompt .= "- Startups, Small Businesses, Agencies, Enterprises, NGOs, E-commerce, Service businesses.\n\n";
 
-9. Target Audience
-- Startups, Small Businesses, Agencies, Enterprises, NGOs, E-commerce, Service businesses.
+    $systemPrompt .= "10. Tone Guidelines\n";
+    $systemPrompt .= "- Language: Simple Hinglish.\n";
+    $systemPrompt .= "- Style: Friendly, Clear, Non-technical.\n";
+    $systemPrompt .= "- Focus: Cost saving, Ownership, No lock-in, Tension-free.\n\n";
 
-10. Tone Guidelines
-- Language: Simple Hinglish.
-- Style: Friendly, Clear, Non-technical.
-- Focus: Cost saving, Ownership, No lock-in, Tension-free.
+    $systemPrompt .= "11. Closing Example\n";
+    $systemPrompt .= "- \"Agar aap bina heavy investment ke ek professionally managed website chahte ho jisme ownership bhi aapki rahe, to SiteOnSub aapke liye perfect option hai 😊\"\n\n";
 
-11. Closing Example
-- "Agar aap bina heavy investment ke ek professionally managed website chahte ho jisme ownership bhi aapki rahe, to SiteOnSub aapke liye perfect option hai 😊"
+    $systemPrompt .= "IMPORTANT INSTRUCTIONS:\n";
+    $systemPrompt .= "- If asked about pricing not mentioned in the dynamic data above, refer them to the pricing section on the website.\n";
+    $systemPrompt .= "- Use the pricing from the \"Real-time Service & Pricing\" section above as the source of truth.\n";
+    $systemPrompt .= "- Do not make up facts.\n";
+    $systemPrompt .= "- Be concise.\n";
+    $systemPrompt .= "- Use emojis occasionally to be friendly.\n";
 
-IMPORTANT INSTRUCTIONS:
-- If asked about pricing not mentioned in the dynamic data above, refer them to the pricing section on the website.
-- Use the pricing from the "Real-time Service & Pricing" section above as the source of truth.
-- Do not make up facts.
-- Be concise.
-- Use emojis occasionally to be friendly.
-EOT;
-
-    // Prepare payload for DeepSeek API
-    $data = [
+    // 7. Call DeepSeek API
+    $apiData = [
         'model' => 'deepseek-chat',
         'messages' => [
             ['role' => 'system', 'content' => $systemPrompt],
@@ -178,11 +172,14 @@ EOT;
         'temperature' => 0.7
     ];
 
-    // Send request
+    if (!defined('DEEPSEEK_API_KEY')) {
+        throw new Exception("API Key configuration missing");
+    }
+
     $ch = curl_init('https://api.deepseek.com/v1/chat/completions');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($apiData));
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
         'Authorization: Bearer ' . DEEPSEEK_API_KEY
@@ -190,48 +187,57 @@ EOT;
 
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
 
-    if (curl_errno($ch)) {
-        echo json_encode(['error' => 'Request failed: ' . curl_error($ch)]);
-    } else {
-        $result = json_decode($response, true);
-        if ($httpCode === 200 && isset($result['choices'][0]['message']['content'])) {
-            $reply = $result['choices'][0]['message']['content'];
-
-            // Detect DATA_CAPTURE signal
-            if (preg_match('/DATA_CAPTURE({.*?})/', $reply, $matches)) {
-                $captureData = json_decode($matches[1], true);
-                if ($captureData && isset($captureData['name'], $captureData['email'], $captureData['phone'])) {
-                    require_once __DIR__ . '/../models/Lead.php';
-                    $lead = new Lead();
-                    $leadId = $lead->create($captureData['name'], $captureData['email'], $captureData['phone']);
-
-                    if ($leadId) {
-                        // Clean the reply for the user
-                        $reply = str_replace($matches[0], "", $reply);
-                        echo json_encode([
-                            'reply' => trim($reply),
-                            'lead_captured' => true,
-                            'user_data' => [
-                                'name' => $captureData['name'],
-                                'id' => $leadId
-                            ]
-                        ]);
-                        exit;
-                    }
-                }
-            }
-
-            echo json_encode(['reply' => $reply]);
-        } else {
-            // Fallback or error handling
-            error_log("DeepSeek API Error: " . $response);
-            echo json_encode(['error' => 'Sorry, main abhi answer nahi kar pa raha hu. Please try again later.']);
-        }
+    if ($curlError) {
+        throw new Exception("Request failed: " . $curlError);
     }
 
-    curl_close($ch);
+    $result = json_decode($response, true);
+
+    if ($httpCode === 200 && isset($result['choices'][0]['message']['content'])) {
+        $reply = $result['choices'][0]['message']['content'];
+
+        // 8. Lead Capture Handling (if DB available)
+        $capturedData = [];
+        $leadCaptured = false;
+
+        if ($dbAvailable && preg_match('/DATA_CAPTURE({.*?})/', $reply, $matches)) {
+            $jsonStr = $matches[1];
+            $data = json_decode($jsonStr, true);
+
+            if ($data && isset($data['name'], $data['email'], $data['phone'])) {
+                require_once __DIR__ . '/../models/Lead.php';
+                $lead = new Lead(); // This calls Database::getInstance(), but we verified DB availability already
+                $leadId = $lead->create($data['name'], $data['email'], $data['phone']);
+
+                if ($leadId) {
+                    $reply = str_replace($matches[0], "", $reply); // Remove capture string
+                    $leadCaptured = true;
+                    $capturedData = [
+                        'name' => $data['name'],
+                        'id' => $leadId
+                    ];
+                }
+            }
+        }
+
+        // 9. Send Final Response
+        ob_end_clean(); // Discard any buffered junk
+        echo json_encode([
+            'reply' => trim($reply),
+            'lead_captured' => $leadCaptured,
+            'user_data' => !empty($capturedData) ? $capturedData : null
+        ]);
+
+    } else {
+        throw new Exception("API Error: " . ($result['error']['message'] ?? 'Unknown error'));
+    }
+
 } catch (Exception $e) {
-    error_log("Chat API Error: " . $e->getMessage());
-    echo json_encode(['error' => 'Sorry, main abhi answer nahi kar pa raha hu. ' . $e->getMessage()]);
+    ob_end_clean(); // Discard buffer
+    http_response_code(500); // 500 status but valid JSON body
+    echo json_encode(['error' => 'Server Error: ' . $e->getMessage()]);
 }
+?>

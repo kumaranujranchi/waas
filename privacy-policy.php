@@ -3,7 +3,11 @@
  * Privacy Policy Page
  */
 
+// SEO Metadata
 $pageTitle = 'Privacy Policy | SiteOnSub';
+$pageDescription = 'Learn how SiteOnSub collects, uses, and protects your personal information. Your privacy is our priority.';
+$pageKeywords = 'privacy policy, SiteOnSub privacy, data protection, GDPR compliance';
+
 require_once __DIR__ . '/includes/functions.php';
 include __DIR__ . '/includes/header.php';
 ?>

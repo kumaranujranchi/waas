@@ -3,8 +3,12 @@
  * Contact Us Page
  */
 
+// SEO Metadata
+$pageTitle = 'Contact Us | SiteOnSub - Get Support for Your WaaS Solutions';
+$pageDescription = 'Have questions? Contact SiteOnSub today for support, sales inquiries, or technical assistance. Our team is available 24/7 to help you grow your digital presence.';
+$pageKeywords = 'contact SiteOnSub, customer support, sales inquiry, WaaS support, Synergy Brand Architect contact';
+
 // Include header
-$pageTitle = 'Contact Us | SiteOnSub';
 include __DIR__ . '/includes/header.php';
 ?>
 

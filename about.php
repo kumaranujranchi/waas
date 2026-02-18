@@ -3,8 +3,12 @@
  * About Us Page
  */
 
+// SEO Metadata
+$pageTitle = 'About Us | SiteOnSub - Redefining Digital Presence';
+$pageDescription = 'Learn about SiteOnSub, a product of Synergy Brand Architect. We are on a mission to make high-quality websites and business software accessible through a flexible subscription model.';
+$pageKeywords = 'about SiteOnSub, Synergy Brand Architect, WaaS history, digital solutions company, subscription based websites';
+
 // Include header
-$pageTitle = 'About Us | SiteOnSub';
 include __DIR__ . '/includes/header.php';
 ?>
 

@@ -14,7 +14,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$pageTitle = 'Book a Consultation | SiteOnSub';
+$pageTitle = 'Book a Free Strategy Consultation | SiteOnSub';
+$pageDescription = 'Schedule a free consultation call with SiteOnSub experts. Discuss your project goals and find the perfect WaaS solution to scale your business without technical hurdles.';
+$pageKeywords = 'book consultation, digital strategy call, WaaS advice, business growth consultation, SiteOnSub experts';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

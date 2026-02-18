@@ -2,7 +2,9 @@
 /**
  * How It Works Page
  */
-$pageTitle = 'How It Works | SiteOnSub';
+$pageTitle = 'How It Works | SiteOnSub - Simple 7-Step Process to Launch';
+$pageDescription = 'Discover our transparent 7-step process to getting your business software or website live. No complex coding, no heavy upfront costs - just a clear path to success.';
+$pageKeywords = 'how SiteOnSub works, WaaS process, website launch steps, subscription model explained, business software setup';
 include __DIR__ . '/includes/header.php';
 ?>
 

@@ -40,11 +40,18 @@ if (isset($_GET['ref']) && !empty($_GET['ref'])) {
     <title>
         <?php echo $pageTitle ?? 'SiteOnSub | WaaS Marketplace'; ?>
     </title>
+    <meta name="description"
+        content="<?php echo $pageDescription ?? 'Launch your dream business with our premium, ready-to-use solutions. Affordable WaaS (Website as a Service) for modern businesses.'; ?>">
+    <meta name="keywords"
+        content="<?php echo $pageKeywords ?? 'WaaS, website as a service, business software, professional websites, digital presence, synergy brand architect'; ?>">
+    <link rel="canonical"
+        href="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>">
     <link rel="icon" type="image/png" href="<?php echo baseUrl('assets/images/favicon.png'); ?>">
 
     <!-- Social Media Meta Tags -->
     <meta property="og:title" content="<?php echo $pageTitle ?? 'SiteOnSub | WaaS Marketplace'; ?>" />
-    <meta property="og:description" content="Launch your dream business with our premium, ready-to-use solutions." />
+    <meta property="og:description"
+        content="<?php echo $pageDescription ?? 'Launch your dream business with our premium, ready-to-use solutions.'; ?>" />
     <meta property="og:image" content="<?php echo baseUrl('assets/images/favicon.png'); ?>" />
     <meta property="og:url"
         content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
@@ -52,7 +59,8 @@ if (isset($_GET['ref']) && !empty($_GET['ref'])) {
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="<?php echo $pageTitle ?? 'SiteOnSub | WaaS Marketplace'; ?>" />
-    <meta name="twitter:description" content="Launch your dream business with our premium, ready-to-use solutions." />
+    <meta name="twitter:description"
+        content="<?php echo $pageDescription ?? 'Launch your dream business with our premium, ready-to-use solutions.'; ?>" />
     <meta name="twitter:image" content="<?php echo baseUrl('assets/images/favicon.png'); ?>" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"

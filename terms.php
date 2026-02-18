@@ -3,7 +3,11 @@
  * Terms & Conditions Page
  */
 
+// SEO Metadata
 $pageTitle = 'Terms & Conditions | SiteOnSub';
+$pageDescription = 'Read the terms and conditions for SiteOnSub services. Understand our subscription model, payment policies, and service scope.';
+$pageKeywords = 'SiteOnSub terms, WaaS terms and conditions, subscription policy, legal terms';
+
 require_once __DIR__ . '/includes/functions.php';
 include __DIR__ . '/includes/header.php';
 ?>

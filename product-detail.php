@@ -3,76 +3,6 @@
  * Product Detail Page - Dynamic
  */
 
-// Include header
-$pageTitle = 'Product Details | SiteOnSub';
-include __DIR__ . '/includes/header.php';
-?>
-<style>
-    .rich-text-content h1 {
-        font-size: 2em;
-        font-weight: bold;
-        margin-bottom: 0.5em;
-        margin-top: 1em;
-    }
-
-    .rich-text-content h2 {
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 0.5em;
-        margin-top: 1em;
-    }
-
-    .rich-text-content h3 {
-        font-size: 1.25em;
-        font-weight: bold;
-        margin-bottom: 0.5em;
-        margin-top: 1em;
-    }
-
-    .rich-text-content p {
-        margin-bottom: 1em;
-        line-height: 1.6;
-    }
-
-    .rich-text-content ul {
-        list-style-type: disc;
-        padding-left: 1.5em;
-        margin-bottom: 1em;
-    }
-
-    .rich-text-content ol {
-        list-style-type: decimal;
-        padding-left: 1.5em;
-        margin-bottom: 1em;
-    }
-
-    .rich-text-content li {
-        margin-bottom: 0.5em;
-    }
-
-    .rich-text-content a {
-        color: #3b82f6;
-        text-decoration: underline;
-    }
-
-    .rich-text-content blockquote {
-        border-left: 4px solid #e5e7eb;
-        padding-left: 1em;
-        font-style: italic;
-        color: #6b7280;
-        margin-bottom: 1em;
-    }
-
-    .rich-text-content strong {
-        font-weight: bold;
-    }
-
-    .rich-text-content em {
-        font-style: italic;
-    }
-</style>
-<?php
-
 // Include models
 require_once __DIR__ . '/models/Product.php';
 
@@ -93,6 +23,14 @@ if (!$product) {
     setFlashMessage('error', 'Product not found');
     redirect(baseUrl('index.php'));
 }
+
+// SEO Metadata
+$pageTitle = e($product['name']) . ' | WaaS Solution - SiteOnSub';
+$pageDescription = 'Get ' . e($product['name']) . ' for your business. ' . substr(strip_tags($product['full_description']), 0, 150) . '...';
+$pageKeywords = e($product['name']) . ', WaaS, ' . e($product['name']) . ' subscription, business software';
+
+// Include header
+include __DIR__ . '/includes/header.php';
 
 // Get product features and pricing plans
 $features = $productModel->getProductFeatures($product['id']);

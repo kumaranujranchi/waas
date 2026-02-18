@@ -19,12 +19,19 @@ log_debug("Callback hit.");
 
 
 require_once __DIR__ . '/config/config.php';
+log_debug("Loaded config");
 require_once __DIR__ . '/config/database.php';
+log_debug("Loaded database");
 require_once __DIR__ . '/includes/functions.php';
+log_debug("Loaded functions");
 require_once __DIR__ . '/models/Order.php';
+log_debug("Loaded Order");
 require_once __DIR__ . '/models/Product.php';
+log_debug("Loaded Product");
 require_once __DIR__ . '/models/Subscription.php';
+log_debug("Loaded Subscription");
 require_once __DIR__ . '/classes/Mail.php';
+log_debug("Loaded Mail");
 
 // Defensive: Ensure SITE_URL is defined if config failed to load completely
 if (!defined('SITE_URL')) {

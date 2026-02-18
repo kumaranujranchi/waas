@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Exclude private directories
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /config/
+Disallow: /includes/
+Disallow: /models/
+Disallow: /uploads/
+Disallow: /vendor/
+
+Sitemap: https://siteonsub.com/sitemap.xml

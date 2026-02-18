@@ -1,7 +1,13 @@
-<?php
 /**
- * Homepage - Dynamic Product Listing
- */
+* Homepage - Dynamic Product Listing
+*/
+
+// SEO Metadata
+$pageTitle = 'SiteOnSub | Premium WaaS Marketplace - Launch Your Business Instantly';
+$pageDescription = 'Access premium websites and business software through our affordable WaaS (Website as a Service)
+subscription. No heavy upfront costs, launch in days with Synergy Brand Architect.';
+$pageKeywords = 'WaaS marketplace, affordable business software, premium websites, launch online business, subscription
+websites, Synergy Brand Architect, SiteOnSub';
 
 // Include header
 include __DIR__ . '/includes/header.php';
@@ -25,11 +31,11 @@ $searchQuery = $_GET['search'] ?? '';
 $selectedCategory = $_GET['category'] ?? '';
 
 if ($searchQuery) {
-    $products = $productModel->searchProducts($searchQuery);
+$products = $productModel->searchProducts($searchQuery);
 } elseif ($selectedCategory) {
-    $products = $productModel->getProductsByCategory($selectedCategory);
+$products = $productModel->getProductsByCategory($selectedCategory);
 } else {
-    $products = $productModel->getAllProducts(16); // Show up to 16 products
+$products = $productModel->getAllProducts(16); // Show up to 16 products
 }
 
 // Split products for different sections
@@ -52,9 +58,9 @@ $moreSolutionsProducts = array_slice($products, 8); // Remaining for More Soluti
                         </span>
                         <h1
                             class="text-[#0f0e1b] dark:text-white text-4xl md:text-6xl font-black leading-[1.1] tracking-tight">
-                            Premium Websites<br>
-                            & Business Software<br>
-                            <span class="text-primary">Without Development Cost</span>
+                            Premium Business Websites<br>
+                            & Ready-to-use Software<br>
+                            <span class="text-primary">at Zero Upfront Cost</span>
                         </h1>
                         <p class="text-[#545095] dark:text-white/70 text-xl font-medium max-w-[540px] leading-relaxed">
                             Launch your professional online presence in affordable cost with our curated service of

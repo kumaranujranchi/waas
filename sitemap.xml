@@ -2,27 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://siteonsub.com/</loc>
-    <lastmod><?php echo date('Y-m-d'); ?></lastmod>
+    <lastmod>2026-02-18</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://siteonsub.com/about.php</loc>
-    <lastmod><?php echo date('Y-m-d'); ?></lastmod>
+    <lastmod>2026-02-18</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://siteonsub.com/consultation.php</loc>
-    <lastmod><?php echo date('Y-m-d'); ?></lastmod>
+    <lastmod>2026-02-18</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://siteonsub.com/how-it-works.php</loc>
-    <lastmod><?php echo date('Y-m-d'); ?></lastmod>
+    <lastmod>2026-02-18</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://siteonsub.com/contact-us.php</loc>
-    <lastmod><?php echo date('Y-m-d'); ?></lastmod>
+    <lastmod>2026-02-18</lastmod>
     <priority>0.6</priority>
   </url>
 </urlset>

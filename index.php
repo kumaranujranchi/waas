@@ -1,6 +1,7 @@
+<?php
 /**
-* Homepage - Dynamic Product Listing
-*/
+ * Homepage - Dynamic Product Listing
+ */
 
 // SEO Metadata
 $pageTitle = 'SiteOnSub | Premium WaaS Marketplace - Launch Your Business Instantly';
@@ -31,11 +32,11 @@ $searchQuery = $_GET['search'] ?? '';
 $selectedCategory = $_GET['category'] ?? '';
 
 if ($searchQuery) {
-$products = $productModel->searchProducts($searchQuery);
+    $products = $productModel->searchProducts($searchQuery);
 } elseif ($selectedCategory) {
-$products = $productModel->getProductsByCategory($selectedCategory);
+    $products = $productModel->getProductsByCategory($selectedCategory);
 } else {
-$products = $productModel->getAllProducts(16); // Show up to 16 products
+    $products = $productModel->getAllProducts(16); // Show up to 16 products
 }
 
 // Split products for different sections

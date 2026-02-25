@@ -203,14 +203,14 @@ $availableDates = $consultationModel->getAvailableDates();
                         <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Name</label>
                         <input type="text" name="full_name" required value="<?php echo e($prefillName); ?>"
                             class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="John Doe" />
+                            placeholder="Rahul Sharma" />
                     </div>
 
                     <div class="space-y-2">
                         <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Work Email</label>
                         <input type="email" name="email" required value="<?php echo e($prefillEmail); ?>"
                             class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="john@company.com" />
+                            placeholder="rahul@company.in" />
                     </div>
                 </div>
 
@@ -219,7 +219,7 @@ $availableDates = $consultationModel->getAvailableDates();
                         <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone Number</label>
                         <input type="tel" name="phone" required value="<?php echo e($prefillPhone); ?>"
                             class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="+1 (555) 000-0000" />
+                            placeholder="+91 98765 43210" />
                     </div>
 
                     <div class="space-y-2">

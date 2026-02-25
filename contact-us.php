@@ -103,7 +103,7 @@ include __DIR__ . '/includes/header.php';
                                 Name</label>
                             <input type="text" id="name" name="name"
                                 class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all dark:text-white"
-                                placeholder="John Doe" required>
+                                placeholder="Rahul Sharma" required>
                         </div>
                         <div class="space-y-2">
                             <label for="email" class="text-sm font-medium text-gray-700 dark:text-gray-300">Email

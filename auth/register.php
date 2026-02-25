@@ -123,7 +123,7 @@ include __DIR__ . '/../includes/header.php';
                     <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Name</label>
                     <input type="text" name="full_name" required value="<?php echo e($_POST['full_name'] ?? ''); ?>"
                         class="w-full px-4 py-3 rounded-lg border-slate-200 dark:border-white/10 dark:bg-white/5 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                        placeholder="John Doe" />
+                        placeholder="Rahul Sharma" />
                 </div>
 
                 <div class="space-y-2">

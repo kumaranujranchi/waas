@@ -10,8 +10,16 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Include configuration and functions
-require_once __DIR__ . '/../config/config.php';
-require_once __DIR__ . '/../config/database.php';
+$configFile = __DIR__ . '/../config/config.php';
+$dbConfigFile = __DIR__ . '/../config/database.php';
+
+if (!file_exists($configFile) || !file_exists($dbConfigFile)) {
+    // Fail loudly with helpful instructions
+    die('Configuration missing. Please copy config/config.example.php to config/config.php and config/database.example.php to config/database.php, then update values.');
+}
+
+require_once $configFile;
+require_once $dbConfigFile;
 require_once __DIR__ . '/../includes/functions.php';
 
 $currentUser = getCurrentUser();

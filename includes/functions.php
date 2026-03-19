@@ -129,6 +129,10 @@ function generateSlug($string)
  */
 function setFlashMessage($type, $message)
 {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
     $_SESSION['flash_message'] = [
         'type' => $type, // 'success', 'error', 'warning', 'info'
         'message' => $message
@@ -137,6 +141,10 @@ function setFlashMessage($type, $message)
 
 function getFlashMessage()
 {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
     if (isset($_SESSION['flash_message'])) {
         $flash = $_SESSION['flash_message'];
         unset($_SESSION['flash_message']);
@@ -147,6 +155,10 @@ function getFlashMessage()
 
 function hasFlashMessage()
 {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
     return isset($_SESSION['flash_message']);
 }
 
